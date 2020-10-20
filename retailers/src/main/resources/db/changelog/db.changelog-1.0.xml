@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="viachaslau.barysau" id="20201019-1">
+        <createTable tableName="address">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="address_pkey"/>
+            </column>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="first_address_line" type="VARCHAR(255)"/>
+            <column name="second_address_line" type="VARCHAR(255)"/>
+            <column name="state_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-2">
+        <createTable tableName="application_record">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="application_record_pkey"/>
+            </column>
+            <column name="amount" type="INT"/>
+            <column name="cost" type="numeric(19, 2)"/>
+            <column name="item_id" type="BIGINT"/>
+            <column name="application_item_record_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-3">
+        <createTable tableName="bill">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="bill_pkey"/>
+            </column>
+            <column name="bill_number" type="INT"/>
+            <column name="registration_date_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="total_item_amount" type="INT"/>
+            <column name="total_unit_number" type="INT"/>
+            <column name="location_id" type="BIGINT"/>
+            <column name="manager_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-4">
+        <createTable tableName="bill_record">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="bill_record_pkey"/>
+            </column>
+            <column name="item_amount" type="INT"/>
+            <column name="item_price" type="numeric(19, 2)"/>
+            <column name="item_id" type="BIGINT"/>
+            <column name="billitemrecord_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-5">
+        <createTable tableName="category">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="category_pkey"/>
+            </column>
+            <column name="category_tax" type="numeric(19, 2)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="category_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-6">
+        <createTable tableName="customer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="customer_pkey"/>
+            </column>
+            <column name="admin_id" type="BIGINT"/>
+            <column name="director_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-7">
+        <createTable tableName="inner_applications">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="inner_applications_pkey"/>
+            </column>
+            <column name="application_number" type="INT"/>
+            <column name="application_status" type="VARCHAR(255)"/>
+            <column name="registration_date_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="total_item_amount" type="INT"/>
+            <column name="total_unit_number" type="INT"/>
+            <column name="updating_date_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="creator_id" type="BIGINT"/>
+            <column name="destination_location_id" type="BIGINT"/>
+            <column name="source_location_id" type="BIGINT"/>
+            <column name="updater_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-8">
+        <createTable tableName="item">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="item_pkey"/>
+            </column>
+            <column name="label" type="VARCHAR(255)"/>
+            <column name="upc" type="INT"/>
+            <column name="volume" type="INT"/>
+            <column name="category_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-9">
+        <createTable tableName="location">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="location_pkey"/>
+            </column>
+            <column name="available_capacity" type="INT"/>
+            <column name="identifier" type="VARCHAR(255)"/>
+            <column name="location_type" type="VARCHAR(255)"/>
+            <column name="total_capacity" type="INT"/>
+            <column name="address_id" type="BIGINT"/>
+            <column name="customer_id" type="BIGINT"/>
+            <column name="warehouse_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-10">
+        <createTable tableName="location_item">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="location_item_pkey"/>
+            </column>
+            <column name="cost" type="numeric(19, 2)"/>
+            <column name="item_id" type="BIGINT"/>
+            <column name="location_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-11">
+        <createTable tableName="state">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="state_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="state_tax" type="numeric(19, 2)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-12">
+        <createTable tableName="supplier">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="supplier_pkey"/>
+            </column>
+            <column name="full_name" type="VARCHAR(255)"/>
+            <column name="identifier" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-13">
+        <createTable tableName="supplier_applications">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="supplier_applications_pkey"/>
+            </column>
+            <column name="application_number" type="INT"/>
+            <column name="application_status" type="VARCHAR(255)"/>
+            <column name="registration_date_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="total_item_amount" type="INT"/>
+            <column name="total_unit_number" type="INT"/>
+            <column name="updating_date_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="creator_id" type="BIGINT"/>
+            <column name="destination_location_id" type="BIGINT"/>
+            <column name="supplier_id" type="BIGINT"/>
+            <column name="updater_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-14">
+        <createTable tableName="user_role">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_role" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-15">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="birthday" type="date"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="user_status" type="VARCHAR(255)"/>
+            <column name="address_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-16">
+        <createTable tableName="write_off_act">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="write_off_act_pkey"/>
+            </column>
+            <column name="act_date_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="total_item_amount" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-17">
+        <createTable tableName="write_off_record">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="write_off_record_pkey"/>
+            </column>
+            <column name="amount" type="INT"/>
+            <column name="reason" type="VARCHAR(255)"/>
+            <column name="item_id" type="BIGINT"/>
+            <column name="writeoffrecord_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-18">
+        <addForeignKeyConstraint baseColumnNames="updater_id" baseTableName="inner_applications"
+                                 constraintName="fk13b13s5if7019x3s3lgqq5614" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-19">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="item"
+                                 constraintName="fk2n9w8d0dp4bsfra9dcg0046l4" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="category"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-20">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="application_record"
+                                 constraintName="fk2r703rk75fd83dhlrx7iks48g" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="item"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-21">
+        <addForeignKeyConstraint baseColumnNames="state_id" baseTableName="address"
+                                 constraintName="fk4cx5jughttw4h3qfxrcitbtxl" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="state"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-22">
+        <addForeignKeyConstraint baseColumnNames="updater_id" baseTableName="supplier_applications"
+                                 constraintName="fk54yypapcnremjm7f64vxm7vvs" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-23">
+        <addForeignKeyConstraint baseColumnNames="billitemrecord_id" baseTableName="bill_record"
+                                 constraintName="fk5bodoyapuwucrww7iyqfvw9fo" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="bill"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-24">
+        <addForeignKeyConstraint baseColumnNames="writeoffrecord_id" baseTableName="write_off_record"
+                                 constraintName="fk8y4t1mqcjhhjaaeef8x72bntg" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="write_off_act"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-25">
+        <addForeignKeyConstraint baseColumnNames="manager_id" baseTableName="bill"
+                                 constraintName="fk95iiv8w349i824r569wuqrbj2" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-26">
+        <addForeignKeyConstraint baseColumnNames="warehouse_id" baseTableName="location"
+                                 constraintName="fk9vnjeuofinpe270fk0tva36c2" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="supplier"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-27">
+        <addForeignKeyConstraint baseColumnNames="director_id" baseTableName="customer"
+                                 constraintName="fkbmpxa7khuatx8n9lbrxqu5qqq" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-28">
+        <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="users"
+                                 constraintName="fkditu6lr4ek16tkxtdsne0gxib" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="address"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-29">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="bill_record"
+                                 constraintName="fkdxj6enuafwvqabaor1l9mpnge" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="item"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-30">
+        <addForeignKeyConstraint baseColumnNames="source_location_id" baseTableName="inner_applications"
+                                 constraintName="fkeit5ql21renrvbhh7sv5h6dai" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="location"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-31">
+        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="bill"
+                                 constraintName="fkfxo606b4spib8dsycr9jf7464" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="location"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-32">
+        <addForeignKeyConstraint baseColumnNames="application_item_record_id" baseTableName="application_record"
+                                 constraintName="fkgs6p904sfcximdgg1b2su0c8i" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="supplier_applications"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-33">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="write_off_record"
+                                 constraintName="fkii56x8b0n0wqgq3ai33ccip6n" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="item"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-34">
+        <addForeignKeyConstraint baseColumnNames="destination_location_id" baseTableName="supplier_applications"
+                                 constraintName="fkm0mytx8kly7uovgro4kip7g16" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="location"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-35">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_role"
+                                 constraintName="fkm3tmf7s11ilny7lvpiks60j0n" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-36">
+        <addForeignKeyConstraint baseColumnNames="creator_id" baseTableName="inner_applications"
+                                 constraintName="fkn1bblhs0m5c9of82qaccjqpg0" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-37">
+        <addForeignKeyConstraint baseColumnNames="creator_id" baseTableName="supplier_applications"
+                                 constraintName="fknqijmut36sja25hudka48h06n" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-38">
+        <addForeignKeyConstraint baseColumnNames="supplier_id" baseTableName="supplier_applications"
+                                 constraintName="fko3w9nxnd2b1xr4cruga74ac7q" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="supplier"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-39">
+        <addForeignKeyConstraint baseColumnNames="destination_location_id" baseTableName="inner_applications"
+                                 constraintName="fkonbbgbe28dum7e7yyfk18np30" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="location"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-40">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="category"
+                                 constraintName="fkp16r0gel6iutv0lkk40fjq054" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="customer"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-41">
+        <addForeignKeyConstraint baseColumnNames="admin_id" baseTableName="customer"
+                                 constraintName="fkq9mtkng4kv6tjsvro03o6dirk" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-42">
+        <addForeignKeyConstraint baseColumnNames="item_id" baseTableName="location_item"
+                                 constraintName="fkqtvnv1tdxiwvqb8gyuvudh8ww" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="item"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-43">
+        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="location"
+                                 constraintName="fkrmcl7u2ulopsr8he496bvu07f" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="customer"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-44">
+        <addForeignKeyConstraint baseColumnNames="location_id" baseTableName="location_item"
+                                 constraintName="fkt0djv8aex3sk6nxxqhh5dj12p" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="location"/>
+    </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201019-45">
+        <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="location"
+                                 constraintName="fkt8psi9b5mkkfc0r9fgptngwhg" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="address"/>
+    </changeSet>
+</databaseChangeLog>
