@@ -11,9 +11,12 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class LocationItemDto {
+
     private Long id;
+
     @Valid
     private ItemDto itemDto;
+
     @NotBlank(message = "Cost can't be empty.")
     @DecimalMin(value = "0.01", message = "Cost must be greater than 0.")
     private BigDecimal cost;

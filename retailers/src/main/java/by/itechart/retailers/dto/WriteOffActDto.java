@@ -12,11 +12,15 @@ import java.util.List;
 @Data
 @Builder
 public class WriteOffActDto {
+
     private Long id;
+
     @Valid
     private List<WriteOffActItemRecordDto> writeOffActItemRecordDtoList;
+
     @Past(message = "Date and time of act can't be in the future.")
     private LocalDateTime actDateTime;
+
     @Min(value = 1, message = "Item amount must be equals or greater than 1.")
     private Integer totalItemAmount;
 }

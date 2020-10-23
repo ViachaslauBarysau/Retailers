@@ -1,13 +1,14 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.BillItemRecordDto;
+import by.itechart.retailers.service.BillItemRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/biilItemRecords")
+@RequestMapping("/billItemRecords")
 public class BillItemRecordController {
 
     private BillItemRecordService billItemRecordService;

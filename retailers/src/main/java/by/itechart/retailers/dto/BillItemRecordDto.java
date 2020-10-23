@@ -12,11 +12,15 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class BillItemRecordDto {
+
     private Long id;
+
     @Valid
     private ItemDto itemDto;
+
     @Min(value = 1, message = "Item amount must be greater than 0.")
     private Integer itemAmount;
+
     @NotBlank(message = "Price can't be empty.")
     @DecimalMin(value = "0.01", message = "Price must be greater than 0.")
     private BigDecimal itemPrice;
