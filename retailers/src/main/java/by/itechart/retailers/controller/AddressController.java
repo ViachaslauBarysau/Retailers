@@ -1,6 +1,7 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.AddressDto;
+import by.itechart.retailers.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
