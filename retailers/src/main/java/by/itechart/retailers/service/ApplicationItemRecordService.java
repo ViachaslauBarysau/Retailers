@@ -13,6 +13,6 @@ public interface ApplicationItemRecordService {
 
     ApplicationItemRecordDto create(ApplicationItemRecordDto applicationItemRecordDto);
 
-    CustomerDto update(ApplicationItemRecordDto applicationItemRecordDto);
+    ApplicationItemRecordDto update(ApplicationItemRecordDto applicationItemRecordDto);
 
 }

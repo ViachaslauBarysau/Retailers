@@ -1,7 +1,9 @@
 package by.itechart.retailers.service.impl;
 
-import by.itechart.retailers.converter.CustomerConverter;
+import by.itechart.retailers.converter.SupplierApplicationConverter;
 import by.itechart.retailers.dto.SupplierApplicationDto;
+import by.itechart.retailers.entity.SupplierApplication;
+import by.itechart.retailers.repository.SupplierApplicationRepository;
 import by.itechart.retailers.service.SupplierApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,31 +14,56 @@ import java.util.List;
 public class SupplierApplicationServiceImpl implements SupplierApplicationService {
 
     private SupplierApplicationRepository supplierApplicationRepository;
-    private CustomerConverter customerConverter;
+    private SupplierApplicationConverter supplierApplicationConverter;
 
     @Autowired
-    public SupplierApplicationServiceImpl(SupplierApplicationRepository supplierApplicationRepository, CustomerConverter customerConverter) {
+    public SupplierApplicationServiceImpl(SupplierApplicationRepository supplierApplicationRepository,
+                                          SupplierApplicationConverter supplierApplicationConverter) {
         this.supplierApplicationRepository = supplierApplicationRepository;
-        this.customerConverter = customerConverter;
+        this.supplierApplicationConverter = supplierApplicationConverter;
     }
 
     @Override
     public SupplierApplicationDto findById(long supplierApplicationId) {
-        return null;
+        SupplierApplication supplierApplication = supplierApplicationRepository.findById(supplierApplicationId)
+                .orElse(new SupplierApplication());
+
+        return supplierApplicationConverter.entityToDto(supplierApplication);
     }
 
     @Override
     public List<SupplierApplicationDto> findAll() {
-        return null;
+        List<SupplierApplication> supplierApplicationList = supplierApplicationRepository.findAll();
+
+        return supplierApplicationConverter.entityToDto(supplierApplicationList);
     }
 
     @Override
     public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) {
-        return null;
+        SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
+        SupplierApplication persistSupplierApplication = supplierApplicationRepository.save(supplierApplication);
+
+        return supplierApplicationConverter.entityToDto(persistSupplierApplication);
     }
 
     @Override
     public SupplierApplicationDto update(SupplierApplicationDto supplierApplicationDto) {
-        return null;
+        SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
+        SupplierApplication persistSupplierApplication = supplierApplicationRepository
+                .findById(supplierApplication.getId()).orElse(new SupplierApplication());
+
+        persistSupplierApplication.setApplicationNumber(supplierApplication.getApplicationNumber());
+        persistSupplierApplication.setApplicationStatus(supplierApplication.getApplicationStatus());
+        persistSupplierApplication.setCreator(supplierApplication.getCreator());
+        persistSupplierApplication.setDestinationLocation(supplierApplication.getDestinationLocation());
+        persistSupplierApplication.setRecordsList(supplierApplication.getRecordsList());
+        persistSupplierApplication.setRegistrationDateTime(supplierApplication.getRegistrationDateTime());
+        persistSupplierApplication.setSupplier(supplierApplication.getSupplier());
+        persistSupplierApplication.setTotalItemAmount(supplierApplication.getTotalItemAmount());
+        persistSupplierApplication.setTotalUnitNumber(supplierApplication.getTotalUnitNumber());
+        persistSupplierApplication.setUpdater(supplierApplication.getUpdater());
+        persistSupplierApplication.setUpdatingDateTime(supplierApplication.getUpdatingDateTime());
+
+        return supplierApplicationConverter.entityToDto(persistSupplierApplication);
     }
 }

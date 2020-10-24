@@ -1,7 +1,9 @@
 package by.itechart.retailers.service.impl;
 
-import by.itechart.retailers.converter.CustomerConverter;
+import by.itechart.retailers.converter.InnerApplicationConverter;
 import by.itechart.retailers.dto.InnerApplicationDto;
+import by.itechart.retailers.entity.InnerApplication;
+import by.itechart.retailers.repository.InnerApplicationRepository;
 import by.itechart.retailers.service.InnerApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,31 +14,56 @@ import java.util.List;
 public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     private InnerApplicationRepository innerApplicationRepository;
-    private CustomerConverter customerConverter;
+    private InnerApplicationConverter innerApplicationConverter;
 
     @Autowired
-    public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository, CustomerConverter customerConverter) {
+    public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository,
+                                       InnerApplicationConverter innerApplicationConverter) {
         this.innerApplicationRepository = innerApplicationRepository;
-        this.customerConverter = customerConverter;
+        this.innerApplicationConverter = innerApplicationConverter;
     }
 
     @Override
     public InnerApplicationDto findById(long innerApplicationId) {
-        return null;
+        InnerApplication innerApplication = innerApplicationRepository.findById(innerApplicationId)
+                .orElse(new InnerApplication());
+
+        return innerApplicationConverter.entityToDto(innerApplication);
     }
 
     @Override
     public List<InnerApplicationDto> findAll() {
-        return null;
+        List<InnerApplication> innerApplicationList = innerApplicationRepository.findAll();
+
+        return innerApplicationConverter.entityToDto(innerApplicationList);
     }
 
     @Override
     public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) {
-        return null;
+        InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
+        InnerApplication persistInnerApplication = innerApplicationRepository.save(innerApplication);
+
+        return innerApplicationConverter.entityToDto(persistInnerApplication);
     }
 
     @Override
     public InnerApplicationDto update(InnerApplicationDto innerApplicationDto) {
-        return null;
+        InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
+        InnerApplication persistInnerApplication = innerApplicationRepository.findById(innerApplication.getId())
+                .orElse(new InnerApplication());
+
+        persistInnerApplication.setApplicationNumber(innerApplication.getApplicationNumber());
+        persistInnerApplication.setApplicationStatus(innerApplication.getApplicationStatus());
+        persistInnerApplication.setCreator(innerApplication.getCreator());
+        persistInnerApplication.setDestinationLocation(innerApplication.getDestinationLocation());
+        persistInnerApplication.setRecordsList(innerApplication.getRecordsList());
+        persistInnerApplication.setRegistrationDateTime(innerApplication.getRegistrationDateTime());
+        persistInnerApplication.setSourceLocation(innerApplication.getSourceLocation());
+        persistInnerApplication.setTotalItemAmount(innerApplication.getTotalItemAmount());
+        persistInnerApplication.setTotalUnitNumber(innerApplication.getTotalUnitNumber());
+        persistInnerApplication.setUpdater(innerApplication.getUpdater());
+        persistInnerApplication.setUpdatingDateTime(innerApplication.getUpdatingDateTime());
+
+        return innerApplicationConverter.entityToDto(persistInnerApplication);
     }
 }
