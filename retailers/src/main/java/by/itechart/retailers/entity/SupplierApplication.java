@@ -32,11 +32,11 @@ public class SupplierApplication implements Serializable {
     @JoinColumn(name = "destination_location_id")
     private Location destinationLocation;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
     private User creator;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "updater_id")
     private User updater;
 

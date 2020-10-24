@@ -26,7 +26,6 @@ public class Supplier implements Serializable {
     @Column(name = "identifier")
     private String identifier;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "warehouse_id")
+    @ManyToMany
     private List<Location> wareHouseList;
 }

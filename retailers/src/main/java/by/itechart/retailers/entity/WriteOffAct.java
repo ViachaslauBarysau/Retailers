@@ -21,8 +21,8 @@ public class WriteOffAct implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writeoffrecord_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "write_off_record_id")
     private List<WriteOffActItemRecord> writeOffActItemRecords;
 
     @Column(name = "act_date_time")

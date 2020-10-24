@@ -25,7 +25,7 @@ public class Item implements Serializable {
     @Column(name = "label")
     private String label;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
