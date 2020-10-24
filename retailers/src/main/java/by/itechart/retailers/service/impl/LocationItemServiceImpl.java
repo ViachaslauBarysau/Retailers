@@ -1,7 +1,9 @@
 package by.itechart.retailers.service.impl;
 
-import by.itechart.retailers.converter.CustomerConverter;
+import by.itechart.retailers.converter.LocationItemConverter;
 import by.itechart.retailers.dto.LocationItemDto;
+import by.itechart.retailers.entity.LocationItem;
+import by.itechart.retailers.repository.LocationItemRepository;
 import by.itechart.retailers.service.LocationItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,31 +14,48 @@ import java.util.List;
 public class LocationItemServiceImpl implements LocationItemService {
 
     private LocationItemRepository locationItemRepository;
-    private CustomerConverter customerConverter;
+    private LocationItemConverter locationItemConverter;
 
     @Autowired
-    public LocationItemServiceImpl(LocationItemRepository locationItemRepository, CustomerConverter customerConverter) {
+    public LocationItemServiceImpl(LocationItemRepository locationItemRepository,
+                                   LocationItemConverter locationItemConverter) {
         this.locationItemRepository = locationItemRepository;
-        this.customerConverter = customerConverter;
+        this.locationItemConverter = locationItemConverter;
     }
 
     @Override
     public LocationItemDto findById(long locationItemId) {
-        return null;
+        LocationItem locationItem = locationItemRepository.findById(locationItemId)
+                .orElse(new LocationItem());
+
+        return locationItemConverter.entityToDto(locationItem);
     }
 
     @Override
     public List<LocationItemDto> findAll() {
-        return null;
+        List<LocationItem> locationItemList = locationItemRepository.findAll();
+
+        return locationItemConverter.entityToDto(locationItemList);
     }
 
     @Override
     public LocationItemDto create(LocationItemDto locationItemDto) {
-        return null;
+        LocationItem locationItem = locationItemConverter.dtoToEntity(locationItemDto);
+        LocationItem persistLocationItem = locationItemRepository.save(locationItem);
+
+        return locationItemConverter.entityToDto(persistLocationItem);
     }
 
     @Override
     public LocationItemDto update(LocationItemDto locationItemDto) {
-        return null;
+        LocationItem locationItem = locationItemConverter.dtoToEntity(locationItemDto);
+        LocationItem persistLocationItem = locationItemRepository
+                .findById(locationItem.getId())
+                .orElse(new LocationItem());
+
+        persistLocationItem.setCost(locationItem.getCost());
+        persistLocationItem.setItem(locationItem.getItem());
+
+        return locationItemConverter.entityToDto(persistLocationItem);
     }
 }

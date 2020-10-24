@@ -2,6 +2,8 @@ package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.dto.CustomerDto;
+import by.itechart.retailers.entity.Customer;
+import by.itechart.retailers.repository.CustomerRepository;
 import by.itechart.retailers.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,33 +25,35 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto findById(long customerId) {
-        return null;
-        //  return customerConverter.entityToDto(customerRepository.findById());
-        //return null;
+        Customer customer = customerRepository.findById(customerId).orElse(new Customer());
+        return customerConverter.entityToDto(customer);
     }
 
     @Override
     public List<CustomerDto> findAll() {
-        return null;
-        // return customerConverter.entityToDto(customerRepository.findAll());
-
-
-        //return null;
-        /*return ((List<Customer>) customerRepository
-                .findAll())
-                .stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());*/
+        List<Customer> customerList = customerRepository.findAll();
+        return customerConverter.entityToDto(customerList);
     }
 
     @Override
     public CustomerDto create(CustomerDto customerDto) {
-        return null;
+        Customer customer = customerConverter.dtoToEntity(customerDto);
+        Customer persistsCustomer = customerRepository.save(customer);
+        return customerConverter.entityToDto(persistsCustomer);
     }
 
     @Override
     public CustomerDto update(CustomerDto customerDto) {
-        return null;
+        Customer customer = customerConverter.dtoToEntity(customerDto);
+        Customer persistCustomer = customerRepository.findById(customer.getId())
+                .orElse(new Customer());
+
+        persistCustomer.setAdmin(customer.getAdmin());
+        persistCustomer.setCategoryList(customer.getCategoryList());
+        persistCustomer.setDirector(customer.getDirector());
+        persistCustomer.setLocationList(customer.getLocationList());
+
+        return customerConverter.entityToDto(persistCustomer);
     }
 
 }
