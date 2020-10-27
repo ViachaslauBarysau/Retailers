@@ -35,6 +35,10 @@ public class Location implements Serializable {
     @JoinColumn(name = "location_id")
     private List<LocationProduct> productList;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "write_of_act_id")
+    private List<WriteOffAct> writeOffActList;
+
     @Column(name = "total_capacity")
     private Integer totalCapacity;
 

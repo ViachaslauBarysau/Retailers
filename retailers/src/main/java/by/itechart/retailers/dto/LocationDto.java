@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,4 +22,6 @@ public class LocationDto {
     @NotBlank(message = "Cost can't be empty.")
     @DecimalMin(value = "0.01", message = "Cost must be greater than 0.")
     private BigDecimal cost;
+    @Valid
+    private List<WriteOffActDto> writeOffActList;
 }

@@ -55,6 +55,7 @@ public class LocationServiceImpl implements LocationService {
         persistLocation.setCustomer(location.getCustomer());
         persistLocation.setIdentifier(location.getIdentifier());
         persistLocation.setProductList(location.getProductList());
+        persistLocation.setWriteOffActList(location.getWriteOffActList());
         persistLocation.setLocationType(location.getLocationType());
         persistLocation.setTotalCapacity(location.getTotalCapacity());
 

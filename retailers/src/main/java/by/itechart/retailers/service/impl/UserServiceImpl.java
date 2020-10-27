@@ -57,6 +57,8 @@ public class UserServiceImpl implements UserService {
         persistUser.setPassword(user.getPassword());
         persistUser.setUserRole(user.getUserRole());
         persistUser.setUserStatus(user.getUserStatus());
+        persistUser.setCustomer(user.getCustomer());
+        persistUser.setLocation(user.getLocation());
 
         return userConverter.entityToDto(persistUser);
     }
