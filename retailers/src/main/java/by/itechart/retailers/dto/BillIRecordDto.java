@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
@@ -14,11 +15,13 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 @Builder
-public class LocationDto {
+public class BillIRecordDto {
     private Long id;
     @Valid
     private ProductDto product;
-    @NotBlank(message = "Cost can't be empty.")
-    @DecimalMin(value = "0.01", message = "Cost must be greater than 0.")
-    private BigDecimal cost;
+    @Min(value = 1, message = "Product amount must be greater than 0.")
+    private Integer productAmount;
+    @NotBlank(message = "Price can't be empty.")
+    @DecimalMin(value = "0.01", message = "Price must be greater than 0.")
+    private BigDecimal productPrice;
 }

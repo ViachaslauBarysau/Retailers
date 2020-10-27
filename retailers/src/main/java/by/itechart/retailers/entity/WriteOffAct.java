@@ -22,12 +22,12 @@ public class WriteOffAct implements Serializable {
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "write_off_record_id")
-    private List<WriteOffActItemRecord> writeOffActItemRecords;
+    @JoinColumn(name = "write_off_act_id")
+    private List<WriteOffActRecord> writeOffActRecords;
 
     @Column(name = "act_date_time")
     private LocalDateTime actDateTime;
 
-    @Column(name = "total_item_amount")
-    private Integer totalItemAmount;
+    @Column(name = "total_product_amount")
+    private Integer totalProductAmount;
 }

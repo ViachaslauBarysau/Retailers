@@ -59,7 +59,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
         persistSupplierApplication.setRecordsList(supplierApplication.getRecordsList());
         persistSupplierApplication.setRegistrationDateTime(supplierApplication.getRegistrationDateTime());
         persistSupplierApplication.setSupplier(supplierApplication.getSupplier());
-        persistSupplierApplication.setTotalItemAmount(supplierApplication.getTotalItemAmount());
+        persistSupplierApplication.setTotalProductAmount(supplierApplication.getTotalProductAmount());
         persistSupplierApplication.setTotalUnitNumber(supplierApplication.getTotalUnitNumber());
         persistSupplierApplication.setUpdater(supplierApplication.getUpdater());
         persistSupplierApplication.setUpdatingDateTime(supplierApplication.getUpdatingDateTime());

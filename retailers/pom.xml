@@ -84,7 +84,6 @@
 <!--            <groupId>org.liquibase</groupId>-->
 <!--            <artifactId>liquibase-core</artifactId>-->
 <!--        </dependency>-->
-
         <!--Swagger UI-->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -97,7 +96,6 @@
             <version>2.6.1</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -106,5 +104,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

@@ -26,9 +26,9 @@ public class BillDto {
     @Past(message = "Registration date of bill cannot be in the future.")
     private LocalDateTime registrationDateTime;
     @Valid
-    private List<BillItemRecordDto> recordList;
-    @Min(value = 1, message = "Item amount must be greater than 0.")
-    private Integer totalItemAmount;
+    private List<BillIRecordDto> recordList;
+    @Min(value = 1, message = "Product amount must be greater than 0.")
+    private Integer totalProductAmount;
     @Min(value = 1, message = "Unit number must be greater than 0.")
     private Integer totalUnitNumber;
 }

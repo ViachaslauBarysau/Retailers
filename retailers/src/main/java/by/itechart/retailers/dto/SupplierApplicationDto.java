@@ -36,9 +36,9 @@ public class SupplierApplicationDto {
     @NotBlank(message = "Status can't be empty.")
     private ApplicationStatus applicationStatus;
     @Valid
-    private List<ApplicationItemRecordDto> recordsList;
-    @Min(value = 0, message = "Item amount must be equals or greater than 0.")
-    private Integer totalItemAmount;
+    private List<ApplicationRecordDto> recordsList;
+    @Min(value = 0, message = "Product amount must be equals or greater than 0.")
+    private Integer totalProductAmount;
     @Min(value = 0, message = "Unit number must be equals or greater than 0.")
     private Integer totalUnitNumber;
 }

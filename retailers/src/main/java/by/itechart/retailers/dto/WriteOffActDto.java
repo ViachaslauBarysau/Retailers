@@ -18,9 +18,9 @@ import java.util.List;
 public class WriteOffActDto {
     private Long id;
     @Valid
-    private List<WriteOffActItemRecordDto> writeOffActItemRecords;
+    private List<WriteOffActRecordDto> writeOffActRecords;
     @Past(message = "Date and time of act can't be in the future.")
     private LocalDateTime actDateTime;
-    @Min(value = 1, message = "Item amount must be equals or greater than 1.")
-    private Integer totalItemAmount;
+    @Min(value = 1, message = "Product amount must be equals or greater than 1.")
+    private Integer totalProductAmount;
 }

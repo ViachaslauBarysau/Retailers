@@ -19,7 +19,7 @@ public class LocationController {
     }
 
     @GetMapping
-    public ResponseEntity findAllItems() {
+    public ResponseEntity findAllProducts() {
         return new ResponseEntity<>(locationService.findAll(), HttpStatus.OK);
     }
 

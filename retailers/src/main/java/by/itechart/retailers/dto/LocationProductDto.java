@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 @Builder
-public class LocationDto {
+public class LocationProductDto {
     private Long id;
     @Valid
     private ProductDto product;

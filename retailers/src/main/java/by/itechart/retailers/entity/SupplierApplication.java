@@ -28,7 +28,7 @@ public class SupplierApplication implements Serializable {
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "destination_location_id")
     private Location destinationLocation;
 
@@ -51,11 +51,11 @@ public class SupplierApplication implements Serializable {
     private ApplicationStatus applicationStatus;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "application_item_record_id")
-    private List<ApplicationItemRecord> recordsList;
+    @JoinColumn(name = "application_record_id")
+    private List<ApplicationRecord> recordsList;
 
-    @Column(name = "total_item_amount")
-    private Integer totalItemAmount;
+    @Column(name = "total_product_amount")
+    private Integer totalProductAmount;
 
     @Column(name = "total_unit_number")
     private Integer totalUnitNumber;

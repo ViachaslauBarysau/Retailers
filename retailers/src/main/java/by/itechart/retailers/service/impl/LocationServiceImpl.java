@@ -24,8 +24,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public LocationDto findById(long locationItemId) {
-        Location location = locationRepository.findById(locationItemId).orElse(new Location());
+    public LocationDto findById(long locationProductId) {
+        Location location = locationRepository.findById(locationProductId).orElse(new Location());
 
         return locationConverter.entityToDto(location);
     }
@@ -54,7 +54,7 @@ public class LocationServiceImpl implements LocationService {
         persistLocation.setAvailableCapacity(location.getAvailableCapacity());
         persistLocation.setCustomer(location.getCustomer());
         persistLocation.setIdentifier(location.getIdentifier());
-        persistLocation.setItemList(location.getItemList());
+        persistLocation.setProductList(location.getProductList());
         persistLocation.setLocationType(location.getLocationType());
         persistLocation.setTotalCapacity(location.getTotalCapacity());
 
