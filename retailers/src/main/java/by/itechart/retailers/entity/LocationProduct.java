@@ -26,4 +26,7 @@ public class LocationProduct implements Serializable {
 
     @Column(name = "cost")
     private BigDecimal cost;
+
+    @Column(name = "amount")
+    private Integer amount;
 }

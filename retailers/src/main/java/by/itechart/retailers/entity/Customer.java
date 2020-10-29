@@ -23,8 +23,10 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Location> locationList;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "customer_category",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = {@JoinColumn(name = "category_id")})
     private List<Category> categoryList;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -34,4 +36,16 @@ public class Customer implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "director_id")
     private User director;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "customer_status")
+    private Status customerStatus;
+
+    @OneToMany
+    @JoinColumn(name = "customer_id")
+    private List<Supplier> supplierList;
+
+    @OneToMany
+    @JoinColumn(name = "customer_id")
+    private List<Product> productList;
 }

@@ -1,6 +1,6 @@
 package by.itechart.retailers.entity;
 
-public enum UserStatus {
+public enum Status {
     ACTIVE,
     DISABLED
 }

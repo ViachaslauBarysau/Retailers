@@ -1,7 +1,7 @@
 package by.itechart.retailers.dto;
 
 import by.itechart.retailers.entity.Role;
-import by.itechart.retailers.entity.UserStatus;
+import by.itechart.retailers.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class UserDto {
     @Size(min = 6, max = 20, message = "Password must be from 6 to 20 symbols.")
     private String password;
     @NotBlank(message = "Status can't be empty.")
-    private UserStatus userStatus;
+    private Status userStatus;
     @Valid
     private LocationDto location;
     @Valid

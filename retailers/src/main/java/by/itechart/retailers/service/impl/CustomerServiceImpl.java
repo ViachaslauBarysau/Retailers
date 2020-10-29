@@ -52,6 +52,8 @@ public class CustomerServiceImpl implements CustomerService {
         persistCustomer.setCategoryList(customer.getCategoryList());
         persistCustomer.setDirector(customer.getDirector());
         persistCustomer.setLocationList(customer.getLocationList());
+        persistCustomer.setCustomerStatus(customer.getCustomerStatus());
+        persistCustomer.setProductList(customer.getProductList());
 
         return customerConverter.entityToDto(persistCustomer);
     }

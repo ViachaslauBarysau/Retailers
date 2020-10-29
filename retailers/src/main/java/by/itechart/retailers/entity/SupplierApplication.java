@@ -51,7 +51,9 @@ public class SupplierApplication implements Serializable {
     private ApplicationStatus applicationStatus;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "application_record_id")
+    @JoinTable(name = "supplier_application_record",
+            joinColumns = @JoinColumn(name = "supplier_application_id"),
+            inverseJoinColumns = {@JoinColumn(name = "application_record_id")})
     private List<ApplicationRecord> recordsList;
 
     @Column(name = "total_product_amount")

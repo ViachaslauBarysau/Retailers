@@ -1,11 +1,13 @@
 package by.itechart.retailers.dto;
 
+import by.itechart.retailers.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @NoArgsConstructor
@@ -22,4 +24,8 @@ public class CustomerDto {
     private UserDto admin;
     @Valid
     private UserDto director;
+    @NotBlank(message = "Status can't be empty.")
+    private Status customerStatus;
+    @Valid
+    private List<ProductDto> productList;
 }

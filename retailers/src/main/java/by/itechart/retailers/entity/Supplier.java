@@ -26,6 +26,9 @@ public class Supplier implements Serializable {
     @Column(name = "identifier")
     private String identifier;
 
-    @ManyToMany
+    @OneToMany
+    @JoinTable(name = "supplier_location",
+            joinColumns = @JoinColumn(name = "supplier_id"),
+            inverseJoinColumns = {@JoinColumn(name = "location_id")})
     private List<Location> wareHouseList;
 }
