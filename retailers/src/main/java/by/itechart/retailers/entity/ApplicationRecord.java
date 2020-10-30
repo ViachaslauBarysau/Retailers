@@ -27,9 +27,6 @@ public class ApplicationRecord implements Serializable {
     @Column(name = "amount")
     private Integer amount;
 
-    @Column(name = "estimate_amount")
-    private Integer estimateAmount;
-
     @Column(name = "cost")
     private BigDecimal cost;
 }

@@ -56,7 +56,6 @@ public class ApplicationRecordServiceImpl implements ApplicationRecordService {
                 .findApplicationProductRecordByProduct(applicationRecord.getProduct());
 
         persistApplicationProduct.setAmount(applicationRecord.getAmount());
-        persistApplicationProduct.setEstimateAmount(applicationRecord.getEstimateAmount());
         persistApplicationProduct.setCost(applicationRecord.getCost());
 
         return applicationRecordConverter.entityToDto(persistApplicationProduct);

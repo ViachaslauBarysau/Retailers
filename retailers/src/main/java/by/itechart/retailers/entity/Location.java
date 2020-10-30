@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -36,7 +37,7 @@ public class Location implements Serializable {
     private List<LocationProduct> productList;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "write_of_act_id")
+    @JoinColumn(name = "location_id")
     private List<WriteOffAct> writeOffActList;
 
     @Column(name = "total_capacity")
@@ -48,4 +49,7 @@ public class Location implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "location_type")
     private LocationType locationType;
+
+    @Column(name = "location_tax")
+    private BigDecimal locationTax;
 }

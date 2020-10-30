@@ -21,4 +21,6 @@ public class LocationProductDto {
     @NotBlank(message = "Cost can't be empty.")
     @DecimalMin(value = "0.01", message = "Cost must be greater than 0.")
     private BigDecimal cost;
+    @DecimalMin(value = "0.01", message = "Price must be greater than 0.")
+    private BigDecimal price;
 }
