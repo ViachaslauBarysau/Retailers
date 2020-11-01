@@ -47,5 +47,13 @@ public class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status")
-    private UserStatus userStatus;
+    private Status userStatus;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

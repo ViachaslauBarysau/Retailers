@@ -59,7 +59,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         persistInnerApplication.setRecordsList(innerApplication.getRecordsList());
         persistInnerApplication.setRegistrationDateTime(innerApplication.getRegistrationDateTime());
         persistInnerApplication.setSourceLocation(innerApplication.getSourceLocation());
-        persistInnerApplication.setTotalItemAmount(innerApplication.getTotalItemAmount());
+        persistInnerApplication.setTotalProductAmount(innerApplication.getTotalProductAmount());
         persistInnerApplication.setTotalUnitNumber(innerApplication.getTotalUnitNumber());
         persistInnerApplication.setUpdater(innerApplication.getUpdater());
         persistInnerApplication.setUpdatingDateTime(innerApplication.getUpdatingDateTime());

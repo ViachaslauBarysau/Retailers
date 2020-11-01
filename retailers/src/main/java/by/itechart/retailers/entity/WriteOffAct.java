@@ -21,13 +21,13 @@ public class WriteOffAct implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "writeoffrecord_id")
-    private List<WriteOffActItemRecord> writeOffActItemRecords;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "write_off_act_id")
+    private List<WriteOffActRecord> writeOffActRecords;
 
     @Column(name = "act_date_time")
     private LocalDateTime actDateTime;
 
-    @Column(name = "total_item_amount")
-    private Integer totalItemAmount;
+    @Column(name = "total_product_amount")
+    private Integer totalProductAmount;
 }

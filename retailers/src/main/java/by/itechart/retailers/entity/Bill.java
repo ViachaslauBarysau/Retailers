@@ -36,11 +36,11 @@ public class Bill implements Serializable {
     private LocalDateTime registrationDateTime;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "billitemrecord_id")
-    private List<BillItemRecord> recordList;
+    @JoinColumn(name = "bill_id")
+    private List<BillRecord> recordList;
 
-    @Column(name = "total_item_amount")
-    private Integer totalItemAmount;
+    @Column(name = "total_product_amount")
+    private Integer totalProductAmount;
 
     @Column(name = "total_unit_number")
     private Integer totalUnitNumber;

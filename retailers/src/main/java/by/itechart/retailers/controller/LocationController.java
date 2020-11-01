@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/items")
+@RequestMapping("/locations")
 public class LocationController {
 
     private LocationService locationService;
@@ -19,7 +19,7 @@ public class LocationController {
     }
 
     @GetMapping
-    public ResponseEntity findAllItems() {
+    public ResponseEntity findAllProducts() {
         return new ResponseEntity<>(locationService.findAll(), HttpStatus.OK);
     }
 

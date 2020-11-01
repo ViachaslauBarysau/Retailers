@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -23,17 +24,21 @@ public class Location implements Serializable {
     @Column(name = "identifier")
     private String identifier;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "location_id")
-    private List<LocationItem> itemList;
+    private List<LocationProduct> productList;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "location_id")
+    private List<WriteOffAct> writeOffActList;
 
     @Column(name = "total_capacity")
     private Integer totalCapacity;
@@ -44,4 +49,7 @@ public class Location implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "location_type")
     private LocationType locationType;
+
+    @Column(name = "location_tax")
+    private BigDecimal locationTax;
 }
