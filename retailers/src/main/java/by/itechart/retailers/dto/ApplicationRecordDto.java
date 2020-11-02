@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 @Builder
 public class ApplicationRecordDto {
     private Long id;
-    @Valid
     private ProductDto product;
     @NotBlank(message = "Amount field can't be empty.")
     @Min(value = 0, message = "Amount must be equals or greater than 0.")

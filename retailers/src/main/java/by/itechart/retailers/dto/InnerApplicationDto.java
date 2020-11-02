@@ -21,13 +21,9 @@ public class InnerApplicationDto {
     private Long id;
     @Min(value = 0, message = "Wrong application number.")
     private Integer applicationNumber;
-    @Valid
     private LocationDto sourceLocation;
-    @Valid
     private LocationDto destinationLocation;
-    @Valid
     private UserDto creator;
-    @Valid
     private UserDto updater;
     @Past(message = "Registration date of application can't be in the future.")
     private LocalDateTime registrationDateTime;

@@ -21,13 +21,9 @@ public class SupplierApplicationDto {
     private Long id;
     @Min(value = 0, message = "Wrong application number.")
     private Integer applicationNumber;
-    @Valid
     private SupplierDto supplier;
-    @Valid
     private LocationDto destinationLocation;
-    @Valid
     private UserDto creator;
-    @Valid
     private UserDto updater;
     @Past(message = "Registration date of application can't be in the future.")
     private LocalDateTime registrationDateTime;
@@ -35,7 +31,6 @@ public class SupplierApplicationDto {
     private LocalDateTime updatingDateTime;
     @NotBlank(message = "Status can't be empty.")
     private ApplicationStatus applicationStatus;
-    @Valid
     private List<ApplicationRecordDto> recordsList;
     @Min(value = 0, message = "Product amount must be equals or greater than 0.")
     private Integer totalProductAmount;

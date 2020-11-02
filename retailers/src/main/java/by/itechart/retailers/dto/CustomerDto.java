@@ -16,16 +16,11 @@ import java.util.List;
 @Builder
 public class CustomerDto {
     private Long id;
-    @Valid
     private List<LocationDto> locationList;
-    @Valid
     private List<CategoryDto> categoryList;
-    @Valid
     private UserDto admin;
-    @Valid
     private UserDto director;
     @NotBlank(message = "Status can't be empty.")
     private Status customerStatus;
-    @Valid
     private List<ProductDto> productList;
 }

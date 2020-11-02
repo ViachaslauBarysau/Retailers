@@ -19,13 +19,10 @@ public class BillDto {
     private Long id;
     @Min(value = 0, message = "Wrong bill number.")
     private Integer billNumber;
-    @Valid
     private LocationDto location;
-    @Valid
     private UserDto shopManager;
     @Past(message = "Registration date of bill cannot be in the future.")
     private LocalDateTime registrationDateTime;
-    @Valid
     private List<BillIRecordDto> recordList;
     @Min(value = 1, message = "Product amount must be greater than 0.")
     private Integer totalProductAmount;

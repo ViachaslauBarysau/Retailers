@@ -19,7 +19,6 @@ public class ProductDto {
     private Integer upc;
     @NotBlank(message = "Label can't be empty.")
     private String label;
-    @Valid
     private CategoryDto category;
     @Min(value = 1, message = "Product volume must be greater than 0.")
     private Integer volume;

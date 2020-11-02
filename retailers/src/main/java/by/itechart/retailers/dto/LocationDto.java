@@ -25,9 +25,7 @@ public class LocationDto {
     @Size(min = 1, max = 20, message = "Identifier can be from 1 to 20 symbols.")
     private String identifier;
     private CustomerDto customer;
-    @Valid
     private AddressDto address;
-    @Valid
     private List<LocationProduct> locationItemList;
     @Min(value = 1, message = "Total capacity must be greater than 0.")
     private Integer totalCapacity;

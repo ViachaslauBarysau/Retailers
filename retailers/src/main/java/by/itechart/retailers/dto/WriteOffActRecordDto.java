@@ -16,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class WriteOffActRecordDto {
     private Long id;
-    @Valid
     private ProductDto product;
     @Min(value = 1, message = "Product amount must be equals or greater than 1.")
     private Integer amount;

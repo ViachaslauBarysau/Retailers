@@ -17,7 +17,6 @@ import java.util.List;
 @Builder
 public class WriteOffActDto {
     private Long id;
-    @Valid
     private List<WriteOffActRecordDto> writeOffActRecords;
     @Past(message = "Date and time of act can't be in the future.")
     private LocalDateTime actDateTime;

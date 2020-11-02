@@ -14,7 +14,6 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class AddressDto {
     private Long id;
-    @Valid
     private StateDto state;
     @NotBlank(message = "City is a mandatory field.")
     private String city;

@@ -24,11 +24,9 @@ public class UserDto {
     @NotNull(message = "Last name can't be empty.")
     @Size(min = 1, max = 20, message = "Last name can be from 1 to 20 symbols.")
     private String lastName;
-    @Valid
     private AddressDto address;
     @Past(message = "Birthday can't be in the future.")
     private LocalDate birthday;
-    @Valid
     private List<Role> userRole;
     @Email(message = "Wrong email format.")
     private String email;
@@ -36,8 +34,6 @@ public class UserDto {
     private String password;
     @NotBlank(message = "Status can't be empty.")
     private Status userStatus;
-    @Valid
     private LocationDto location;
-    @Valid
     private CustomerDto customer;
 }
