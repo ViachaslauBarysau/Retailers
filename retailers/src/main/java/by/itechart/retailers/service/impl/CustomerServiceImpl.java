@@ -38,12 +38,6 @@ public class CustomerServiceImpl implements CustomerService {
         return customerConverter.entityToDto(customerPage.toList());
     }
 
-   /* @Override
-    public List<CustomerDto> findAll() {
-        List<Customer> customerList = customerRepository.findAll();
-        return customerConverter.entityToDto(customerList);
-    }*/
-
     @Override
     public CustomerDto create(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);

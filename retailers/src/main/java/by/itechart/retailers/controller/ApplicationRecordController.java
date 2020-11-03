@@ -19,7 +19,7 @@ public class ApplicationRecordController {
     }
 
     @GetMapping
-    public ResponseEntity findAllUsers() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(applicationRecordService.findAll(), HttpStatus.OK);
     }
 

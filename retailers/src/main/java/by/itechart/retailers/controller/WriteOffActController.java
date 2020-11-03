@@ -19,7 +19,7 @@ public class WriteOffActController {
     }
 
     @GetMapping
-    public ResponseEntity findAllUsers() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(writeOffActService.findAll(), HttpStatus.OK);
     }
 

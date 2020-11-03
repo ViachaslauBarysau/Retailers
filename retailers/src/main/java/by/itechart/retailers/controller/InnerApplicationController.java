@@ -19,7 +19,7 @@ public class InnerApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity findAllCustomers() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(innerApplicationService.findAll(), HttpStatus.OK);
     }
 
