@@ -3,6 +3,7 @@ package by.itechart.retailers.service.impl;
 import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.entity.Customer;
+import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.repository.CustomerRepository;
 import by.itechart.retailers.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerConverter.entityToDto(customerPage.toList());
     }
 
+
     @Override
     public CustomerDto create(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
@@ -59,6 +61,21 @@ public class CustomerServiceImpl implements CustomerService {
         persistCustomer.setProductList(customer.getProductList());
 
         return customerConverter.entityToDto(persistCustomer);
+    }
+
+    @Override
+    public List<CustomerDto> updateStatus(List<CustomerDto> customerDtos) {
+        List<Customer> customers = customerConverter.dtoToEntity(customerDtos);
+        for (Customer customer : customers) {
+            if (customer.getCustomerStatus()
+                        .equals(Status.ACTIVE)) {
+                customer.setCustomerStatus(Status.DISABLED);
+            } else {
+                customer.setCustomerStatus(Status.ACTIVE);
+            }
+            customerRepository.save(customer);
+        }
+        return customerConverter.entityToDto(customers);
     }
 
 }
