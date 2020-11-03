@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.repository.CustomerRepository;
 import by.itechart.retailers.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,15 +27,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto findById(long customerId) {
-        Customer customer = customerRepository.findById(customerId).orElse(new Customer());
+        Customer customer = customerRepository.findById(customerId)
+                                              .orElse(new Customer());
         return customerConverter.entityToDto(customer);
     }
 
     @Override
+    public List<CustomerDto> findAll(Pageable pageable) {
+        Page<Customer> customerPage = customerRepository.findAll(pageable);
+        return customerConverter.entityToDto(customerPage.toList());
+    }
+
+   /* @Override
     public List<CustomerDto> findAll() {
         List<Customer> customerList = customerRepository.findAll();
         return customerConverter.entityToDto(customerList);
-    }
+    }*/
 
     @Override
     public CustomerDto create(CustomerDto customerDto) {
@@ -46,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto update(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistCustomer = customerRepository.findById(customer.getId())
-                .orElse(new Customer());
+                                                     .orElse(new Customer());
 
         persistCustomer.setAdmin(customer.getAdmin());
         persistCustomer.setCategoryList(customer.getCategoryList());
