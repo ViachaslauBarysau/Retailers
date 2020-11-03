@@ -48,12 +48,16 @@ public class CustomerServiceImpl implements CustomerService {
         Customer persistCustomer = customerRepository.findById(customer.getId())
                 .orElse(new Customer());
 
+        persistCustomer.setName(customer.getName());
+        persistCustomer.setEmail(customer.getEmail());
+        persistCustomer.setRegistrationDate(customer.getRegistrationDate());
         persistCustomer.setAdmin(customer.getAdmin());
         persistCustomer.setCategoryList(customer.getCategoryList());
         persistCustomer.setDirector(customer.getDirector());
         persistCustomer.setLocationList(customer.getLocationList());
         persistCustomer.setCustomerStatus(customer.getCustomerStatus());
         persistCustomer.setProductList(customer.getProductList());
+
 
         return customerConverter.entityToDto(persistCustomer);
     }

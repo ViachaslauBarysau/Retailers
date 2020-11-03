@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,15 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "registration_date")
+    private LocalDate registrationDate;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Location> locationList;

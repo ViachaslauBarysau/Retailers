@@ -6,8 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @NoArgsConstructor
@@ -16,6 +18,13 @@ import java.util.List;
 @Builder
 public class CustomerDto {
     private Long id;
+    @NotNull(message = "Customer name can't be empty.")
+    @Size(min = 1, max = 20, message = "Customer name can be from 1 to 20 symbols.")
+    private String name;
+    @Email(message = "Wrong email format.")
+    private String email;
+    @Past(message = "Registration date can't be in the future.")
+    private LocalDate registrationDate;
     @Valid
     private List<LocationDto> locationList;
     @Valid
