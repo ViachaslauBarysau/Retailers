@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity findAllUsers() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 

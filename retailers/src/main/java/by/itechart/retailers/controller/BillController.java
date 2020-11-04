@@ -19,7 +19,7 @@ public class BillController {
     }
 
     @GetMapping
-    public ResponseEntity findAllUsers() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(billService.findAll(), HttpStatus.OK);
     }
 

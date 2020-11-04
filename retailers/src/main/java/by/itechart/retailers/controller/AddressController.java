@@ -19,7 +19,7 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity findAllUsers() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(addressService.findAll(), HttpStatus.OK);
     }
 
