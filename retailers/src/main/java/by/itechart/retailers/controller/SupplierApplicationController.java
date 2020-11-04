@@ -19,7 +19,7 @@ public class SupplierApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity findAllProducts() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(supplierApplicationService.findAll(), HttpStatus.OK);
     }
 

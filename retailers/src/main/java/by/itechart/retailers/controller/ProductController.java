@@ -19,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity findAllProducts() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
     }
 

@@ -19,7 +19,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity findAllUsers() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
     }
 
