@@ -23,8 +23,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        return userConverter.entityToDto(user);
+    }
+
+    @Override
     public UserDto findById(long userId) {
-        User user = userRepository.findById(userId).orElse(new User());
+        User user = userRepository.findById(userId)
+                                  .orElse(new User());
 
         return userConverter.entityToDto(user);
     }
@@ -47,7 +54,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto userDto) {
         User user = userConverter.dtoToEntity(userDto);
-        User persistUser = userRepository.findById(user.getId()).orElse(new User());
+        User persistUser = userRepository.findById(user.getId())
+                                         .orElse(new User());
 
         persistUser.setAddress(user.getAddress());
         persistUser.setBirthday(user.getBirthday());
