@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,9 +36,9 @@ public class User implements Serializable {
     private LocalDate birthday;
 
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(targetClass = Role.class,fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private List<Role> userRole;
+    private List<Role> userRole=new ArrayList<>();
 
     @Column(name = "email")
     private String email;

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -29,7 +30,7 @@ public class UserDto {
     @Past(message = "Birthday can't be in the future.")
     private LocalDate birthday;
     @Valid
-    private List<Role> userRole;
+    private List<Role> userRole=new ArrayList<>();
     @Email(message = "Wrong email format.")
     private String email;
     @Size(min = 6, max = 20, message = "Password must be from 6 to 20 symbols.")
