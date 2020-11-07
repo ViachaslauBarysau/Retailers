@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class JwtTokenFilter extends GenericFilterBean {
@@ -31,6 +32,9 @@ public class JwtTokenFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
+//        ((HttpServletResponse) res).setHeader("Access-Control-Allow-Origin", "*");
+//        ((HttpServletResponse) res).setHeader("Access-Control-Allow-Methods", "*");
+
         filterChain.doFilter(req, res);
     }
 

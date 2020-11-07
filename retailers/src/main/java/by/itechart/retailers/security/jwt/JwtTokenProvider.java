@@ -3,6 +3,7 @@ package by.itechart.retailers.security.jwt;
 import by.itechart.retailers.entity.Role;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,9 +29,12 @@ public class JwtTokenProvider {
     @Value("${jwt.token.expired}")
     private long validityInMilliseconds;
 
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    public JwtTokenProvider(@Qualifier("jwtUserDetailsService") UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
