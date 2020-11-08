@@ -26,13 +26,7 @@ public class CustomerDto {
     @Past(message = "Registration date can't be in the future.")
     private LocalDate registrationDate;
     @Valid
-    private List<LocationDto> locationList;
-    @Valid
     private List<CategoryDto> categoryList;
-    @Valid
-    private UserDto admin;
-    @Valid
-    private UserDto director;
     @NotBlank(message = "Status can't be empty.")
     private Status customerStatus;
     @Valid

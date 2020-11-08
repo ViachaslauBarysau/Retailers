@@ -30,22 +30,11 @@ public class Customer implements Serializable {
     @Column(name = "registration_date")
     private LocalDate registrationDate;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Location> locationList;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "customer_category",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = {@JoinColumn(name = "category_id")})
     private List<Category> categoryList;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "admin_id")
-    private User admin;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "director_id")
-    private User director;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "customer_status")
