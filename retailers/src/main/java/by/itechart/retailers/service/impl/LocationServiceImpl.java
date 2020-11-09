@@ -1,10 +1,13 @@
 package by.itechart.retailers.service.impl;
 
+import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.converter.LocationConverter;
 import by.itechart.retailers.dto.LocationDto;
+import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Location;
 import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.service.LocationService;
+import by.itechart.retailers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,27 +16,36 @@ import java.util.List;
 @Service
 public class LocationServiceImpl implements LocationService {
 
+    public UserService userService;
     private LocationRepository locationRepository;
     private LocationConverter locationConverter;
+    private CustomerConverter customerConverter;
 
     @Autowired
-    public LocationServiceImpl(LocationRepository locationRepository,
-                               LocationConverter locationConverter) {
+
+    public LocationServiceImpl(LocationRepository locationRepository, LocationConverter locationConverter, CustomerConverter customerConverter, UserService userService) {
         this.locationRepository = locationRepository;
         this.locationConverter = locationConverter;
+        this.customerConverter = customerConverter;
+        this.userService = userService;
     }
+
 
     @Override
     public LocationDto findById(long locationProductId) {
-        Location location = locationRepository.findById(locationProductId).orElse(new Location());
+        Location location = locationRepository.findById(locationProductId)
+                                              .orElse(new Location());
 
         return locationConverter.entityToDto(location);
     }
 
     @Override
     public List<LocationDto> findAll() {
-        List<Location> locationList = locationRepository.findAll();
+        //List<Location> locationList = locationRepository.findAll();
 
+       UserDto userDto = userService.getUser();
+        List<Location> locationList = locationRepository.findAllByCustomer_Id(userDto.getCustomer().getId());
+//досмотреть видос
         return locationConverter.entityToDto(locationList);
     }
 
@@ -48,7 +60,8 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDto update(LocationDto locationDto) {
         Location location = locationConverter.dtoToEntity(locationDto);
-        Location persistLocation = locationRepository.findById(location.getId()).orElse(new Location());
+        Location persistLocation = locationRepository.findById(location.getId())
+                                                     .orElse(new Location());
 
         persistLocation.setAddress(location.getAddress());
         persistLocation.setAvailableCapacity(location.getAvailableCapacity());

@@ -24,7 +24,7 @@ public class Location implements Serializable {
     @Column(name = "identifier")
     private String identifier;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

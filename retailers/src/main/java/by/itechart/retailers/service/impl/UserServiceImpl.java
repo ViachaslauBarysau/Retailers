@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.User;
 import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,16 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, UserConverter userConverter) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
+    }
+
+    @Override
+    public UserDto getUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext()
+                                                             .getAuthentication();
+
+        String currentPrincipalName = authentication.getName();
+        return findByEmail(currentPrincipalName);
     }
 
     @Override

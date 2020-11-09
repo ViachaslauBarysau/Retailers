@@ -30,7 +30,7 @@ public class Customer implements Serializable {
     @Column(name = "registration_date")
     private LocalDate registrationDate;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "customer_category",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = {@JoinColumn(name = "category_id")})

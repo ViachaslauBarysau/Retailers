@@ -13,5 +13,7 @@ public interface UserService {
 
     UserDto update(UserDto userDto);
 
+    UserDto getUser();
+
     UserDto findByEmail(String email);
 }
