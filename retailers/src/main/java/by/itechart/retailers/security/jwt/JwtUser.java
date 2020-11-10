@@ -15,7 +15,7 @@ public class JwtUser implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
     private final String email;
     private final String password;
-    private final Status userStatus;
+    private final boolean isActive;
 
     public JwtUser(Long id,
                    String firstName,
@@ -23,14 +23,14 @@ public class JwtUser implements UserDetails {
                    Collection<? extends GrantedAuthority> authorities,
                    String email,
                    String password,
-                   Status userStatus) {
+                   Status isActive) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.authorities = authorities;
         this.email = email;
         this.password = password;
-        this.userStatus = userStatus;
+        this.isActive = isActive.equals(Status.ACTIVE);
     }
 
     @Override
@@ -62,27 +62,27 @@ public class JwtUser implements UserDetails {
         return lastName;
     }
 
-    public Status getUserStatus() {
-        return userStatus;
+    public boolean getUserStatus() {
+        return isActive;
     }
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return isActive;
     }
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isActive;
     }
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return isActive;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isActive;
     }
 }

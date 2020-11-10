@@ -2,6 +2,7 @@ package by.itechart.retailers.security.jwt;
 
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Role;
+import by.itechart.retailers.entity.Status;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

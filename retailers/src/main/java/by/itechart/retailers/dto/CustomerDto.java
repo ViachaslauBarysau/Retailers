@@ -18,17 +18,17 @@ import java.util.List;
 @Builder
 public class CustomerDto {
     private Long id;
-    @NotNull(message = "Customer name can't be empty.")
-    @Size(min = 1, max = 20, message = "Customer name can be from 1 to 20 symbols.")
+    //@NotNull(message = "Customer name can't be empty.")
+   // @Size(min = 1, max = 20, message = "Customer name can be from 1 to 20 symbols.")
     private String name;
     @Email(message = "Wrong email format.")
     private String email;
     @Past(message = "Registration date can't be in the future.")
     private LocalDate registrationDate;
-    @Valid
+  //  @Valid
     private List<CategoryDto> categoryList;
-    @NotBlank(message = "Status can't be empty.")
+   // @NotBlank(message = "Status can't be empty.")
     private Status customerStatus;
-    @Valid
+  //  @Valid
     private List<ProductDto> productList;
 }

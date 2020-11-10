@@ -37,8 +37,8 @@ public class UserDto {
     private String password;
     @NotBlank(message = "Status can't be empty.")
     private Status userStatus;
-    @Valid
+  //  @Valid
     private LocationDto location;
-    @Valid
+   // @Valid
     private CustomerDto customer;
 }

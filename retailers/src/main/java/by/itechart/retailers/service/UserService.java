@@ -1,6 +1,7 @@
 package by.itechart.retailers.service;
 
 import by.itechart.retailers.dto.UserDto;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ public interface UserService {
     UserDto create(UserDto userDto);
 
     UserDto update(UserDto userDto);
+
+    UserDto getUser();
 
     UserDto findByEmail(String email);
 }
