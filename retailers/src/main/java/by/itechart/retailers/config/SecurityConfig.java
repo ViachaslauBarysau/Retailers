@@ -25,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String PRODUCTS = "/products/**";
     private static final String WRITE_OFF_ACTS = "/write_of_acts/**";
     private static final String WRITE_OFF_ACT_RECORDS = "/write_of_act_records/**";
+    private static final String USERS = "/users/**";
     private static final String LOGIN_ENDPOINT = "/login";
     private static final String LOGOUT_ENDPOINT = "/logout";
     private final JwtTokenProvider jwtTokenProvider;
@@ -57,6 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(CUSTOMERS).hasAuthority("SYSTEM_ADMIN")
                 .antMatchers(LOCATIONS).hasAuthority("ADMIN")
                 .antMatchers(SUPPLIERS).hasAuthority("ADMIN")
+                .antMatchers(USERS).hasAuthority("ADMIN")
                 .antMatchers(PRODUCTS).hasAuthority("DISPATCHER")
                 .antMatchers(WRITE_OFF_ACTS).hasAuthority("DISPATCHER")
                 .antMatchers(WRITE_OFF_ACT_RECORDS).hasAuthority("DISPATCHER")
