@@ -2,6 +2,7 @@ package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.service.CustomerService;
+import by.itechart.retailers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +15,23 @@ import java.util.List;
 public class CustomerController {
 
     private CustomerService customerService;
+    private UserService userService;
 
     @Autowired
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService, UserService userService) {
         this.customerService = customerService;
+        this.userService = userService;
     }
+
 
     @GetMapping
-    public ResponseEntity findAllCustomers() {
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
     }
-
+    @GetMapping(value = "/customer_employees")
+    public ResponseEntity findAllCustomerEmployees() {
+        return new ResponseEntity<>(userService.findAllByCustomerId(), HttpStatus.OK);
+    }
     @GetMapping(value = "/{customerId}")
     public ResponseEntity findById(@PathVariable(name = "customerId") Long customerId) {
         return new ResponseEntity<>(customerService.findById(customerId), HttpStatus.OK);

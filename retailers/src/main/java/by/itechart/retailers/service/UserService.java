@@ -10,6 +10,8 @@ public interface UserService {
 
     List<UserDto> findAll();
 
+    List<UserDto> findAllByCustomerId();
+
     UserDto create(UserDto userDto);
 
     UserDto update(UserDto userDto);
@@ -17,4 +19,5 @@ public interface UserService {
     UserDto getUser();
 
     UserDto findByEmail(String email);
+
 }

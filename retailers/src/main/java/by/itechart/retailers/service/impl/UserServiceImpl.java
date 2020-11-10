@@ -57,6 +57,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> findAllByCustomerId() {
+        UserDto userDto = getUser();
+        List<User> customerEmployeesList = userRepository.findAllByCustomer_Id(userDto.getCustomer()
+                                                                                      .getId());
+        return userConverter.entityToDto(customerEmployeesList);
+    }
+
+    @Override
     public UserDto create(UserDto userDto) {
         User user = userConverter.dtoToEntity(userDto);
         User persistUser = userRepository.save(user);
