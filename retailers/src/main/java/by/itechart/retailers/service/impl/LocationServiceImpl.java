@@ -42,10 +42,9 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<LocationDto> findAll() {
         //List<Location> locationList = locationRepository.findAll();
-
-       UserDto userDto = userService.getUser();
-        List<Location> locationList = locationRepository.findAllByCustomer_Id(userDto.getCustomer().getId());
-//досмотреть видос
+        UserDto userDto = userService.getUser();
+        List<Location> locationList = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
+                                                                                     .getId());
         return locationConverter.entityToDto(locationList);
     }
 
@@ -74,4 +73,14 @@ public class LocationServiceImpl implements LocationService {
 
         return locationConverter.entityToDto(persistLocation);
     }
+
+    @Override
+    public void delete(List<LocationDto> locationDtos) {
+        List<Location> locations = locationConverter.dtoToEntity(locationDtos);
+        for (Location location : locations) {
+            locationRepository.delete(location);
+        }
+    }
+
+
 }

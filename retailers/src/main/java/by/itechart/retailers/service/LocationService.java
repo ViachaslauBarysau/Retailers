@@ -12,4 +12,7 @@ public interface LocationService {
     LocationDto create(LocationDto locationDto);
 
     LocationDto update(LocationDto locationDto);
+
+    void delete(List<LocationDto> locationDtos);
+
 }

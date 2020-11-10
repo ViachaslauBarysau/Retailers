@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/locations")
 public class LocationController {
@@ -37,4 +39,10 @@ public class LocationController {
     public ResponseEntity update(@RequestBody LocationDto locationDto) {
         return new ResponseEntity<>(locationService.update(locationDto), HttpStatus.OK);
     }
+
+    @DeleteMapping
+    public void delete(@RequestBody List<LocationDto> locationDtos) {
+        locationService.delete(locationDtos);
+    }
+
 }

@@ -1,6 +1,7 @@
 package by.itechart.retailers.service;
 
 import by.itechart.retailers.dto.UserDto;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

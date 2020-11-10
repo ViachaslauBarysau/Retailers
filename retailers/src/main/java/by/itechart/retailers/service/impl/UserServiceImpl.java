@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,16 +26,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto getUser() {
-
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
-
         String currentPrincipalName = authentication.getName();
         return findByEmail(currentPrincipalName);
     }
 
     @Override
+    @Transactional
     public UserDto findByEmail(String email) {
         User user = userRepository.findByEmail(email);
         return userConverter.entityToDto(user);
