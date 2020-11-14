@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class ApplicationRecordServiceImpl implements ApplicationRecordService {
 
-    private ApplicationRecordRepository applicationRecordRepository;
-    private ApplicationRecordConverter applicationRecordConverter;
+    private final ApplicationRecordRepository applicationRecordRepository;
+    private final ApplicationRecordConverter applicationRecordConverter;
 
     @Autowired
     public ApplicationRecordServiceImpl(ApplicationRecordRepository applicationRecordRepository,

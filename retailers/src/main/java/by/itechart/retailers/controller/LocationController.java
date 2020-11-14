@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/locations")
 public class LocationController {
 
-    private LocationService locationService;
+    private final LocationService locationService;
 
     @Autowired
     public LocationController(LocationService locationService) {

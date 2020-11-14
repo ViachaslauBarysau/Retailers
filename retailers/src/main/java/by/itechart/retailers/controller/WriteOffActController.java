@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/writeOffActs")
 public class WriteOffActController {
 
-    private WriteOffActService writeOffActService;
+    private final WriteOffActService writeOffActService;
 
     @Autowired
     public WriteOffActController(WriteOffActService writeOffActService) {

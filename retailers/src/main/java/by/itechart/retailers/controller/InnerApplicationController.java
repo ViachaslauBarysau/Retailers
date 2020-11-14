@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/innerApplications")
 public class InnerApplicationController {
 
-    private InnerApplicationService innerApplicationService;
+    private final InnerApplicationService innerApplicationService;
 
     @Autowired
     public InnerApplicationController(InnerApplicationService innerApplicationService) {

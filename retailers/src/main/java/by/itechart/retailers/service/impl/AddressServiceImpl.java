@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-    private AddressRepository addressRepository;
-    private AddressConverter addressConverter;
+    private final AddressRepository addressRepository;
+    private final AddressConverter addressConverter;
 
     @Autowired
     public AddressServiceImpl(AddressRepository addressRepository, AddressConverter addressConverter) {

@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class BillRecordServiceImpl implements BillRecordService {
 
-    private BillRecordRepository billRecordRepository;
-    private BillRecordConverter billRecordConverter;
+    private final BillRecordRepository billRecordRepository;
+    private final BillRecordConverter billRecordConverter;
 
     @Autowired
     public BillRecordServiceImpl(BillRecordRepository billRecordRepository,

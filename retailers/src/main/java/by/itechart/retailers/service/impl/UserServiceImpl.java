@@ -27,11 +27,14 @@ import java.util.Random;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private UserConverter userConverter;
-    private CustomerConverter customerConverter;
-
-    private BCryptPasswordEncoder encoder;
+    private final static String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final static String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+    private final static String specialCharacters = "!@#$";
+    private final static String numbers = "1234567890";
+    private final UserRepository userRepository;
+    private final UserConverter userConverter;
+    private final CustomerConverter customerConverter;
+    private final BCryptPasswordEncoder encoder;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, CustomerConverter customerConverter, @Lazy BCryptPasswordEncoder encoder) {
@@ -60,10 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String generatePassword() {
-        String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
-        String specialCharacters = "!@#$";
-        String numbers = "1234567890";
+
         String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
         Random random = new Random();
         char[] charPassword = new char[8];

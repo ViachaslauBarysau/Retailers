@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class WriteOffActServiceImpl implements WriteOffActService {
 
-    private WriteOffActRepository writeOffActRepository;
-    private WriteOffActConverter converter;
+    private final WriteOffActRepository writeOffActRepository;
+    private final WriteOffActConverter converter;
 
     @Autowired
     public WriteOffActServiceImpl(WriteOffActRepository writeOffActRepository,

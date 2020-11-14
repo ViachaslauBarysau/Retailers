@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class InnerApplicationServiceImpl implements InnerApplicationService {
 
-    private InnerApplicationRepository innerApplicationRepository;
-    private InnerApplicationConverter innerApplicationConverter;
+    private final InnerApplicationRepository innerApplicationRepository;
+    private final InnerApplicationConverter innerApplicationConverter;
 
     @Autowired
     public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository,

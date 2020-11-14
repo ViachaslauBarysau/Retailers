@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/supplierApplications")
 public class SupplierApplicationController {
 
-    private SupplierApplicationService supplierApplicationService;
+    private final SupplierApplicationService supplierApplicationService;
 
     @Autowired
     public SupplierApplicationController(SupplierApplicationService supplierApplicationService) {

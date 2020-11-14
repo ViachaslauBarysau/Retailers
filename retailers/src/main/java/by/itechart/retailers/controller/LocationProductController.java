@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/locationProducts")
 public class LocationProductController {
 
-    private LocationProductService locationProductService;
+    private final LocationProductService locationProductService;
 
     @Autowired
     public LocationProductController(LocationProductService locationProductService) {

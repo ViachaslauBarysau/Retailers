@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class LocationProductServiceImpl implements LocationProductService {
 
-    private LocationProductRepository locationProductRepository;
-    private LocationProductConverter locationProductConverter;
+    private final LocationProductRepository locationProductRepository;
+    private final LocationProductConverter locationProductConverter;
 
     @Autowired
     public LocationProductServiceImpl(LocationProductRepository locationProductRepository,

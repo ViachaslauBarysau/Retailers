@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class StateServiceImpl implements StateService {
 
-    private StateRepository stateRepository;
-    private StateConverter stateConverter;
+    private final StateRepository stateRepository;
+    private final StateConverter stateConverter;
 
     @Autowired
     public StateServiceImpl(StateRepository stateRepository, StateConverter stateConverter) {

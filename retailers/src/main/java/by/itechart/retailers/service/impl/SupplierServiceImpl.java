@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class SupplierServiceImpl implements SupplierService {
 
-    private SupplierRepository supplierRepository;
-    private SupplierConverter supplierConverter;
+    private final SupplierRepository supplierRepository;
+    private final SupplierConverter supplierConverter;
 
     @Autowired
     public SupplierServiceImpl(SupplierRepository supplierRepository, SupplierConverter supplierConverter) {

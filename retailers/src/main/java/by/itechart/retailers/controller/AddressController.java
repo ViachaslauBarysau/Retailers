@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/addresses")
 public class AddressController {
 
-    private AddressService addressService;
+    private final AddressService addressService;
 
     @Autowired
     public AddressController(AddressService addressService) {

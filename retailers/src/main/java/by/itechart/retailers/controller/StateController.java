@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/states")
 public class StateController {
 
-    private StateService stateService;
+    private final StateService stateService;
 
     @Autowired
     public StateController(StateService stateService) {

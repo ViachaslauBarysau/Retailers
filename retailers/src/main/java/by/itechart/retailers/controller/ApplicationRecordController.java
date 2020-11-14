@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/applicationProductRecords")
 public class ApplicationRecordController {
 
-    private ApplicationRecordService applicationRecordService;
+    private final ApplicationRecordService applicationRecordService;
 
     @Autowired
     public ApplicationRecordController(ApplicationRecordService applicationRecordService) {

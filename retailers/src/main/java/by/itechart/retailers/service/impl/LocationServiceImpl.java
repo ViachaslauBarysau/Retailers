@@ -18,17 +18,15 @@ import java.util.List;
 @Service
 public class LocationServiceImpl implements LocationService {
 
-    public UserService userService;
-    private LocationRepository locationRepository;
-    private LocationConverter locationConverter;
-    private CustomerConverter customerConverter;
+    private final UserService userService;
+    private final LocationRepository locationRepository;
+    private final LocationConverter locationConverter;
 
     @Autowired
 
     public LocationServiceImpl(LocationRepository locationRepository, LocationConverter locationConverter, CustomerConverter customerConverter, UserService userService) {
         this.locationRepository = locationRepository;
         this.locationConverter = locationConverter;
-        this.customerConverter = customerConverter;
         this.userService = userService;
     }
 
