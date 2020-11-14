@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.State;
 import by.itechart.retailers.repository.StateRepository;
 import by.itechart.retailers.service.interfaces.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,10 +32,10 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public List<StateDto> findAll() {
-        List<State> stateList = stateRepository.findAll();
+    public List<StateDto> findAll(Pageable pageable) {
+        Page<State> statePage = stateRepository.findAll(pageable);
 
-        return stateConverter.entityToDto(stateList);
+        return stateConverter.entityToDto(statePage.toList());
     }
 
     @Override

@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.Bill;
 import by.itechart.retailers.repository.BillRepository;
 import by.itechart.retailers.service.interfaces.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,9 +32,9 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public List<BillDto> findAll() {
-        List<Bill> billList = billRepository.findAll();
-        return billConverter.entityToDto(billList);
+    public List<BillDto> findAll(Pageable pageable) {
+        Page<Bill> billPage = billRepository.findAll(pageable);
+        return billConverter.entityToDto(billPage.toList());
     }
 
     @Override

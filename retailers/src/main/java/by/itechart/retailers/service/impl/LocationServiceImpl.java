@@ -9,6 +9,8 @@ import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.service.interfaces.LocationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,12 +42,12 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<LocationDto> findAll() {
+    public List<LocationDto> findAll(Pageable pageable) {
         //List<Location> locationList = locationRepository.findAll();
         UserDto userDto = userService.getUser();
-        List<Location> locationList = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
-                                                                                     .getId());
-        return locationConverter.entityToDto(locationList);
+        Page<Location> locationPage = locationRepository.findAllByCustomer_Id(pageable,userDto.getCustomer()
+                                                                                              .getId());
+        return locationConverter.entityToDto(locationPage.toList());
     }
 
     @Override

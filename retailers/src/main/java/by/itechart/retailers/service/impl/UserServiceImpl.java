@@ -12,6 +12,8 @@ import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -91,18 +93,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> findAll() {
-        List<User> userList = userRepository.findAll();
+    public List<UserDto> findAll(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
 
-        return userConverter.entityToDto(userList);
+        return userConverter.entityToDto(userPage.toList());
     }
 
     @Override
-    public List<UserDto> findAllByCustomerId() {
+    public List<UserDto> findAllByCustomerId(Pageable pageable) {
         UserDto userDto = getUser();
-        List<User> customerEmployeesList = userRepository.findAllByCustomer_Id(userDto.getCustomer()
-                                                                                      .getId());
-        return userConverter.entityToDto(customerEmployeesList);
+        Page<User> customerEmployeesPage = userRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
+                                                                                                .getId());
+        return userConverter.entityToDto(customerEmployeesPage.toList());
     }
 
     @Override
@@ -119,7 +121,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setEmail(customerDto.getEmail());
         user.setCustomer(customer);
-        String password=generatePassword();
+        String password = generatePassword();
         user.setPassword(encodePassword(password));
         user.setUserStatus(Status.ACTIVE);
         user.setUserRole(Collections.singletonList(Role.ADMIN));

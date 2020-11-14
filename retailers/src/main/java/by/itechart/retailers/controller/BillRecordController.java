@@ -3,6 +3,7 @@ package by.itechart.retailers.controller;
 import by.itechart.retailers.dto.BillIRecordDto;
 import by.itechart.retailers.service.interfaces.BillRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class BillRecordController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(billRecordService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(billRecordService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{billProductRecordId}")

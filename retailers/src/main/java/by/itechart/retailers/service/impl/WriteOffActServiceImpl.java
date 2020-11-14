@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.WriteOffAct;
 import by.itechart.retailers.repository.WriteOffActRepository;
 import by.itechart.retailers.service.interfaces.WriteOffActService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +33,10 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     }
 
     @Override
-    public List<WriteOffActDto> findAll() {
-        List<WriteOffAct> writeOffActList = writeOffActRepository.findAll();
+    public List<WriteOffActDto> findAll(Pageable pageable) {
+        Page<WriteOffAct> writeOffActPage = writeOffActRepository.findAll(pageable);
 
-        return converter.entityToDto(writeOffActList);
+        return converter.entityToDto(writeOffActPage.toList());
     }
 
     @Override

@@ -10,6 +10,8 @@ import by.itechart.retailers.service.interfaces.CustomerService;
 import by.itechart.retailers.service.interfaces.SendingCredentialsService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,9 +40,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerDto> findAll() {
-        List<Customer> customerList = customerRepository.findAll();
-        return customerConverter.entityToDto(customerList);
+    public List<CustomerDto> findAll(Pageable pageable) {
+        Page<Customer> customerPage = customerRepository.findAll(pageable);
+        return customerConverter.entityToDto(customerPage.toList());
     }
 
     @Override

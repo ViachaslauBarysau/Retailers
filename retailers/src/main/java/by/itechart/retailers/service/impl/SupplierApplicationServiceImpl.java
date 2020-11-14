@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.SupplierApplication;
 import by.itechart.retailers.repository.SupplierApplicationRepository;
 import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,10 +34,10 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     }
 
     @Override
-    public List<SupplierApplicationDto> findAll() {
-        List<SupplierApplication> supplierApplicationList = supplierApplicationRepository.findAll();
+    public List<SupplierApplicationDto> findAll(Pageable pageable) {
+        Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAll(pageable);
 
-        return supplierApplicationConverter.entityToDto(supplierApplicationList);
+        return supplierApplicationConverter.entityToDto(supplierApplicationPage.toList());
     }
 
     @Override

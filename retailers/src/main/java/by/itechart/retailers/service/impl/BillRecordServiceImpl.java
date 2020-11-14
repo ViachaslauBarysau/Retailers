@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.BillRecord;
 import by.itechart.retailers.repository.BillRecordRepository;
 import by.itechart.retailers.service.interfaces.BillRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,15 +28,15 @@ public class BillRecordServiceImpl implements BillRecordService {
     @Override
     public BillIRecordDto findById(long billProductRecordId) {
         BillRecord billRecord = billRecordRepository.findById(billProductRecordId)
-                .orElse(new BillRecord());
+                                                    .orElse(new BillRecord());
 
         return billRecordConverter.entityToDto(billRecord);
     }
 
     @Override
-    public List<BillIRecordDto> findAll() {
-        List<BillRecord> billList = billRecordRepository.findAll();
-        return billRecordConverter.entityToDto(billList);
+    public List<BillIRecordDto> findAll(Pageable pageable) {
+        Page<BillRecord> billRecordPage = billRecordRepository.findAll(pageable);
+        return billRecordConverter.entityToDto(billRecordPage.toList());
     }
 
     @Override
@@ -48,7 +50,7 @@ public class BillRecordServiceImpl implements BillRecordService {
     public BillIRecordDto update(BillIRecordDto billIRecordDto) {
         BillRecord billRecord = billRecordConverter.dtoToEntity(billIRecordDto);
         BillRecord persistBillProduct = billRecordRepository.findById(billRecord.getId())
-                .orElse(new BillRecord());
+                                                            .orElse(new BillRecord());
 
         persistBillProduct.setProduct(billRecord.getProduct());
         persistBillProduct.setProductAmount(billRecord.getProductAmount());
