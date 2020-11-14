@@ -54,7 +54,7 @@ public class User implements Serializable {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "customer_id")
     private Customer customer;
 }
