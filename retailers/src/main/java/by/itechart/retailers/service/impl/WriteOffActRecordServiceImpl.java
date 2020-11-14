@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.WriteOffActRecordConverter;
 import by.itechart.retailers.dto.WriteOffActRecordDto;
 import by.itechart.retailers.entity.WriteOffActRecord;
 import by.itechart.retailers.repository.WriteOffActRecordRepository;
-import by.itechart.retailers.service.WriteOffActRecordService;
+import by.itechart.retailers.service.interfaces.WriteOffActRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.BillRecordConverter;
 import by.itechart.retailers.dto.BillIRecordDto;
 import by.itechart.retailers.entity.BillRecord;
 import by.itechart.retailers.repository.BillRecordRepository;
-import by.itechart.retailers.service.BillRecordService;
+import by.itechart.retailers.service.interfaces.BillRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

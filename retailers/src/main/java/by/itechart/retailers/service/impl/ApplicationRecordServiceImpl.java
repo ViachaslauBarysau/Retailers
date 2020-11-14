@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.ApplicationRecordConverter;
 import by.itechart.retailers.dto.ApplicationRecordDto;
 import by.itechart.retailers.entity.ApplicationRecord;
 import by.itechart.retailers.repository.ApplicationRecordRepository;
-import by.itechart.retailers.service.ApplicationRecordService;
+import by.itechart.retailers.service.interfaces.ApplicationRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

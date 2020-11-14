@@ -1,5 +1,6 @@
-package by.itechart.retailers.service;
+package by.itechart.retailers.service.interfaces;
 
+import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.dto.UserDto;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +15,15 @@ public interface UserService {
 
     UserDto create(UserDto userDto);
 
+    UserDto create(CustomerDto customerDto);
+
     UserDto update(UserDto userDto);
 
     UserDto getUser();
 
     UserDto findByEmail(String email);
+
+    String generatePassword();
+    String encodePassword(String password);
 
 }

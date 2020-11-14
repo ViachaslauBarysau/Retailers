@@ -1,7 +1,7 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.SupplierApplicationDto;
-import by.itechart.retailers.service.SupplierApplicationService;
+import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

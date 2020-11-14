@@ -6,8 +6,8 @@ import by.itechart.retailers.dto.LocationDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Location;
 import by.itechart.retailers.repository.LocationRepository;
-import by.itechart.retailers.service.LocationService;
-import by.itechart.retailers.service.UserService;
+import by.itechart.retailers.service.interfaces.LocationService;
+import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
