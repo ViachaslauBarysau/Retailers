@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.StateConverter;
 import by.itechart.retailers.dto.StateDto;
 import by.itechart.retailers.entity.State;
 import by.itechart.retailers.repository.StateRepository;
-import by.itechart.retailers.service.StateService;
+import by.itechart.retailers.service.interfaces.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

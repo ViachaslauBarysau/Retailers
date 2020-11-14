@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.LocationProductConverter;
 import by.itechart.retailers.dto.LocationProductDto;
 import by.itechart.retailers.entity.LocationProduct;
 import by.itechart.retailers.repository.LocationProductRepository;
-import by.itechart.retailers.service.LocationProductService;
+import by.itechart.retailers.service.interfaces.LocationProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.CategoryConverter;
 import by.itechart.retailers.dto.CategoryDto;
 import by.itechart.retailers.entity.Category;
 import by.itechart.retailers.repository.CategoryRepository;
-import by.itechart.retailers.service.CategoryService;
+import by.itechart.retailers.service.interfaces.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

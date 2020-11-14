@@ -1,4 +1,4 @@
-package by.itechart.retailers.service;
+package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.CategoryDto;
 

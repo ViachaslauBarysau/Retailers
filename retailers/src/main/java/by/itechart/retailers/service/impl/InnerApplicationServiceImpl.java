@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.InnerApplicationConverter;
 import by.itechart.retailers.dto.InnerApplicationDto;
 import by.itechart.retailers.entity.InnerApplication;
 import by.itechart.retailers.repository.InnerApplicationRepository;
-import by.itechart.retailers.service.InnerApplicationService;
+import by.itechart.retailers.service.interfaces.InnerApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

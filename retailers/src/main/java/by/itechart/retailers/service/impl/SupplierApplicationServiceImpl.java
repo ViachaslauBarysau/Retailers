@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.SupplierApplicationConverter;
 import by.itechart.retailers.dto.SupplierApplicationDto;
 import by.itechart.retailers.entity.SupplierApplication;
 import by.itechart.retailers.repository.SupplierApplicationRepository;
-import by.itechart.retailers.service.SupplierApplicationService;
+import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

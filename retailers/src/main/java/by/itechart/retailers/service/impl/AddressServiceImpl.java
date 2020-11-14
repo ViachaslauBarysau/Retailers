@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.AddressConverter;
 import by.itechart.retailers.dto.AddressDto;
 import by.itechart.retailers.entity.Address;
 import by.itechart.retailers.repository.AddressRepository;
-import by.itechart.retailers.service.AddressService;
+import by.itechart.retailers.service.interfaces.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.ProductConverter;
 import by.itechart.retailers.dto.ProductDto;
 import by.itechart.retailers.entity.Product;
 import by.itechart.retailers.repository.ProductRepository;
-import by.itechart.retailers.service.ProductService;
+import by.itechart.retailers.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
