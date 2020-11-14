@@ -3,6 +3,7 @@ package by.itechart.retailers.controller;
 import by.itechart.retailers.dto.InnerApplicationDto;
 import by.itechart.retailers.service.interfaces.InnerApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/innerApplications")
 public class InnerApplicationController {
 
-    private InnerApplicationService innerApplicationService;
+    private final InnerApplicationService innerApplicationService;
 
     @Autowired
     public InnerApplicationController(InnerApplicationService innerApplicationService) {
@@ -19,8 +20,8 @@ public class InnerApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(innerApplicationService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(innerApplicationService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{innerApplicationId}")

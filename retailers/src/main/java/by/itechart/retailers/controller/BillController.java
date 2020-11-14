@@ -3,6 +3,7 @@ package by.itechart.retailers.controller;
 import by.itechart.retailers.dto.BillDto;
 import by.itechart.retailers.service.interfaces.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/bills")
 public class BillController {
 
-    private BillService billService;
+    private final BillService billService;
 
     @Autowired
     public BillController(BillService billService) {
@@ -19,8 +20,8 @@ public class BillController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(billService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(billService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{billId}")

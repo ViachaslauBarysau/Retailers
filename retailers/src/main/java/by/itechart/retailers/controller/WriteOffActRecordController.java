@@ -3,6 +3,7 @@ package by.itechart.retailers.controller;
 import by.itechart.retailers.dto.WriteOffActRecordDto;
 import by.itechart.retailers.service.interfaces.WriteOffActRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/writeOffActProductRecords")
 public class WriteOffActRecordController {
 
-    private WriteOffActRecordService writeOffActRecordService;
+    private final WriteOffActRecordService writeOffActRecordService;
 
     @Autowired
     public WriteOffActRecordController(WriteOffActRecordService writeOffActRecordService) {
@@ -19,8 +20,8 @@ public class WriteOffActRecordController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(writeOffActRecordService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(writeOffActRecordService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{writeOffActProductRecordId}")

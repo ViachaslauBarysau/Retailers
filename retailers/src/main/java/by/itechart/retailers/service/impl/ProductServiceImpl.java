@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.Product;
 import by.itechart.retailers.repository.ProductRepository;
 import by.itechart.retailers.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private ProductRepository productRepository;
-    private ProductConverter productConverter;
+    private final ProductRepository productRepository;
+    private final ProductConverter productConverter;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter) {
@@ -24,16 +26,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto findById(long productId) {
-        Product product = productRepository.findById(productId).orElse(new Product());
+        Product product = productRepository.findById(productId)
+                                           .orElse(new Product());
 
         return productConverter.entityToDto(product);
     }
 
     @Override
-    public List<ProductDto> findAll() {
-        List<Product> productList = productRepository.findAll();
+    public List<ProductDto> findAll(Pageable pageable) {
+        Page<Product> productPage = productRepository.findAll(pageable);
 
-        return productConverter.entityToDto(productList);
+        return productConverter.entityToDto(productPage.toList());
     }
 
     @Override
@@ -47,7 +50,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto update(ProductDto productDto) {
         Product product = productConverter.dtoToEntity(productDto);
-        Product persistProduct = productRepository.findById(product.getId()).orElse(new Product());
+        Product persistProduct = productRepository.findById(product.getId())
+                                                  .orElse(new Product());
 
         persistProduct.setCategory(product.getCategory());
         persistProduct.setLabel(product.getLabel());

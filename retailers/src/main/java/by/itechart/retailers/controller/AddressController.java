@@ -3,6 +3,7 @@ package by.itechart.retailers.controller;
 import by.itechart.retailers.dto.AddressDto;
 import by.itechart.retailers.service.interfaces.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/addresses")
 public class AddressController {
 
-    private AddressService addressService;
+    private final AddressService addressService;
 
     @Autowired
     public AddressController(AddressService addressService) {
@@ -19,8 +20,8 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(addressService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(addressService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{addressId}")

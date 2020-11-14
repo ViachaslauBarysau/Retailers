@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.InnerApplication;
 import by.itechart.retailers.repository.InnerApplicationRepository;
 import by.itechart.retailers.service.interfaces.InnerApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @Service
 public class InnerApplicationServiceImpl implements InnerApplicationService {
 
-    private InnerApplicationRepository innerApplicationRepository;
-    private InnerApplicationConverter innerApplicationConverter;
+    private final InnerApplicationRepository innerApplicationRepository;
+    private final InnerApplicationConverter innerApplicationConverter;
 
     @Autowired
     public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository,
@@ -32,10 +34,10 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     }
 
     @Override
-    public List<InnerApplicationDto> findAll() {
-        List<InnerApplication> innerApplicationList = innerApplicationRepository.findAll();
+    public List<InnerApplicationDto> findAll(Pageable pageable) {
+        Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAll(pageable);
 
-        return innerApplicationConverter.entityToDto(innerApplicationList);
+        return innerApplicationConverter.entityToDto(innerApplicationPage.toList());
     }
 
     @Override

@@ -2,16 +2,16 @@ package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.dto.UserDto;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface UserService {
     UserDto findById(long userId);
 
-    List<UserDto> findAll();
+    List<UserDto> findAll(Pageable pageable);
 
-    List<UserDto> findAllByCustomerId();
+    List<UserDto> findAllByCustomerId(Pageable pageable);
 
     UserDto create(UserDto userDto);
 
@@ -24,6 +24,7 @@ public interface UserService {
     UserDto findByEmail(String email);
 
     String generatePassword();
+
     String encodePassword(String password);
 
 }

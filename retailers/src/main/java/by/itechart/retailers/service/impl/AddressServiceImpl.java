@@ -6,6 +6,8 @@ import by.itechart.retailers.entity.Address;
 import by.itechart.retailers.repository.AddressRepository;
 import by.itechart.retailers.service.interfaces.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-    private AddressRepository addressRepository;
-    private AddressConverter addressConverter;
+    private final AddressRepository addressRepository;
+    private final AddressConverter addressConverter;
 
     @Autowired
     public AddressServiceImpl(AddressRepository addressRepository, AddressConverter addressConverter) {
@@ -29,9 +31,9 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<AddressDto> findAll() {
-        List<Address> addressList = addressRepository.findAll();
-        return addressConverter.entityToDto(addressList);
+    public List<AddressDto> findAll(Pageable pageable) {
+        Page<Address> addressPage = addressRepository.findAll(pageable);
+        return addressConverter.entityToDto(addressPage.toList());
     }
 
     @Override
