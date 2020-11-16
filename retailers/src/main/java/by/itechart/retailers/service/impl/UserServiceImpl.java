@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodePassword(password));
         User persistUser = userRepository.save(user);
         persistUser.setPassword(password);
-        userDto=userConverter.entityToDto(persistUser);
+        userDto = userConverter.entityToDto(persistUser);
         sendingCredentialsService.send(userDto);
         return userDto;
     }
@@ -126,6 +126,8 @@ public class UserServiceImpl implements UserService {
     public UserDto create(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         User user = new User();
+        user.setFirstName(customerDto.getName());
+        user.setLastName(customerDto.getName());
         user.setEmail(customerDto.getEmail());
         user.setCustomer(customer);
         String password = generatePassword();
