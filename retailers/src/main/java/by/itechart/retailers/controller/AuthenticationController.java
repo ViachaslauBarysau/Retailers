@@ -45,7 +45,6 @@ public class AuthenticationController {
             String username = requestDto.getEmail();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             UserDto user = userService.findByEmail(username);
-
             if (user == null) {
                 throw new UsernameNotFoundException("User with username: " + username + " not found");
             }
@@ -55,7 +54,6 @@ public class AuthenticationController {
             Map<Object, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("user", user);
-
 
 
             return ResponseEntity.ok(response);

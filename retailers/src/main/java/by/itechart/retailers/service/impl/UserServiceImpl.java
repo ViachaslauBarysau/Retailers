@@ -9,6 +9,7 @@ import by.itechart.retailers.entity.Role;
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.entity.User;
 import by.itechart.retailers.repository.UserRepository;
+import by.itechart.retailers.service.interfaces.SendingCredentialsService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -35,13 +36,15 @@ public class UserServiceImpl implements UserService {
     private final UserConverter userConverter;
     private final CustomerConverter customerConverter;
     private final BCryptPasswordEncoder encoder;
+    private final SendingCredentialsService sendingCredentialsService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, CustomerConverter customerConverter, @Lazy BCryptPasswordEncoder encoder) {
+    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, CustomerConverter customerConverter, @Lazy BCryptPasswordEncoder encoder, SendingCredentialsService sendingCredentialsService) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.customerConverter = customerConverter;
         this.encoder = encoder;
+        this.sendingCredentialsService = sendingCredentialsService;
     }
 
 
@@ -110,15 +113,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) {
         User user = userConverter.dtoToEntity(userDto);
+        String password = generatePassword();
+        user.setPassword(encodePassword(password));
         User persistUser = userRepository.save(user);
-
-        return userConverter.entityToDto(persistUser);
+        persistUser.setPassword(password);
+        userDto = userConverter.entityToDto(persistUser);
+        sendingCredentialsService.send(userDto);
+        return userDto;
     }
 
     @Override
     public UserDto create(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         User user = new User();
+        user.setFirstName(customerDto.getName());
+        user.setLastName(customerDto.getName());
         user.setEmail(customerDto.getEmail());
         user.setCustomer(customer);
         String password = generatePassword();
