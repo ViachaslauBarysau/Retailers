@@ -33,7 +33,7 @@ public class JwtUser implements UserDetails {
         this.email = email;
         this.password = password;
         this.isActive = isActive.equals(Status.ACTIVE);
-        this.isCustomerActive=isCustomerActive.equals(Status.ACTIVE);
+        this.isCustomerActive = isCustomerActive.equals(Status.ACTIVE);
     }
 
     @Override
@@ -45,6 +45,7 @@ public class JwtUser implements UserDetails {
     public Long getId() {
         return id;
     }
+
     @JsonIgnore
     @Override
     public String getPassword() {
@@ -61,23 +62,18 @@ public class JwtUser implements UserDetails {
         return firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public boolean getUserStatus() {
-        return isActive;
-    }
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return isActive;
     }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return isActive;
+        return isCustomerActive;
     }
+
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
