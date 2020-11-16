@@ -12,6 +12,7 @@ import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.interfaces.SendingCredentialsService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
     private final SendingCredentialsService sendingCredentialsService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, CustomerConverter customerConverter, BCryptPasswordEncoder encoder, SendingCredentialsService sendingCredentialsService) {
+    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, CustomerConverter customerConverter, @Lazy BCryptPasswordEncoder encoder, SendingCredentialsService sendingCredentialsService) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.customerConverter = customerConverter;
