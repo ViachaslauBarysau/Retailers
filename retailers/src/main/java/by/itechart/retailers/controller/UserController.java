@@ -24,6 +24,11 @@ public class UserController {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/customer_employees")
+    public ResponseEntity findAllCustomerEmployees() {
+        return new ResponseEntity<>(userService.findAllByCustomerId(), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{userId}")
     public ResponseEntity findById(@PathVariable(name = "userId") Long userId) {
         return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
