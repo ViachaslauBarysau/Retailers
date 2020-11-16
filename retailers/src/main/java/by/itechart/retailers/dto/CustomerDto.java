@@ -6,9 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,16 +18,18 @@ import java.util.List;
 public class CustomerDto {
     private Long id;
     //@NotNull(message = "Customer name can't be empty.")
-   // @Size(min = 1, max = 20, message = "Customer name can be from 1 to 20 symbols.")
+    // @Size(min = 1, max = 20, message = "Customer name can be from 1 to 20 symbols.")
     private String name;
     @Email(message = "Wrong email format.")
     private String email;
     @Past(message = "Registration date can't be in the future.")
     private LocalDate registrationDate;
-  //  @Valid
+    //  @Valid
     private List<CategoryDto> categoryList;
-   // @NotBlank(message = "Status can't be empty.")
+    // @NotBlank(message = "Status can't be empty.")
     private Status customerStatus;
-  //  @Valid
+    //  @Valid
     private List<ProductDto> productList;
+
+    private List<SupplierDto> supplierList;
 }

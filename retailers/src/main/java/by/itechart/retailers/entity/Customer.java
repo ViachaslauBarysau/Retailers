@@ -40,8 +40,7 @@ public class Customer implements Serializable {
     @Column(name = "customer_status")
     private Status customerStatus;
 
-    @OneToMany
-    @JoinColumn(name = "customer_id")
+    @OneToMany(mappedBy = "customer")
     private List<Supplier> supplierList;
 
     @OneToMany
