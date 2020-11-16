@@ -29,10 +29,7 @@ public class CustomerController {
     public ResponseEntity findAll(Pageable pageable) {
         return new ResponseEntity<>(customerService.findAll(pageable), HttpStatus.OK);
     }
-    @GetMapping(value = "/customer_employees")
-    public ResponseEntity findAllCustomerEmployees(Pageable pageable) {
-        return new ResponseEntity<>(userService.findAllByCustomerId(pageable), HttpStatus.OK);
-    }
+
     @GetMapping(value = "/{customerId}")
     public ResponseEntity findById(@PathVariable(name = "customerId") Long customerId) {
         return new ResponseEntity<>(customerService.findById(customerId), HttpStatus.OK);
