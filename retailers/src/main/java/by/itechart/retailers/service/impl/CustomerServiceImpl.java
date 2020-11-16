@@ -49,7 +49,9 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto create(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistsCustomer = customerRepository.save(customer);
-        UserDto userDto=userService.create(customerDto);
+        //отправлять persistCustomer
+        //убрать каскад из user
+        UserDto userDto=userService.create(customerConverter.entityToDto(persistsCustomer));
         sendingCredentialsService.send(userDto);
         return customerConverter.entityToDto(persistsCustomer);
     }
