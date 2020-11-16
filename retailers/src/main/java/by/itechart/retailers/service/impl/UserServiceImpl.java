@@ -131,12 +131,12 @@ public class UserServiceImpl implements UserService {
         user.setEmail(customerDto.getEmail());
         user.setCustomer(customer);
         String password = generatePassword();
+        user.setPassword(password);
+        sendingCredentialsService.send(userConverter.entityToDto(user));
         user.setPassword(encodePassword(password));
         user.setUserStatus(Status.ACTIVE);
         user.setUserRole(Collections.singletonList(Role.ADMIN));
-
         userRepository.save(user);
-        user.setPassword(password);
         return userConverter.entityToDto(user);
     }
 

@@ -2,7 +2,6 @@ package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.dto.CustomerDto;
-import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.repository.CustomerRepository;
@@ -49,8 +48,8 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto create(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistsCustomer = customerRepository.save(customer);
-        UserDto userDto=userService.create(customerConverter.entityToDto(persistsCustomer));
-        sendingCredentialsService.send(userDto);
+        userService.create(customerConverter.entityToDto(persistsCustomer));
+        //  sendingCredentialsService.send(userDto);
         return customerConverter.entityToDto(persistsCustomer);
     }
 
