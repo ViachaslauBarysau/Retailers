@@ -1,8 +1,9 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.StateDto;
-import by.itechart.retailers.service.StateService;
+import by.itechart.retailers.service.interfaces.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/states")
 public class StateController {
 
-    private StateService stateService;
+    private final StateService stateService;
 
     @Autowired
     public StateController(StateService stateService) {
@@ -19,8 +20,8 @@ public class StateController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(stateService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(stateService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{stateId}")

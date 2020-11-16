@@ -4,8 +4,10 @@ import by.itechart.retailers.converter.ApplicationRecordConverter;
 import by.itechart.retailers.dto.ApplicationRecordDto;
 import by.itechart.retailers.entity.ApplicationRecord;
 import by.itechart.retailers.repository.ApplicationRecordRepository;
-import by.itechart.retailers.service.ApplicationRecordService;
+import by.itechart.retailers.service.interfaces.ApplicationRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @Service
 public class ApplicationRecordServiceImpl implements ApplicationRecordService {
 
-    private ApplicationRecordRepository applicationRecordRepository;
-    private ApplicationRecordConverter applicationRecordConverter;
+    private final ApplicationRecordRepository applicationRecordRepository;
+    private final ApplicationRecordConverter applicationRecordConverter;
 
     @Autowired
     public ApplicationRecordServiceImpl(ApplicationRecordRepository applicationRecordRepository,
@@ -33,9 +35,9 @@ public class ApplicationRecordServiceImpl implements ApplicationRecordService {
     }
 
     @Override
-    public List<ApplicationRecordDto> findAll() {
-        List<ApplicationRecord> applicationRecordList = applicationRecordRepository.findAll();
-        return applicationRecordConverter.entityToDto(applicationRecordList);
+    public List<ApplicationRecordDto> findAll(Pageable pageable) {
+        Page<ApplicationRecord> applicationRecordPage = applicationRecordRepository.findAll(pageable);
+        return applicationRecordConverter.entityToDto(applicationRecordPage.toList());
     }
 
     @Override

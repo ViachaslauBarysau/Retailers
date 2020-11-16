@@ -1,8 +1,9 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.CategoryDto;
-import by.itechart.retailers.service.CategoryService;
+import by.itechart.retailers.service.interfaces.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/categories")
 public class CategoryController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @Autowired
     public CategoryController(CategoryService categoryService) {
@@ -19,8 +20,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(categoryService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{categoryId}")

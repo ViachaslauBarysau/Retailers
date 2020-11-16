@@ -4,8 +4,10 @@ import by.itechart.retailers.converter.LocationProductConverter;
 import by.itechart.retailers.dto.LocationProductDto;
 import by.itechart.retailers.entity.LocationProduct;
 import by.itechart.retailers.repository.LocationProductRepository;
-import by.itechart.retailers.service.LocationProductService;
+import by.itechart.retailers.service.interfaces.LocationProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @Service
 public class LocationProductServiceImpl implements LocationProductService {
 
-    private LocationProductRepository locationProductRepository;
-    private LocationProductConverter locationProductConverter;
+    private final LocationProductRepository locationProductRepository;
+    private final LocationProductConverter locationProductConverter;
 
     @Autowired
     public LocationProductServiceImpl(LocationProductRepository locationProductRepository,
@@ -32,10 +34,10 @@ public class LocationProductServiceImpl implements LocationProductService {
     }
 
     @Override
-    public List<LocationProductDto> findAll() {
-        List<LocationProduct> locationProductList = locationProductRepository.findAll();
+    public List<LocationProductDto> findAll(Pageable pageable) {
+        Page<LocationProduct> locationProductPage = locationProductRepository.findAll(pageable);
 
-        return locationProductConverter.entityToDto(locationProductList);
+        return locationProductConverter.entityToDto(locationProductPage.toList());
     }
 
     @Override

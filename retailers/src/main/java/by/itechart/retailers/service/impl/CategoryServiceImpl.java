@@ -4,8 +4,10 @@ import by.itechart.retailers.converter.CategoryConverter;
 import by.itechart.retailers.dto.CategoryDto;
 import by.itechart.retailers.entity.Category;
 import by.itechart.retailers.repository.CategoryRepository;
-import by.itechart.retailers.service.CategoryService;
+import by.itechart.retailers.service.interfaces.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private CategoryRepository categoryRepository;
-    private CategoryConverter categoryConverter;
+    private final CategoryRepository categoryRepository;
+    private final CategoryConverter categoryConverter;
 
     @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryConverter categoryConverter) {
@@ -24,14 +26,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findById(long categoryId) {
-        Category persistCategory = categoryRepository.findById(categoryId).orElse(new Category());
+        Category persistCategory = categoryRepository.findById(categoryId)
+                                                     .orElse(new Category());
         return categoryConverter.entityToDto(persistCategory);
     }
 
     @Override
-    public List<CategoryDto> findAll() {
-        List<Category> categoryList = categoryRepository.findAll();
-        return categoryConverter.entityToDto(categoryList);
+    public List<CategoryDto> findAll(Pageable pageable) {
+        Page<Category> categoryPage = categoryRepository.findAll(pageable);
+        return categoryConverter.entityToDto(categoryPage.toList());
     }
 
     @Override
@@ -44,7 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto update(CategoryDto categoryDto) {
         Category category = categoryConverter.dtoToEntity(categoryDto);
-        Category persistCategory = categoryRepository.findById(category.getId()).orElse(new Category());
+        Category persistCategory = categoryRepository.findById(category.getId())
+                                                     .orElse(new Category());
 
         persistCategory.setName(category.getName());
         persistCategory.setCategoryTax(category.getCategoryTax());

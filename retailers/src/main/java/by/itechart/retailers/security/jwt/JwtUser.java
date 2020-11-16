@@ -16,6 +16,7 @@ public class JwtUser implements UserDetails {
     private final String email;
     private final String password;
     private final boolean isActive;
+    private final boolean isCustomerActive;
 
     public JwtUser(Long id,
                    String firstName,
@@ -23,7 +24,8 @@ public class JwtUser implements UserDetails {
                    Collection<? extends GrantedAuthority> authorities,
                    String email,
                    String password,
-                   Status isActive) {
+                   Status isActive,
+                   Status isCustomerActive) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,6 +33,7 @@ public class JwtUser implements UserDetails {
         this.email = email;
         this.password = password;
         this.isActive = isActive.equals(Status.ACTIVE);
+        this.isCustomerActive=isCustomerActive.equals(Status.ACTIVE);
     }
 
     @Override

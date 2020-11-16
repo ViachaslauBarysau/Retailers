@@ -1,8 +1,9 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.ApplicationRecordDto;
-import by.itechart.retailers.service.ApplicationRecordService;
+import by.itechart.retailers.service.interfaces.ApplicationRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/applicationProductRecords")
 public class ApplicationRecordController {
 
-    private ApplicationRecordService applicationRecordService;
+    private final ApplicationRecordService applicationRecordService;
 
     @Autowired
     public ApplicationRecordController(ApplicationRecordService applicationRecordService) {
@@ -19,8 +20,8 @@ public class ApplicationRecordController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(applicationRecordService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(applicationRecordService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{applicationProductRecordId}")

@@ -1,8 +1,9 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.ProductDto;
-import by.itechart.retailers.service.ProductService;
+import by.itechart.retailers.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/products")
 public class ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
 
     @Autowired
     public ProductController(ProductService productService) {
@@ -19,8 +20,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(productService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(productService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{productId}")

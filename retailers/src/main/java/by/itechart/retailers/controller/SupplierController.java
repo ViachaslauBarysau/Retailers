@@ -1,8 +1,9 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.SupplierDto;
-import by.itechart.retailers.service.SupplierService;
+import by.itechart.retailers.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/suppliers")
 public class SupplierController {
 
-    private SupplierService supplierService;
+    private final SupplierService supplierService;
 
     @Autowired
     public SupplierController(SupplierService supplierService) {
@@ -19,8 +20,8 @@ public class SupplierController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(supplierService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(supplierService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{supplierId}")

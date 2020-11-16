@@ -5,8 +5,12 @@ import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.repository.CustomerRepository;
-import by.itechart.retailers.service.CustomerService;
+import by.itechart.retailers.service.interfaces.CustomerService;
+import by.itechart.retailers.service.interfaces.SendingCredentialsService;
+import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,32 +18,38 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private CustomerRepository customerRepository;
-    private CustomerConverter customerConverter;
+    private final CustomerRepository customerRepository;
+    private final CustomerConverter customerConverter;
+    private final UserService userService;
+    private final SendingCredentialsService sendingCredentialsService;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter customerConverter) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter customerConverter, UserService userService, SendingCredentialsService sendingCredentialsService) {
         this.customerRepository = customerRepository;
         this.customerConverter = customerConverter;
+        this.userService = userService;
+        this.sendingCredentialsService = sendingCredentialsService;
     }
-
 
     @Override
     public CustomerDto findById(long customerId) {
-        Customer customer = customerRepository.findById(customerId).orElse(new Customer());
+        Customer customer = customerRepository.findById(customerId)
+                                              .orElse(new Customer());
         return customerConverter.entityToDto(customer);
     }
 
     @Override
-    public List<CustomerDto> findAll() {
-        List<Customer> customerList = customerRepository.findAll();
-        return customerConverter.entityToDto(customerList);
+    public List<CustomerDto> findAll(Pageable pageable) {
+        Page<Customer> customerPage = customerRepository.findAll(pageable);
+        return customerConverter.entityToDto(customerPage.toList());
     }
 
     @Override
     public CustomerDto create(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistsCustomer = customerRepository.save(customer);
+        userService.create(customerConverter.entityToDto(persistsCustomer));
+        //  sendingCredentialsService.send(userDto);
         return customerConverter.entityToDto(persistsCustomer);
     }
 
@@ -47,7 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto update(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistCustomer = customerRepository.findById(customer.getId())
-                .orElse(new Customer());
+                                                     .orElse(new Customer());
 
         persistCustomer.setName(customer.getName());
         persistCustomer.setEmail(customer.getEmail());
@@ -55,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
         persistCustomer.setCategoryList(customer.getCategoryList());
         persistCustomer.setCustomerStatus(customer.getCustomerStatus());
         persistCustomer.setProductList(customer.getProductList());
-        
+
         return customerConverter.entityToDto(persistCustomer);
     }
 

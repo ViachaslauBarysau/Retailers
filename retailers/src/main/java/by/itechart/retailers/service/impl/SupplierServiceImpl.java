@@ -4,8 +4,10 @@ import by.itechart.retailers.converter.SupplierConverter;
 import by.itechart.retailers.dto.SupplierDto;
 import by.itechart.retailers.entity.Supplier;
 import by.itechart.retailers.repository.SupplierRepository;
-import by.itechart.retailers.service.SupplierService;
+import by.itechart.retailers.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @Service
 public class SupplierServiceImpl implements SupplierService {
 
-    private SupplierRepository supplierRepository;
-    private SupplierConverter supplierConverter;
+    private final SupplierRepository supplierRepository;
+    private final SupplierConverter supplierConverter;
 
     @Autowired
     public SupplierServiceImpl(SupplierRepository supplierRepository, SupplierConverter supplierConverter) {
@@ -30,10 +32,10 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public List<SupplierDto> findAll() {
-        List<Supplier> supplierList = supplierRepository.findAll();
+    public List<SupplierDto> findAll(Pageable pageable) {
+        Page<Supplier> supplierPage = supplierRepository.findAll(pageable);
 
-        return supplierConverter.entityToDto(supplierList);
+        return supplierConverter.entityToDto(supplierPage.toList());
     }
 
     @Override

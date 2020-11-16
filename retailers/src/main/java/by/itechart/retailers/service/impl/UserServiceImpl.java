@@ -1,29 +1,52 @@
 package by.itechart.retailers.service.impl;
 
+import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.converter.UserConverter;
+import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.dto.UserDto;
+import by.itechart.retailers.entity.Customer;
+import by.itechart.retailers.entity.Role;
+import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.entity.User;
 import by.itechart.retailers.repository.UserRepository;
-import by.itechart.retailers.service.UserService;
+import by.itechart.retailers.service.interfaces.SendingCredentialsService;
+import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
-    private UserConverter userConverter;
+    private final static String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final static String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+    private final static String specialCharacters = "!@#$";
+    private final static String numbers = "1234567890";
+    private final UserRepository userRepository;
+    private final UserConverter userConverter;
+    private final CustomerConverter customerConverter;
+    private final BCryptPasswordEncoder encoder;
+    private final SendingCredentialsService sendingCredentialsService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter) {
+    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, CustomerConverter customerConverter, @Lazy BCryptPasswordEncoder encoder, SendingCredentialsService sendingCredentialsService) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
+        this.customerConverter = customerConverter;
+        this.encoder = encoder;
+        this.sendingCredentialsService = sendingCredentialsService;
     }
+
 
     @Override
     @Transactional
@@ -42,6 +65,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String generatePassword() {
+
+        String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+        Random random = new Random();
+        char[] charPassword = new char[8];
+
+        charPassword[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
+        charPassword[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
+        charPassword[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
+        charPassword[3] = numbers.charAt(random.nextInt(numbers.length()));
+
+        for (int i = 0; i < 8; i++) {
+            charPassword[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
+        }
+        return new String(charPassword);
+    }
+
+    @Override
+    public String encodePassword(String password) {
+        return encoder.encode(password);
+    }
+
+    @Override
     public UserDto findById(long userId) {
         User user = userRepository.findById(userId)
                                   .orElse(new User());
@@ -50,26 +96,48 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> findAll() {
-        List<User> userList = userRepository.findAll();
+    public List<UserDto> findAll(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
 
-        return userConverter.entityToDto(userList);
+        return userConverter.entityToDto(userPage.toList());
     }
 
     @Override
-    public List<UserDto> findAllByCustomerId() {
+    public List<UserDto> findAllByCustomerId(Pageable pageable) {
         UserDto userDto = getUser();
-        List<User> customerEmployeesList = userRepository.findAllByCustomer_Id(userDto.getCustomer()
-                                                                                      .getId());
-        return userConverter.entityToDto(customerEmployeesList);
+        Page<User> customerEmployeesPage = userRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
+                                                                                                .getId());
+        return userConverter.entityToDto(customerEmployeesPage.toList());
     }
 
     @Override
     public UserDto create(UserDto userDto) {
         User user = userConverter.dtoToEntity(userDto);
+        String password = generatePassword();
+        user.setPassword(encodePassword(password));
         User persistUser = userRepository.save(user);
+        persistUser.setPassword(password);
+        userDto = userConverter.entityToDto(persistUser);
+        sendingCredentialsService.send(userDto);
+        return userDto;
+    }
 
-        return userConverter.entityToDto(persistUser);
+    @Override
+    public UserDto create(CustomerDto customerDto) {
+        Customer customer = customerConverter.dtoToEntity(customerDto);
+        User user = new User();
+        user.setFirstName(customerDto.getName());
+        user.setLastName(customerDto.getName());
+        user.setEmail(customerDto.getEmail());
+        user.setCustomer(customer);
+        String password = generatePassword();
+        user.setPassword(password);
+        sendingCredentialsService.send(userConverter.entityToDto(user));
+        user.setPassword(encodePassword(password));
+        user.setUserStatus(Status.ACTIVE);
+        user.setUserRole(Collections.singletonList(Role.ADMIN));
+        userRepository.save(user);
+        return userConverter.entityToDto(user);
     }
 
     @Override

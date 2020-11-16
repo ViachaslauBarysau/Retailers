@@ -6,9 +6,11 @@ import by.itechart.retailers.dto.LocationDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Location;
 import by.itechart.retailers.repository.LocationRepository;
-import by.itechart.retailers.service.LocationService;
-import by.itechart.retailers.service.UserService;
+import by.itechart.retailers.service.interfaces.LocationService;
+import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,17 +18,15 @@ import java.util.List;
 @Service
 public class LocationServiceImpl implements LocationService {
 
-    public UserService userService;
-    private LocationRepository locationRepository;
-    private LocationConverter locationConverter;
-    private CustomerConverter customerConverter;
+    private final UserService userService;
+    private final LocationRepository locationRepository;
+    private final LocationConverter locationConverter;
 
     @Autowired
 
     public LocationServiceImpl(LocationRepository locationRepository, LocationConverter locationConverter, CustomerConverter customerConverter, UserService userService) {
         this.locationRepository = locationRepository;
         this.locationConverter = locationConverter;
-        this.customerConverter = customerConverter;
         this.userService = userService;
     }
 
@@ -40,12 +40,12 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<LocationDto> findAll() {
+    public List<LocationDto> findAll(Pageable pageable) {
         //List<Location> locationList = locationRepository.findAll();
         UserDto userDto = userService.getUser();
-        List<Location> locationList = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
-                                                                                     .getId());
-        return locationConverter.entityToDto(locationList);
+        Page<Location> locationPage = locationRepository.findAllByCustomer_Id(pageable,userDto.getCustomer()
+                                                                                              .getId());
+        return locationConverter.entityToDto(locationPage.toList());
     }
 
     @Override

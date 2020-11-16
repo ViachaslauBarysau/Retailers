@@ -1,9 +1,10 @@
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.CustomerDto;
-import by.itechart.retailers.service.CustomerService;
-import by.itechart.retailers.service.UserService;
+import by.itechart.retailers.service.interfaces.CustomerService;
+import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,8 @@ import java.util.List;
 @RequestMapping("/customers")
 public class CustomerController {
 
-    private CustomerService customerService;
-    private UserService userService;
+    private final CustomerService customerService;
+    private final UserService userService;
 
     @Autowired
     public CustomerController(CustomerService customerService, UserService userService) {
@@ -25,8 +26,8 @@ public class CustomerController {
 
 
     @GetMapping
-    public ResponseEntity findAll() {
-        return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
+    public ResponseEntity findAll(Pageable pageable) {
+        return new ResponseEntity<>(customerService.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{customerId}")

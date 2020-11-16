@@ -4,7 +4,7 @@ package by.itechart.retailers.security;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.security.jwt.JwtUser;
 import by.itechart.retailers.security.jwt.JwtUserFactory;
-import by.itechart.retailers.service.UserService;
+import by.itechart.retailers.service.interfaces.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
