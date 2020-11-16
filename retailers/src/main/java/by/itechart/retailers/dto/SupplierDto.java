@@ -25,5 +25,4 @@ public class SupplierDto {
     private String identifier;
     @Valid
     private List<LocationDto> wareHouseList;
-    private CustomerDto customer;
 }
