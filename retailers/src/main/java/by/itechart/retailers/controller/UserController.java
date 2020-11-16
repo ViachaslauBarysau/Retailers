@@ -26,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/customer_employees")
-    public ResponseEntity findAllCustomerEmployees() {
-        return new ResponseEntity<>(userService.findAllByCustomerId(), HttpStatus.OK);
+    public ResponseEntity findAllCustomerEmployees(Pageable pageable) {
+        return new ResponseEntity<>(userService.findAllByCustomerId(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{userId}")
