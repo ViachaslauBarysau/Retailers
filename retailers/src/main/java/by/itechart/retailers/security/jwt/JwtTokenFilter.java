@@ -4,6 +4,7 @@ import by.itechart.retailers.dto.ErrorResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -13,6 +14,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
 
@@ -63,22 +66,30 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 }
             }
         } catch (JwtAuthenticationException e) {
-            ErrorResponse errorResponse = new ErrorResponse();
+
+          /*  ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
             errorResponse.setMessage(e.getMessage());
             response.getWriter()
-                    .write(convertObjectToJson(errorResponse));
+                    .write(convertObjectToJson(errorResponse));*/
+           // response= new ResponseEntity<Object>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            responseEntityToHttpServletResponse(new ResponseEntity<Object>(e.getMessage(), HttpStatus.UNAUTHORIZED),response);
             return;
         }
         filterChain.doFilter(request, response);
     }
 
-    public String convertObjectToJson(Object object) throws JsonProcessingException {
-        if (object == null) {
-            return null;
+    public static void responseEntityToHttpServletResponse(ResponseEntity<Object> responseEntity, HttpServletResponse response)
+            throws IOException {
+        for (Map.Entry<String, List<String>> header : responseEntity.getHeaders().entrySet()) {
+            String chave = header.getKey();
+            for (String valor : header.getValue()) {
+                response.addHeader(chave, valor);
+            }
         }
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
+
+        response.setStatus(responseEntity.getStatusCodeValue());
+        response.getWriter().write(String.valueOf(responseEntity.getBody()));
     }
 }
 
