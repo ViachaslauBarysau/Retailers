@@ -28,7 +28,7 @@ public class LocationProductServiceImpl implements LocationProductService {
     @Override
     public LocationProductDto findById(long locationProductId) {
         LocationProduct locationProduct = locationProductRepository.findById(locationProductId)
-                .orElse(new LocationProduct());
+                                                                   .orElse(new LocationProduct());
 
         return locationProductConverter.entityToDto(locationProduct);
     }
@@ -58,7 +58,7 @@ public class LocationProductServiceImpl implements LocationProductService {
         persistLocationProduct.setCost(locationProduct.getCost());
         persistLocationProduct.setProduct(locationProduct.getProduct());
         persistLocationProduct.setPrice(locationProduct.getPrice());
-
+        persistLocationProduct = locationProductRepository.save(persistLocationProduct);
 
         return locationProductConverter.entityToDto(persistLocationProduct);
     }

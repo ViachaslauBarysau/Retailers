@@ -61,6 +61,7 @@ public class SupplierServiceImpl implements SupplierService {
         persistSupplier.setFullName(supplier.getFullName());
         persistSupplier.setIdentifier(supplier.getIdentifier());
         persistSupplier.setWareHouseList(supplier.getWareHouseList());
+        persistSupplier=supplierRepository.save(persistSupplier);
 
         return supplierConverter.entityToDto(persistSupplier);
     }

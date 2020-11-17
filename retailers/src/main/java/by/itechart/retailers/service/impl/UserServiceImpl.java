@@ -66,7 +66,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String generatePassword() {
-
         String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
         Random random = new Random();
         char[] charPassword = new char[8];
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService {
         charPassword[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
         charPassword[3] = numbers.charAt(random.nextInt(numbers.length()));
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 4; i < 8; i++) {
             charPassword[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
         }
         return new String(charPassword);
@@ -156,6 +155,7 @@ public class UserServiceImpl implements UserService {
         persistUser.setUserStatus(user.getUserStatus());
         persistUser.setCustomer(user.getCustomer());
         persistUser.setLocation(user.getLocation());
+        persistUser=userRepository.save(persistUser);
 
         return userConverter.entityToDto(persistUser);
     }

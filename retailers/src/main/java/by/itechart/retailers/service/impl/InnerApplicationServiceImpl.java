@@ -65,6 +65,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         persistInnerApplication.setTotalUnitNumber(innerApplication.getTotalUnitNumber());
         persistInnerApplication.setUpdater(innerApplication.getUpdater());
         persistInnerApplication.setUpdatingDateTime(innerApplication.getUpdatingDateTime());
+        persistInnerApplication=innerApplicationRepository.save(persistInnerApplication);
 
         return innerApplicationConverter.entityToDto(persistInnerApplication);
     }

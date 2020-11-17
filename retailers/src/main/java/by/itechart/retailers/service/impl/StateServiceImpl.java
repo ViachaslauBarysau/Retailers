@@ -53,6 +53,7 @@ public class StateServiceImpl implements StateService {
 
         persistState.setName(state.getName());
         persistState.setStateTax(state.getStateTax());
+        persistState=stateRepository.save(persistState);
 
         return stateConverter.entityToDto(persistState);
     }

@@ -26,7 +26,8 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public BillDto findById(long billId) {
-        Bill bill = billRepository.findById(billId).orElse(new Bill());
+        Bill bill = billRepository.findById(billId)
+                                  .orElse(new Bill());
 
         return billConverter.entityToDto(bill);
     }
@@ -47,7 +48,8 @@ public class BillServiceImpl implements BillService {
     @Override
     public BillDto update(BillDto billDto) {
         Bill bill = billConverter.dtoToEntity(billDto);
-        Bill persistBill = billRepository.findById(bill.getId()).orElse(new Bill());
+        Bill persistBill = billRepository.findById(bill.getId())
+                                         .orElse(new Bill());
 
         persistBill.setLocation(bill.getLocation());
         persistBill.setBillNumber(bill.getBillNumber());
@@ -56,6 +58,7 @@ public class BillServiceImpl implements BillService {
         persistBill.setShopManager(bill.getShopManager());
         persistBill.setTotalProductAmount(bill.getTotalProductAmount());
         persistBill.setTotalUnitNumber(bill.getTotalUnitNumber());
+        persistBill = billRepository.save(persistBill);
 
         return billConverter.entityToDto(persistBill);
     }

@@ -70,6 +70,7 @@ public class LocationServiceImpl implements LocationService {
         persistLocation.setWriteOffActList(location.getWriteOffActList());
         persistLocation.setLocationType(location.getLocationType());
         persistLocation.setTotalCapacity(location.getTotalCapacity());
+        persistLocation=locationRepository.save(persistLocation);
 
         return locationConverter.entityToDto(persistLocation);
     }
@@ -81,6 +82,4 @@ public class LocationServiceImpl implements LocationService {
             locationRepository.delete(location);
         }
     }
-
-
 }

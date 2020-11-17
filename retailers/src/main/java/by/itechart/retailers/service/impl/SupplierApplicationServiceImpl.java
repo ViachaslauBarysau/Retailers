@@ -65,6 +65,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
         persistSupplierApplication.setTotalUnitNumber(supplierApplication.getTotalUnitNumber());
         persistSupplierApplication.setUpdater(supplierApplication.getUpdater());
         persistSupplierApplication.setUpdatingDateTime(supplierApplication.getUpdatingDateTime());
+        persistSupplierApplication=supplierApplicationRepository.save(persistSupplierApplication);
 
         return supplierApplicationConverter.entityToDto(persistSupplierApplication);
     }
