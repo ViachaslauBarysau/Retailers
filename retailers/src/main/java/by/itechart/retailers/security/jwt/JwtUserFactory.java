@@ -14,6 +14,7 @@ public final class JwtUserFactory {
     }
 
     public static JwtUser create(UserDto userDto) {
+
         return new JwtUser(
                 userDto.getId(),
                 userDto.getFirstName(),
@@ -22,7 +23,7 @@ public final class JwtUserFactory {
                 userDto.getEmail(),
                 userDto.getPassword(),
                 userDto.getUserStatus(),
-                userDto.getCustomer().getCustomerStatus()
+                getCustomerStatus(userDto)
         );
     }
 
@@ -31,4 +32,13 @@ public final class JwtUserFactory {
                         .map(role -> new SimpleGrantedAuthority(role.name()))
                         .collect(Collectors.toList());
     }
+
+    private static Status getCustomerStatus(UserDto userDto) {
+        if (userDto.getUserRole().contains(Role.SYSTEM_ADMIN)) {
+            return Status.ACTIVE;
+        } else {
+            return userDto.getCustomer() .getCustomerStatus();
+        }
+    }
+
 }

@@ -31,4 +31,8 @@ public class Supplier implements Serializable {
             joinColumns = @JoinColumn(name = "supplier_id"),
             inverseJoinColumns = {@JoinColumn(name = "location_id")})
     private List<Location> wareHouseList;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

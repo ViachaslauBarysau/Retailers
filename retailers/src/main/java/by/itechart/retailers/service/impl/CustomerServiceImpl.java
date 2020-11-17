@@ -65,13 +65,14 @@ public class CustomerServiceImpl implements CustomerService {
         persistCustomer.setCategoryList(customer.getCategoryList());
         persistCustomer.setCustomerStatus(customer.getCustomerStatus());
         persistCustomer.setProductList(customer.getProductList());
+        persistCustomer=customerRepository.save(persistCustomer);
 
         return customerConverter.entityToDto(persistCustomer);
     }
 
     @Override
-    public List<CustomerDto> updateStatus(List<CustomerDto> customerDtos) {
-        List<Customer> customers = customerConverter.dtoToEntity(customerDtos);
+    public List<CustomerDto> updateStatus(List<Long> customerIds) {
+         List<Customer> customers=customerRepository.findAllById(customerIds);
         for (Customer customer : customers) {
             if (customer.getCustomerStatus()
                         .equals(Status.ACTIVE)) {

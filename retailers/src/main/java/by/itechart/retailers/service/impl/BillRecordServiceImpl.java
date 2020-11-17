@@ -55,6 +55,7 @@ public class BillRecordServiceImpl implements BillRecordService {
         persistBillProduct.setProduct(billRecord.getProduct());
         persistBillProduct.setProductAmount(billRecord.getProductAmount());
         persistBillProduct.setProductPrice(billRecord.getProductPrice());
+        persistBillProduct = billRecordRepository.save(persistBillProduct);
 
         return billRecordConverter.entityToDto(persistBillProduct);
     }

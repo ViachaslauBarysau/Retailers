@@ -52,14 +52,15 @@ public class WriteOffActRecordServiceImpl implements WriteOffActRecordService {
     @Override
     public WriteOffActRecordDto update(WriteOffActRecordDto writeOffActRecordDto) {
         WriteOffActRecord productRecord = writeOffActRecordConverter.dtoToEntity(writeOffActRecordDto);
-        WriteOffActRecord writeOffActRecord = writeOffActRecordRepository
+        WriteOffActRecord persistWriteOffActRecord = writeOffActRecordRepository
                 .findById(productRecord.getId())
                 .orElse(new WriteOffActRecord());
 
-        writeOffActRecord.setAmount(productRecord.getAmount());
-        writeOffActRecord.setProduct(productRecord.getProduct());
-        writeOffActRecord.setReason(productRecord.getReason());
+        persistWriteOffActRecord.setAmount(productRecord.getAmount());
+        persistWriteOffActRecord.setProduct(productRecord.getProduct());
+        persistWriteOffActRecord.setReason(productRecord.getReason());
+        persistWriteOffActRecord=writeOffActRecordRepository.save(persistWriteOffActRecord);
 
-        return writeOffActRecordConverter.entityToDto(writeOffActRecord);
+        return writeOffActRecordConverter.entityToDto(persistWriteOffActRecord);
     }
 }

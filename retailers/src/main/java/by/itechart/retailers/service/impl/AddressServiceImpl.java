@@ -54,6 +54,7 @@ public class AddressServiceImpl implements AddressService {
         persistAddress.setCity(addressWithUpdatedFields.getCity());
         persistAddress.setFirstAddressLine(addressWithUpdatedFields.getFirstAddressLine());
         persistAddress.setSecondAddressLine(addressWithUpdatedFields.getSecondAddressLine());
+        persistAddress=addressRepository.save(persistAddress);
 
         return addressConverter.entityToDto(persistAddress);
     }
