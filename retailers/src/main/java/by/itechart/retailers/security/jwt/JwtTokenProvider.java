@@ -1,7 +1,10 @@
 package by.itechart.retailers.security.jwt;
 
 import by.itechart.retailers.entity.Role;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,13 +26,11 @@ import java.util.List;
 @Component
 public class JwtTokenProvider {
 
+    private final UserDetailsService userDetailsService;
     @Value("${jwt.token.secret}")
     private String secret;
-
     @Value("${jwt.token.expired}")
     private long validityInMilliseconds;
-
-    private final UserDetailsService userDetailsService;
 
     @Autowired
     public JwtTokenProvider(@Qualifier("jwtUserDetailsService") UserDetailsService userDetailsService) {
@@ -43,12 +44,14 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        secret = Base64.getEncoder().encodeToString(secret.getBytes());
+        secret = Base64.getEncoder()
+                       .encodeToString(secret.getBytes());
     }
 
     public String createToken(String username, List<Role> roles) {
 
-        Claims claims = Jwts.claims().setSubject(username);
+        Claims claims = Jwts.claims()
+                            .setSubject(username);
         claims.put("roles", getRoleNames(roles));
 
         Date now = new Date();
@@ -68,8 +71,16 @@ public class JwtTokenProvider {
     }
 
     public String getUsername(String token) {
-        System.out.println(Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject());
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+        System.out.println(Jwts.parser()
+                               .setSigningKey(secret)
+                               .parseClaimsJws(token)
+                               .getBody()
+                               .getSubject());
+        return Jwts.parser()
+                   .setSigningKey(secret)
+                   .parseClaimsJws(token)
+                   .getBody()
+                   .getSubject();
     }
 
     public String resolveToken(HttpServletRequest req) {
@@ -80,23 +91,18 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws JwtAuthenticationException {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser()
+                                     .setSigningKey(secret)
+                                     .parseClaimsJws(token);
 
-            if (claims.getBody().getExpiration().before(new Date())) {
-                return false;
-            }
-
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            try {
-                throw new JwtAuthenticationException("JWT token is expired or invalid");
-            } catch (JwtAuthenticationException jwtAuthenticationException) {
-                jwtAuthenticationException.printStackTrace();
-            }
+            return !claims.getBody()
+                          .getExpiration()
+                          .before(new Date());
+        } catch (Exception e) {
+            throw new JwtAuthenticationException("JWT token is expired or invalid");
         }
-        return false;
     }
 
     private List<String> getRoleNames(List<Role> userRoles) {
