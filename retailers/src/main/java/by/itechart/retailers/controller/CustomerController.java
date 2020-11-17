@@ -46,7 +46,7 @@ public class CustomerController {
     }*/
 
     @PutMapping
-    public ResponseEntity updateStatus(@RequestBody List<CustomerDto> customerDtos) {
-        return new ResponseEntity<>(customerService.updateStatus(customerDtos), HttpStatus.OK);
+    public ResponseEntity updateStatus(@RequestBody List<Long> customerIds) {
+        return new ResponseEntity<>(customerService.updateStatus(customerIds), HttpStatus.OK);
     }
 }

@@ -14,5 +14,5 @@ public interface CustomerService {
 
     CustomerDto update(CustomerDto customerDto);
 
-    List<CustomerDto> updateStatus(List<CustomerDto> customerDtos);
+    List<CustomerDto> updateStatus(List<Long> customerIds);
 }
