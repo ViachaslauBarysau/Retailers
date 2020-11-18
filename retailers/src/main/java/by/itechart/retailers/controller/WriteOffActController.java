@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/writeOffActs")
+@RequestMapping("/api/writeOffActs")
 public class WriteOffActController {
 
     private final WriteOffActService writeOffActService;

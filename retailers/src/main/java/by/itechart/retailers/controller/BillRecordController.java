@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/billProductRecords")
+@RequestMapping("/api/billProductRecords")
 public class BillRecordController {
 
     private final BillRecordService billRecordService;

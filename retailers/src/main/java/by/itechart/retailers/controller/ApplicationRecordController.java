@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/applicationProductRecords")
+@RequestMapping("/api/applicationProductRecords")
 public class ApplicationRecordController {
 
     private final ApplicationRecordService applicationRecordService;

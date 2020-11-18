@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/suppliers")
+@RequestMapping("/api/suppliers")
 public class SupplierController {
 
     private final SupplierService supplierService;
@@ -37,5 +39,9 @@ public class SupplierController {
     @PutMapping
     public ResponseEntity update(@RequestBody SupplierDto supplierDto) {
         return new ResponseEntity<>(supplierService.update(supplierDto), HttpStatus.OK);
+    }
+    @PutMapping(value = "/supplier_status")
+    public ResponseEntity updateStatus(@RequestBody List<Long> supplierIdsList) {
+        return new ResponseEntity<>(supplierService.updateStatus(supplierIdsList), HttpStatus.OK);
     }
 }

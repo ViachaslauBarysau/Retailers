@@ -1,6 +1,7 @@
 package by.itechart.retailers.config;
 
 import by.itechart.retailers.security.jwt.JwtConfigurer;
+import by.itechart.retailers.security.jwt.JwtTokenFilter;
 import by.itechart.retailers.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,15 +20,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String CUSTOMERS = "/customers/**";
-    private static final String LOCATIONS = "/locations/**";
-    private static final String SUPPLIERS = "/suppliers/**";
-    private static final String PRODUCTS = "/products/**";
-    private static final String WRITE_OFF_ACTS = "/write_of_acts/**";
-    private static final String WRITE_OFF_ACT_RECORDS = "/write_of_act_records/**";
-    private static final String USERS = "/users/**";
-    private static final String LOGIN_ENDPOINT = "/login";
-    private static final String LOGOUT_ENDPOINT = "/logout";
+    private static final String CUSTOMERS = "/api/customers/**";
+    private static final String LOCATIONS = "/api/locations/**";
+    private static final String SUPPLIERS = "/api/suppliers/**";
+    private static final String PRODUCTS = "/api/products/**";
+    private static final String WRITE_OFF_ACTS = "/api/write_of_acts/**";
+    private static final String WRITE_OFF_ACT_RECORDS = "/api/write_of_act_records/**";
+    private static final String USERS = "/api/users/**";
+    private static final String LOGIN_ENDPOINT = "/api/login";
+    private static final String LOGOUT_ENDPOINT = "/api/logout";
     private final JwtTokenProvider jwtTokenProvider;
 
 

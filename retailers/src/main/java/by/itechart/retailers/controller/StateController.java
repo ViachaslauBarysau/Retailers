@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/states")
+@RequestMapping("/api/states")
 public class StateController {
 
     private final StateService stateService;
