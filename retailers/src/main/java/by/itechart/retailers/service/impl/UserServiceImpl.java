@@ -128,6 +128,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(customerDto.getName());
         user.setLastName(customerDto.getName());
         user.setEmail(customerDto.getEmail());
+        user.setLogin(customerDto.getEmail());
         user.setCustomer(customer);
         String password = generatePassword();
         user.setPassword(password);
@@ -148,6 +149,7 @@ public class UserServiceImpl implements UserService {
         persistUser.setAddress(user.getAddress());
         persistUser.setBirthday(user.getBirthday());
         persistUser.setEmail(user.getEmail());
+        persistUser.setLogin(user.getLogin());
         persistUser.setFirstName(user.getFirstName());
         persistUser.setLastName(user.getLastName());
         persistUser.setPassword(user.getPassword());
