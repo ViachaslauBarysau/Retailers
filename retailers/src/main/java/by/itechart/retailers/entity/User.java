@@ -57,4 +57,7 @@ public class User implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Column(name = "login")
+    private String login;
 }

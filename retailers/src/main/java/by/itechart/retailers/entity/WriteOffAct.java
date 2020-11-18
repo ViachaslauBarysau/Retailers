@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,4 +31,7 @@ public class WriteOffAct implements Serializable {
 
     @Column(name = "total_product_amount")
     private Integer totalProductAmount;
+
+    @Column(name = "total_product_sum")
+    private BigDecimal totalProductSum;
 }

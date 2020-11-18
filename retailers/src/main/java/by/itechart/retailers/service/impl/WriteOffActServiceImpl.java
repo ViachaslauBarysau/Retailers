@@ -57,6 +57,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
         persistWriteOffAct.setActDateTime(writeOffAct.getActDateTime());
         persistWriteOffAct.setTotalProductAmount(writeOffAct.getTotalProductAmount());
         persistWriteOffAct.setWriteOffActRecords(writeOffAct.getWriteOffActRecords());
+        persistWriteOffAct.setTotalProductSum(writeOffAct.getTotalProductSum());
         persistWriteOffAct=writeOffActRepository.save(persistWriteOffAct);
 
         return converter.entityToDto(persistWriteOffAct);
