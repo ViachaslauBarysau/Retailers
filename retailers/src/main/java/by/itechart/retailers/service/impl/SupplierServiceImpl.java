@@ -3,6 +3,7 @@ package by.itechart.retailers.service.impl;
 import by.itechart.retailers.converter.SupplierConverter;
 import by.itechart.retailers.dto.SupplierDto;
 import by.itechart.retailers.dto.UserDto;
+import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.entity.Supplier;
 import by.itechart.retailers.repository.SupplierRepository;
 import by.itechart.retailers.service.interfaces.SupplierService;
@@ -63,8 +64,23 @@ public class SupplierServiceImpl implements SupplierService {
         persistSupplier.setWareHouseList(supplier.getWareHouseList());
         persistSupplier.setCustomer(supplier.getCustomer());
         persistSupplier.setSupplierStatus(supplier.getSupplierStatus());
-        persistSupplier=supplierRepository.save(persistSupplier);
+        persistSupplier = supplierRepository.save(persistSupplier);
 
         return supplierConverter.entityToDto(persistSupplier);
+    }
+
+    @Override
+    public List<SupplierDto> updateStatus(List<Long> supplierIdsList) {
+        List<Supplier> suppliers = supplierRepository.findAllById(supplierIdsList);
+        for (Supplier supplier : suppliers) {
+            if (supplier.getSupplierStatus()
+                        .equals(Status.ACTIVE)) {
+                supplier.setSupplierStatus(Status.DISABLED);
+            } else {
+                supplier.setSupplierStatus(Status.ACTIVE);
+            }
+            supplierRepository.save(supplier);
+        }
+        return supplierConverter.entityToDto(suppliers);
     }
 }

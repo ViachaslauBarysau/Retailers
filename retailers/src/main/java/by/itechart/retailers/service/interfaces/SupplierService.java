@@ -13,4 +13,6 @@ public interface SupplierService {
     SupplierDto create(SupplierDto supplierDto);
 
     SupplierDto update(SupplierDto supplierDto);
+
+    List<SupplierDto> updateStatus(List<Long> supplierIdsList);
 }
