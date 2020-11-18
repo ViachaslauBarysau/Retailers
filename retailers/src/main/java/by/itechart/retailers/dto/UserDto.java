@@ -41,4 +41,5 @@ public class UserDto {
     private LocationDto location;
    // @Valid
     private CustomerDto customer;
+    private String login;
 }

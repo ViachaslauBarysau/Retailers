@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Past;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,4 +24,5 @@ public class WriteOffActDto {
     private LocalDateTime actDateTime;
     @Min(value = 1, message = "Product amount must be equals or greater than 1.")
     private Integer totalProductAmount;
+    private BigDecimal totalProductSum;
 }

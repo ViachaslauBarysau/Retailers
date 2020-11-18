@@ -1,6 +1,7 @@
 package by.itechart.retailers.dto;
 
 import by.itechart.retailers.entity.Customer;
+import by.itechart.retailers.entity.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,4 +29,5 @@ public class SupplierDto {
     private List<LocationDto> wareHouseList;
     @Valid
     private Customer customer;
+    private Status supplierStatus;
 }

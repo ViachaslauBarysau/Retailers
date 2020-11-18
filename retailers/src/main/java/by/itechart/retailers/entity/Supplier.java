@@ -35,4 +35,8 @@ public class Supplier implements Serializable {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "supplier_status")
+    private Status supplierStatus;
 }
