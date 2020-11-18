@@ -23,4 +23,6 @@ public class ProductDto {
     private CategoryDto category;
     @Min(value = 1, message = "Product volume must be greater than 0.")
     private Integer volume;
+    @Valid
+    private CustomerDto customer;
 }

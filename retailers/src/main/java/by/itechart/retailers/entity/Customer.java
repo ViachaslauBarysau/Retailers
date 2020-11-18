@@ -30,18 +30,18 @@ public class Customer implements Serializable {
     @Column(name = "registration_date")
     private LocalDate registrationDate;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+/*    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "customer_category",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = {@JoinColumn(name = "category_id")})
-    private List<Category> categoryList;
+    private List<Category> categoryList;*/
 
     @Enumerated(EnumType.STRING)
     @Column(name = "customer_status")
     private Status customerStatus;
 
 
-    @OneToMany
+ /*   @OneToMany
     @JoinColumn(name = "customer_id")
-    private List<Product> productList;
+    private List<Product> productList;*/
 }

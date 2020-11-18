@@ -62,9 +62,9 @@ public class CustomerServiceImpl implements CustomerService {
         persistCustomer.setName(customer.getName());
         persistCustomer.setEmail(customer.getEmail());
         persistCustomer.setRegistrationDate(customer.getRegistrationDate());
-        persistCustomer.setCategoryList(customer.getCategoryList());
+     //   persistCustomer.setCategoryList(customer.getCategoryList());
         persistCustomer.setCustomerStatus(customer.getCustomerStatus());
-        persistCustomer.setProductList(customer.getProductList());
+     //   persistCustomer.setProductList(customer.getProductList());
         persistCustomer=customerRepository.save(persistCustomer);
 
         return customerConverter.entityToDto(persistCustomer);

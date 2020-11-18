@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,11 +26,7 @@ public class CustomerDto {
     @Past(message = "Registration date can't be in the future.")
     private LocalDate registrationDate;
     //  @Valid
-    private List<CategoryDto> categoryList;
-    // @NotBlank(message = "Status can't be empty.")
+   // private List<CategoryDto> categoryList;
+    @NotBlank(message = "Status can't be empty.")
     private Status customerStatus;
-    //  @Valid
-    private List<ProductDto> productList;
-
-    private List<SupplierDto> supplierList;
 }

@@ -31,4 +31,8 @@ public class Product implements Serializable {
 
     @Column(name = "volume")
     private Integer volume;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

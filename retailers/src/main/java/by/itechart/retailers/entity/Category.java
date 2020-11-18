@@ -25,4 +25,8 @@ public class Category implements Serializable {
 
     @Column(name = "category_tax")
     private BigDecimal categoryTax;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

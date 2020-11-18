@@ -57,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
         persistProduct.setLabel(product.getLabel());
         persistProduct.setUpc(product.getUpc());
         persistProduct.setVolume(product.getVolume());
+        persistProduct.setCustomer(product.getCustomer());
         persistProduct=productRepository.save(persistProduct);
 
         return productConverter.entityToDto(persistProduct);

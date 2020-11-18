@@ -52,6 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         persistCategory.setName(category.getName());
         persistCategory.setCategoryTax(category.getCategoryTax());
+        persistCategory.setCustomer(category.getCustomer());
         persistCategory=categoryRepository.save(persistCategory);
 
         return categoryConverter.entityToDto(persistCategory);
