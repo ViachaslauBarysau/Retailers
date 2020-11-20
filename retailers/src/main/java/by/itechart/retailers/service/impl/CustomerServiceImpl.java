@@ -4,6 +4,7 @@ import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Status;
+import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.CustomerRepository;
 import by.itechart.retailers.service.interfaces.CustomerService;
 import by.itechart.retailers.service.interfaces.SendingCredentialsService;
@@ -45,11 +46,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto create(CustomerDto customerDto) {
+    public CustomerDto create(CustomerDto customerDto) throws NotUniqueDataException {
         Customer customer = customerConverter.dtoToEntity(customerDto);
+        if(emailExists(customer.getEmail())){
+            throw new NotUniqueDataException("Email should be unique");
+        }
         Customer persistsCustomer = customerRepository.save(customer);
         userService.create(customerConverter.entityToDto(persistsCustomer));
-        //  sendingCredentialsService.send(userDto);
         return customerConverter.entityToDto(persistsCustomer);
     }
 
@@ -60,11 +63,8 @@ public class CustomerServiceImpl implements CustomerService {
                                                      .orElse(new Customer());
 
         persistCustomer.setName(customer.getName());
-        persistCustomer.setEmail(customer.getEmail());
         persistCustomer.setRegistrationDate(customer.getRegistrationDate());
-     //   persistCustomer.setCategoryList(customer.getCategoryList());
         persistCustomer.setCustomerStatus(customer.getCustomerStatus());
-     //   persistCustomer.setProductList(customer.getProductList());
         persistCustomer=customerRepository.save(persistCustomer);
 
         return customerConverter.entityToDto(persistCustomer);
@@ -83,6 +83,11 @@ public class CustomerServiceImpl implements CustomerService {
             customerRepository.save(customer);
         }
         return customerConverter.entityToDto(customers);
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        return customerRepository.findByEmail(email).isPresent();
     }
 
 }

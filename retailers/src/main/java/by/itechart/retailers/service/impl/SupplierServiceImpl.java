@@ -5,6 +5,7 @@ import by.itechart.retailers.dto.SupplierDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.entity.Supplier;
+import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.SupplierRepository;
 import by.itechart.retailers.service.interfaces.SupplierService;
 import by.itechart.retailers.service.interfaces.UserService;
@@ -46,8 +47,11 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public SupplierDto create(SupplierDto supplierDto) {
+    public SupplierDto create(SupplierDto supplierDto) throws NotUniqueDataException {
         Supplier supplier = supplierConverter.dtoToEntity(supplierDto);
+        if(identifierExists(supplier.getIdentifier())){
+            throw new NotUniqueDataException("Identifier should be unique");
+        }
         Supplier persistSupplier = supplierRepository.save(supplier);
 
         return supplierConverter.entityToDto(persistSupplier);
@@ -60,7 +64,6 @@ public class SupplierServiceImpl implements SupplierService {
                                                      .orElse(new Supplier());
 
         persistSupplier.setFullName(supplier.getFullName());
-        persistSupplier.setIdentifier(supplier.getIdentifier());
         persistSupplier.setWareHouseList(supplier.getWareHouseList());
         persistSupplier.setCustomer(supplier.getCustomer());
         persistSupplier.setSupplierStatus(supplier.getSupplierStatus());
@@ -82,5 +85,10 @@ public class SupplierServiceImpl implements SupplierService {
             supplierRepository.save(supplier);
         }
         return supplierConverter.entityToDto(suppliers);
+    }
+
+    @Override
+    public boolean identifierExists(String identifier) {
+        return supplierRepository.findByIdentifier(identifier).isPresent();
     }
 }

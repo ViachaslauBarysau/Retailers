@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHelper {
 
-    @ExceptionHandler(value = {NotUniqueEmailException.class})
-    public ResponseEntity<Object> handleNotUniqueEmailException(NotUniqueEmailException ex) {
-        log.error("Email should be unique: ", ex.getMessage());
+    @ExceptionHandler(value = {NotUniqueDataException.class})
+    public ResponseEntity<Object> handleNotUniqueDataException(NotUniqueDataException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
     }
