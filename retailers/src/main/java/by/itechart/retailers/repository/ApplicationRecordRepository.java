@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplicationRecordRepository extends JpaRepository<ApplicationRecord, Long> {
     ApplicationRecord findApplicationProductRecordByProduct(Product product);
+
+    boolean existsByProduct(Product product);
+
 }

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -37,5 +39,11 @@ public class ProductController {
     @PutMapping
     public ResponseEntity update(@RequestBody ProductDto productDto) {
         return new ResponseEntity<>(productService.update(productDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity delete(@RequestBody List<ProductDto> productDtos) {
+        return new ResponseEntity<>(productService.delete(productDtos), HttpStatus.OK);
+        //возвращать list неудаленных!!
     }
 }

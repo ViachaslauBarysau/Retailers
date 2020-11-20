@@ -77,6 +77,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public void delete(List<LocationDto> locationDtos) {
+        //подождать насчет проверки если ли юзеры в location
         List<Location> locations = locationConverter.dtoToEntity(locationDtos);
         for (Location location : locations) {
             locationRepository.delete(location);
