@@ -86,6 +86,28 @@ public class UserServiceImpl implements UserService {
         return encoder.encode(password);
     }
 
+
+    @Override
+    public List<UserDto> updateStatus(List<Long> userIds) {
+        List<User> users = userRepository.findAllById(userIds);
+        for (User user : users) {
+            if (user.getUserStatus()
+                    .equals(Status.ACTIVE)) {
+                user.setUserStatus(Status.DISABLED);
+            } else {
+                user.setUserStatus(Status.ACTIVE);
+            }
+            userRepository.save(user);
+        }
+        return userConverter.entityToDto(users);
+    }
+
+    @Override
+    public List<UserDto> findAllByLocationId(Long locationId) {
+        List<User> users=userRepository.findAllByLocation_IdAndUserStatus(locationId,Status.ACTIVE);
+        return userConverter.entityToDto(users);
+    }
+
     @Override
     public UserDto findById(long userId) {
         User user = userRepository.findById(userId)
@@ -158,7 +180,7 @@ public class UserServiceImpl implements UserService {
         persistUser.setCustomer(user.getCustomer());
         persistUser.setLocation(user.getLocation());
         persistUser.setLogin(user.getLogin());
-        persistUser=userRepository.save(persistUser);
+        persistUser = userRepository.save(persistUser);
 
         return userConverter.entityToDto(persistUser);
     }

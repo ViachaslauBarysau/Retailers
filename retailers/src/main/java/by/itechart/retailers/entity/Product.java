@@ -35,4 +35,8 @@ public class Product implements Serializable {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "deleted_status")
+    private DeletedStatus status;
 }

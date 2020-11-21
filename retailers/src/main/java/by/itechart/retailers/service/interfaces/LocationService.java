@@ -14,6 +14,6 @@ public interface LocationService {
 
     LocationDto update(LocationDto locationDto);
 
-    void delete(List<LocationDto> locationDtos);
+    List<LocationDto>  delete(List<LocationDto> locationDtos);
 
 }

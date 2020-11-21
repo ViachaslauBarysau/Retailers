@@ -1,5 +1,6 @@
 package by.itechart.retailers.dto;
 
+import by.itechart.retailers.entity.DeletedStatus;
 import by.itechart.retailers.entity.LocationProduct;
 import by.itechart.retailers.entity.LocationType;
 import lombok.AllArgsConstructor;
@@ -37,4 +38,6 @@ public class LocationDto {
     private LocationType locationType;
     @DecimalMin(value = "0", message = "Tax must be equals or greater than 0.")
     private BigDecimal locationTax;
+
+    private DeletedStatus status;
 }

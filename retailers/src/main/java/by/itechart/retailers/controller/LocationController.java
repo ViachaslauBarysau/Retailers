@@ -42,8 +42,10 @@ public class LocationController {
     }
 
     @DeleteMapping
-    public void delete(@RequestBody List<LocationDto> locationDtos) {
-        locationService.delete(locationDtos);
-    }
+    public ResponseEntity delete(@RequestBody List<LocationDto> locationDtos) {
+        return new ResponseEntity<>(locationService.delete(locationDtos), HttpStatus.OK);
+        //TODO:вернуть List locations которые не удалиллись потому что там есть активные юзеры
+        //TODO: получить фидбек
+        }
 
 }
