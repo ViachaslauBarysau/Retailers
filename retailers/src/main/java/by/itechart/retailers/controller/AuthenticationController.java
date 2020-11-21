@@ -59,7 +59,6 @@ public class AuthenticationController {
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid username or password", HttpStatus.FORBIDDEN);
-            //throw new BadCredentialsException("Invalid username or password");
         }
     }
 
