@@ -2,7 +2,6 @@ package by.itechart.retailers.repository;
 
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.entity.User;
-import org.graalvm.compiler.lir.LIRInstruction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

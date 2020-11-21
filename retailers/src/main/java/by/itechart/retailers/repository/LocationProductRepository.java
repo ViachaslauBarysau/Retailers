@@ -5,7 +5,10 @@ import by.itechart.retailers.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface LocationProductRepository extends JpaRepository<LocationProduct, Long> {
-    boolean existsByProduct(Product product);
+
+    List<LocationProduct> findAllByProduct(Product product);
 }

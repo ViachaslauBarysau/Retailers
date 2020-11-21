@@ -29,4 +29,5 @@ public class ApplicationRecord implements Serializable {
 
     @Column(name = "cost")
     private BigDecimal cost;
+
 }

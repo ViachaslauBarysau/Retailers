@@ -2,10 +2,8 @@ package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.ProductConverter;
 import by.itechart.retailers.dto.ProductDto;
-import by.itechart.retailers.entity.Product;
-import by.itechart.retailers.repository.ApplicationRecordRepository;
-import by.itechart.retailers.repository.LocationProductRepository;
-import by.itechart.retailers.repository.ProductRepository;
+import by.itechart.retailers.entity.*;
+import by.itechart.retailers.repository.*;
 import by.itechart.retailers.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,14 +19,19 @@ public class ProductServiceImpl implements ProductService {
     private final ProductConverter productConverter;
     private final ApplicationRecordRepository applicationRecordRepository;
     private final LocationProductRepository locationProductRepository;
+    private final InnerApplicationRepository innerApplicationRepository;
+    private final SupplierApplicationRepository supplierApplicationRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, ApplicationRecordRepository applicationRecordRepository, LocationProductRepository locationProductRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, ApplicationRecordRepository applicationRecordRepository, LocationProductRepository locationProductRepository, InnerApplicationRepository innerApplicationRepository, SupplierApplicationRepository supplierApplicationRepository) {
         this.productRepository = productRepository;
         this.productConverter = productConverter;
         this.applicationRecordRepository = applicationRecordRepository;
         this.locationProductRepository = locationProductRepository;
+        this.innerApplicationRepository = innerApplicationRepository;
+        this.supplierApplicationRepository = supplierApplicationRepository;
     }
+
 
     @Override
     public ProductDto findById(long productId) {
@@ -72,32 +75,41 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> delete(List<ProductDto> productDtos) {
         List<Product> products = productConverter.dtoToEntity(productDtos);
-        for (Product product : products) {
-            if (!applicationRecordRepository.existsByProduct(product)) {
-                if (!locationProductRepository.existsByProduct(product)) {
-                    productRepository.delete(product);
-                    products.remove(product);
-                } else {
-                    if (locationProductRepository.findById(product.getId())
-                                                 .get()
-                                                 .getAmount() == 0) {
-                        productRepository.delete(product);
-                        products.remove(product);
-                    }
-                }
 
+        for (Product product : products) {
+            List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
+            List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
+            List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
+            List<InnerApplication> innerApplications = innerApplicationRepository.findAllByRecordsListIn(applicationRecords);
+
+            long locationProductCount = locationProducts.stream()
+                                                        .filter(locationProduct -> (locationProduct.getAmount() != 0))
+                                                        .count();
+            if (locationProductCount > 0) {
+                continue;
             }
 
+            long supplierApplicationCount = supplierApplications.stream()
+                                                                .filter(supplierApplication -> (supplierApplication.getApplicationStatus()
+                                                                                                                   .equals(ApplicationStatus.OPEN)))
+                                                                .count();
+            if (supplierApplicationCount > 0) {
+                continue;
+            }
+
+            long innerApplicationCount = innerApplications.stream()
+                                                          .filter(innerApplication -> (innerApplication.getApplicationStatus()
+                                                                                                       .equals(ApplicationStatus.OPEN)))
+                                                          .count();
+            if (innerApplicationCount > 0) {
+                continue;
+            }
+            product.setStatus(DeletedStatus.DELETED);
+            productRepository.save(product);
+            products.remove(product);
         }
         return productConverter.entityToDto(products);
     }
 }
-       /* for (Product product : products) {
-            if (!applicationRecordRepository.existsByProduct(product)
-                    && !locationProductRepository.existsByProduct(product)) {
-                productRepository.delete(product);
-            }
-            // тут проверять amount на ноль в location_product потому что может быть товар но количество равно 0
-        }*/
 
 
