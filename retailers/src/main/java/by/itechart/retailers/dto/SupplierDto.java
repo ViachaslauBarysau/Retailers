@@ -28,7 +28,7 @@ public class SupplierDto {
     @Valid
     private List<LocationDto> wareHouseList;
     @Valid
-    private Customer customer;
+    private CustomerDto customer;
 
     private Status supplierStatus;
 }
