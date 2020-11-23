@@ -44,6 +44,5 @@ public class ProductController {
     @DeleteMapping
     public ResponseEntity delete(@RequestBody List<ProductDto> productDtos) {
         return new ResponseEntity<>(productService.delete(productDtos), HttpStatus.OK);
-        //возвращать list неудаленных!!
     }
 }

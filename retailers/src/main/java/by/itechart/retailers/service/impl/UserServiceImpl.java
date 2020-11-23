@@ -46,7 +46,20 @@ public class UserServiceImpl implements UserService {
         this.encoder = encoder;
         this.sendingCredentialsService = sendingCredentialsService;
     }
-
+    @Override
+    public List<UserDto> updateStatus(List<Long> userIds) {
+        List<User> users = userRepository.findAllById(userIds);
+        for (User user : users) {
+            if (user.getUserStatus()
+                    .equals(Status.ACTIVE)) {
+                user.setUserStatus(Status.DISABLED);
+            } else {
+                user.setUserStatus(Status.ACTIVE);
+            }
+            userRepository.save(user);
+        }
+        return userConverter.entityToDto(users);
+    }
 
     @Override
     @Transactional

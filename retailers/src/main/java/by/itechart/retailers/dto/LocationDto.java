@@ -28,8 +28,6 @@ public class LocationDto {
     private CustomerDto customer;
     @Valid
     private AddressDto address;
-    @Valid
-    private List<LocationProduct> locationItemList;
     @Min(value = 1, message = "Total capacity must be greater than 0.")
     private Integer totalCapacity;
     @Min(value = 1, message = "Available capacity must be greater than 0.")

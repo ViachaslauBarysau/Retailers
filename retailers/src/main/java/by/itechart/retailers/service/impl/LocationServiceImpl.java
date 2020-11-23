@@ -1,12 +1,13 @@
 package by.itechart.retailers.service.impl;
 
-import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.converter.LocationConverter;
 import by.itechart.retailers.dto.LocationDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.DeletedStatus;
 import by.itechart.retailers.entity.Location;
+import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.repository.LocationRepository;
+import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.interfaces.LocationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,14 @@ public class LocationServiceImpl implements LocationService {
     private final UserService userService;
     private final LocationRepository locationRepository;
     private final LocationConverter locationConverter;
+    private final UserRepository userRepository;
 
     @Autowired
-
-    public LocationServiceImpl(LocationRepository locationRepository, LocationConverter locationConverter, CustomerConverter customerConverter, UserService userService) {
+    public LocationServiceImpl(UserService userService, LocationRepository locationRepository, LocationConverter locationConverter, UserRepository userRepository) {
+        this.userService = userService;
         this.locationRepository = locationRepository;
         this.locationConverter = locationConverter;
-        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
 
@@ -67,7 +69,6 @@ public class LocationServiceImpl implements LocationService {
         persistLocation.setAvailableCapacity(location.getAvailableCapacity());
         persistLocation.setCustomer(location.getCustomer());
         persistLocation.setIdentifier(location.getIdentifier());
-        persistLocation.setProductList(location.getProductList());
         persistLocation.setWriteOffActList(location.getWriteOffActList());
         persistLocation.setLocationType(location.getLocationType());
         persistLocation.setTotalCapacity(location.getTotalCapacity());
@@ -80,7 +81,7 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationDto> delete(List<LocationDto> locationDtos) {
         List<Location> locations = locationConverter.dtoToEntity(locationDtos);
         for (Location location : locations) {
-            if (userService.findAllByLocationId(location.getId()) == null) {
+            if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE) == null) {
                 location.setStatus(DeletedStatus.DELETED);
                 locationRepository.save(location);
                 locations.remove(location);

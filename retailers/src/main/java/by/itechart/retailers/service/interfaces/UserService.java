@@ -27,4 +27,6 @@ public interface UserService {
 
     String encodePassword(String password);
 
+    List<UserDto> updateStatus(List<Long> userIds);
+
 }
