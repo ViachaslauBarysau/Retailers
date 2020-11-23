@@ -24,7 +24,6 @@ public class CustomerController {
         this.userService = userService;
     }
 
-
     @GetMapping
     public ResponseEntity findAll(Pageable pageable) {
         return new ResponseEntity<>(customerService.findAll(pageable), HttpStatus.OK);
@@ -39,11 +38,6 @@ public class CustomerController {
     public ResponseEntity create(@RequestBody CustomerDto customerDto) {
         return new ResponseEntity<>(customerService.create(customerDto), HttpStatus.CREATED);
     }
-
-  /*   @PutMapping
-    public ResponseEntity update(@RequestBody CustomerDto customerDto) {
-        return new ResponseEntity<>(customerService.update(customerDto), HttpStatus.OK);
-    }*/
 
     @PutMapping
     public ResponseEntity updateStatus(@RequestBody List<Long> customerIds) {

@@ -15,14 +15,19 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class LocationProductDto {
+
     private Long id;
+
     @Valid
     private ProductDto product;
+
     @NotBlank(message = "Cost can't be empty.")
     @DecimalMin(value = "0.01", message = "Cost must be greater than 0.")
     private BigDecimal cost;
+
     @DecimalMin(value = "0.01", message = "Price must be greater than 0.")
     private BigDecimal price;
+
     @Valid
     private LocationDto location;
 }

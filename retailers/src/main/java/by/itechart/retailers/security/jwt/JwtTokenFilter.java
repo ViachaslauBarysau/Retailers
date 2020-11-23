@@ -1,8 +1,5 @@
 package by.itechart.retailers.security.jwt;
 
-import by.itechart.retailers.dto.ErrorResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,35 +22,25 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-  /*  @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
-            throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
-
-
-        String token = jwtTokenProvider.resolveToken((HttpServletRequest) req);
-        try {
-            if (token != null && jwtTokenProvider.validateToken(token)) {
-                Authentication auth = jwtTokenProvider.getAuthentication(token);
-
-                if (auth != null) {
-                    SecurityContextHolder.getContext()
-                                         .setAuthentication(auth);
-                }
+    public static void responseEntityToHttpServletResponse(ResponseEntity<Object> responseEntity, HttpServletResponse response)
+            throws IOException {
+        for (Map.Entry<String, List<String>> header : responseEntity.getHeaders()
+                                                                    .entrySet()) {
+            String chave = header.getKey();
+            for (String valor : header.getValue()) {
+                response.addHeader(chave, valor);
             }
-        } catch (JwtAuthenticationException e) {
-
-            // return;
         }
-//        ((HttpServletResponse) res).setHeader("Access-Control-Allow-Origin", "*");
-//        ((HttpServletResponse) res).setHeader("Access-Control-Allow-Methods", "*");
 
-        filterChain.doFilter(req, res);
-    }*/
+        response.setStatus(responseEntity.getStatusCodeValue());
+        response.getWriter()
+                .write(String.valueOf(responseEntity.getBody()));
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         String token = jwtTokenProvider.resolveToken(request);
         try {
@@ -66,30 +53,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 }
             }
         } catch (JwtAuthenticationException e) {
-
-          /*  ErrorResponse errorResponse = new ErrorResponse();
-            errorResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
-            errorResponse.setMessage(e.getMessage());
-            response.getWriter()
-                    .write(convertObjectToJson(errorResponse));*/
-           // response= new ResponseEntity<Object>(e.getMessage(), HttpStatus.UNAUTHORIZED);
-            responseEntityToHttpServletResponse(new ResponseEntity<Object>(e.getMessage(), HttpStatus.UNAUTHORIZED),response);
+            responseEntityToHttpServletResponse(new ResponseEntity<Object>(e.getMessage(), HttpStatus.UNAUTHORIZED), response);
             return;
         }
         filterChain.doFilter(request, response);
-    }
-
-    public static void responseEntityToHttpServletResponse(ResponseEntity<Object> responseEntity, HttpServletResponse response)
-            throws IOException {
-        for (Map.Entry<String, List<String>> header : responseEntity.getHeaders().entrySet()) {
-            String chave = header.getKey();
-            for (String valor : header.getValue()) {
-                response.addHeader(chave, valor);
-            }
-        }
-
-        response.setStatus(responseEntity.getStatusCodeValue());
-        response.getWriter().write(String.valueOf(responseEntity.getBody()));
     }
 }
 

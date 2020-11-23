@@ -12,7 +12,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "address")
 public class Address implements Serializable {
     @Id

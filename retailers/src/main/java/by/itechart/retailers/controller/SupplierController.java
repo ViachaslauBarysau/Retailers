@@ -40,6 +40,7 @@ public class SupplierController {
     public ResponseEntity update(@RequestBody SupplierDto supplierDto) {
         return new ResponseEntity<>(supplierService.update(supplierDto), HttpStatus.OK);
     }
+
     @PutMapping(value = "/supplier_status")
     public ResponseEntity updateStatus(@RequestBody List<Long> supplierIdsList) {
         return new ResponseEntity<>(supplierService.updateStatus(supplierIdsList), HttpStatus.OK);

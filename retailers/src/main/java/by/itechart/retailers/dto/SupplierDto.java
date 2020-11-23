@@ -19,14 +19,18 @@ import java.util.List;
 @Builder
 public class SupplierDto {
     private Long id;
+
     @NotBlank(message = "Name can't be empty.")
     @Size(min = 1, max = 20, message = "Name can be from 1 to 20 symbols.")
     private String fullName;
+
     @NotNull(message = "Identifier can't be empty.")
     @Size(min = 1, max = 20, message = "Identifier can be from 1 to 20 symbols.")
     private String identifier;
+
     @Valid
     private List<LocationDto> wareHouseList;
+
     @Valid
     private Customer customer;
 

@@ -26,7 +26,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressDto findById(long addressId) {
-        Address address = addressRepository.findById(addressId).orElse(new Address());
+        Address address = addressRepository.findById(addressId)
+                                           .orElse(new Address());
         return addressConverter.entityToDto(address);
     }
 
@@ -54,7 +55,7 @@ public class AddressServiceImpl implements AddressService {
         persistAddress.setCity(addressWithUpdatedFields.getCity());
         persistAddress.setFirstAddressLine(addressWithUpdatedFields.getFirstAddressLine());
         persistAddress.setSecondAddressLine(addressWithUpdatedFields.getSecondAddressLine());
-        persistAddress=addressRepository.save(persistAddress);
+        persistAddress = addressRepository.save(persistAddress);
 
         return addressConverter.entityToDto(persistAddress);
     }

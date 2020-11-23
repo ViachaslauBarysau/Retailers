@@ -16,12 +16,15 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class CategoryDto {
+
     private Long id;
     @NotBlank(message = "Amount field can't be empty.")
     private String name;
+
     @NotBlank(message = "Category tax can't be empty.")
     @DecimalMin(value = "0", message = "Tax must be equals or greater than 0.")
     private BigDecimal categoryTax;
+
     @Valid
     private CustomerDto customer;
 }

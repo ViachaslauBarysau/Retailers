@@ -27,7 +27,8 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public WriteOffActDto findById(long writeOffActId) {
-        WriteOffAct writeOffAct = writeOffActRepository.findById(writeOffActId).orElse(new WriteOffAct());
+        WriteOffAct writeOffAct = writeOffActRepository.findById(writeOffActId)
+                                                       .orElse(new WriteOffAct());
 
         return converter.entityToDto(writeOffAct);
     }
@@ -58,7 +59,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
         persistWriteOffAct.setTotalProductAmount(writeOffAct.getTotalProductAmount());
         persistWriteOffAct.setWriteOffActRecords(writeOffAct.getWriteOffActRecords());
         persistWriteOffAct.setTotalProductSum(writeOffAct.getTotalProductSum());
-        persistWriteOffAct=writeOffActRepository.save(persistWriteOffAct);
+        persistWriteOffAct = writeOffActRepository.save(persistWriteOffAct);
 
         return converter.entityToDto(persistWriteOffAct);
     }

@@ -28,7 +28,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     @Override
     public SupplierApplicationDto findById(long supplierApplicationId) {
         SupplierApplication supplierApplication = supplierApplicationRepository.findById(supplierApplicationId)
-                .orElse(new SupplierApplication());
+                                                                               .orElse(new SupplierApplication());
 
         return supplierApplicationConverter.entityToDto(supplierApplication);
     }
@@ -52,7 +52,8 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     public SupplierApplicationDto update(SupplierApplicationDto supplierApplicationDto) {
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
         SupplierApplication persistSupplierApplication = supplierApplicationRepository
-                .findById(supplierApplication.getId()).orElse(new SupplierApplication());
+                .findById(supplierApplication.getId())
+                .orElse(new SupplierApplication());
 
         persistSupplierApplication.setApplicationNumber(supplierApplication.getApplicationNumber());
         persistSupplierApplication.setApplicationStatus(supplierApplication.getApplicationStatus());
@@ -65,7 +66,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
         persistSupplierApplication.setTotalUnitNumber(supplierApplication.getTotalUnitNumber());
         persistSupplierApplication.setUpdater(supplierApplication.getUpdater());
         persistSupplierApplication.setUpdatingDateTime(supplierApplication.getUpdatingDateTime());
-        persistSupplierApplication=supplierApplicationRepository.save(persistSupplierApplication);
+        persistSupplierApplication = supplierApplicationRepository.save(persistSupplierApplication);
 
         return supplierApplicationConverter.entityToDto(persistSupplierApplication);
     }

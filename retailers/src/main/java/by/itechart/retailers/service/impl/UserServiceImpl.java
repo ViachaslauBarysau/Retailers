@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         this.encoder = encoder;
         this.sendingCredentialsService = sendingCredentialsService;
     }
+
     @Override
     public List<UserDto> updateStatus(List<Long> userIds) {
         List<User> users = userRepository.findAllById(userIds);
@@ -171,7 +172,7 @@ public class UserServiceImpl implements UserService {
         persistUser.setCustomer(user.getCustomer());
         persistUser.setLocation(user.getLocation());
         persistUser.setLogin(user.getLogin());
-        persistUser=userRepository.save(persistUser);
+        persistUser = userRepository.save(persistUser);
 
         return userConverter.entityToDto(persistUser);
     }

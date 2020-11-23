@@ -1,7 +1,6 @@
 package by.itechart.retailers.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+
 @Table(name = "write_off_record")
 public class WriteOffActRecord implements Serializable {
     @Id

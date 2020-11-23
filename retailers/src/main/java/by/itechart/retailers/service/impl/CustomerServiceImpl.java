@@ -7,7 +7,6 @@ import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.CustomerRepository;
 import by.itechart.retailers.service.interfaces.CustomerService;
-import by.itechart.retailers.service.interfaces.SendingCredentialsService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,14 +21,14 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerConverter customerConverter;
     private final UserService userService;
-    private final SendingCredentialsService sendingCredentialsService;
+
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter customerConverter, UserService userService, SendingCredentialsService sendingCredentialsService) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter customerConverter, UserService userService) {
         this.customerRepository = customerRepository;
         this.customerConverter = customerConverter;
         this.userService = userService;
-        this.sendingCredentialsService = sendingCredentialsService;
+
     }
 
     @Override
@@ -48,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto create(CustomerDto customerDto) throws NotUniqueDataException {
         Customer customer = customerConverter.dtoToEntity(customerDto);
-        if(emailExists(customer.getEmail())){
+        if (emailExists(customer.getEmail())) {
             throw new NotUniqueDataException("Email should be unique");
         }
         Customer persistsCustomer = customerRepository.save(customer);
@@ -65,14 +64,14 @@ public class CustomerServiceImpl implements CustomerService {
         persistCustomer.setName(customer.getName());
         persistCustomer.setRegistrationDate(customer.getRegistrationDate());
         persistCustomer.setCustomerStatus(customer.getCustomerStatus());
-        persistCustomer=customerRepository.save(persistCustomer);
+        persistCustomer = customerRepository.save(persistCustomer);
 
         return customerConverter.entityToDto(persistCustomer);
     }
 
     @Override
     public List<CustomerDto> updateStatus(List<Long> customerIds) {
-         List<Customer> customers=customerRepository.findAllById(customerIds);
+        List<Customer> customers = customerRepository.findAllById(customerIds);
         for (Customer customer : customers) {
             if (customer.getCustomerStatus()
                         .equals(Status.ACTIVE)) {
@@ -87,7 +86,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean emailExists(String email) {
-        return customerRepository.findByEmail(email).isPresent();
+        return customerRepository.findByEmail(email)
+                                 .isPresent();
     }
 
 }

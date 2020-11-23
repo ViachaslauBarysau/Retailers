@@ -44,7 +44,6 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<LocationDto> findAll(Pageable pageable) {
-        //List<Location> locationList = locationRepository.findAll();
         UserDto userDto = userService.getUser();
         Page<Location> locationPage = locationRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
                                                                                                .getId());

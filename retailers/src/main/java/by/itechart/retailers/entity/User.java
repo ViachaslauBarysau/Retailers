@@ -1,7 +1,6 @@
 package by.itechart.retailers.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +14,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "users")
 public class User implements Serializable {
     @Id
@@ -36,9 +34,9 @@ public class User implements Serializable {
     private LocalDate birthday;
 
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @ElementCollection(targetClass = Role.class,fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private List<Role> userRole=new ArrayList<>();
+    private List<Role> userRole = new ArrayList<>();
 
     @Column(name = "email")
     private String email;

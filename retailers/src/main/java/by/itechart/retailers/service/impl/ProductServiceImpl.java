@@ -73,8 +73,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> delete(List<ProductDto> productDtos) {
-        List<Product> products = productConverter.dtoToEntity(productDtos);
+    public List<ProductDto> delete(List<Long> productsIds) {
+        List<Product> products = productRepository.findAllById(productsIds);
 
         for (Product product : products) {
             List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
@@ -83,23 +83,26 @@ public class ProductServiceImpl implements ProductService {
             List<InnerApplication> innerApplications = innerApplicationRepository.findAllByRecordsListIn(applicationRecords);
 
             long locationProductCount = locationProducts.stream()
-                                                        .filter(locationProduct -> (locationProduct.getAmount() != 0))
+                                                        .filter(locationProduct -> (locationProduct
+                                                                .getAmount() != 0))
                                                         .count();
             if (locationProductCount > 0) {
                 continue;
             }
 
             long supplierApplicationCount = supplierApplications.stream()
-                                                                .filter(supplierApplication -> (supplierApplication.getApplicationStatus()
-                                                                                                                   .equals(ApplicationStatus.OPEN)))
+                                                                .filter(supplierApplication -> (supplierApplication
+                                                                        .getApplicationStatus()
+                                                                        .equals(ApplicationStatus.OPEN)))
                                                                 .count();
             if (supplierApplicationCount > 0) {
                 continue;
             }
 
             long innerApplicationCount = innerApplications.stream()
-                                                          .filter(innerApplication -> (innerApplication.getApplicationStatus()
-                                                                                                       .equals(ApplicationStatus.OPEN)))
+                                                          .filter(innerApplication -> (innerApplication
+                                                                  .getApplicationStatus()
+                                                                  .equals(ApplicationStatus.OPEN)))
                                                           .count();
             if (innerApplicationCount > 0) {
                 continue;

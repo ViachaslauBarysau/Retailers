@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "application_record")
 public class ApplicationRecord implements Serializable {
     @Id

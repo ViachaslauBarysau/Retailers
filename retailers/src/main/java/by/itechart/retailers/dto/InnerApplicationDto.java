@@ -18,26 +18,38 @@ import java.util.List;
 @Data
 @Builder
 public class InnerApplicationDto {
+
     private Long id;
+
     @Min(value = 0, message = "Wrong application number.")
     private Integer applicationNumber;
+
     @Valid
     private LocationDto sourceLocation;
+
     @Valid
     private LocationDto destinationLocation;
+
     @Valid
     private UserDto creator;
+
     @Valid
     private UserDto updater;
+
     @Past(message = "Registration date of application can't be in the future.")
     private LocalDateTime registrationDateTime;
+
     @Past(message = "Updating date of application can't be in the future.")
     private LocalDateTime updatingDateTime;
+
     @NotBlank(message = "Status can't be empty.")
     private ApplicationStatus applicationStatus;
+
     private List<ApplicationRecordDto> recordsList;
+
     @Min(value = 0, message = "Product amount must be equals or greater than 0.")
     private Integer totalProductAmount;
+
     @Min(value = 0, message = "Unit number must be equals or greater than 0.")
     private Integer totalUnitNumber;
 }

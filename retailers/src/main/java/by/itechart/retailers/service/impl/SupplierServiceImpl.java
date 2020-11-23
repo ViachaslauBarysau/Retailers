@@ -49,7 +49,7 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public SupplierDto create(SupplierDto supplierDto) throws NotUniqueDataException {
         Supplier supplier = supplierConverter.dtoToEntity(supplierDto);
-        if(identifierExists(supplier.getIdentifier())){
+        if (identifierExists(supplier.getIdentifier())) {
             throw new NotUniqueDataException("Identifier should be unique");
         }
         Supplier persistSupplier = supplierRepository.save(supplier);
@@ -89,6 +89,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public boolean identifierExists(String identifier) {
-        return supplierRepository.findByIdentifier(identifier).isPresent();
+        return supplierRepository.findByIdentifier(identifier)
+                                 .isPresent();
     }
 }

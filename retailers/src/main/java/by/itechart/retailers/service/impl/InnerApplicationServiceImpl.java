@@ -28,7 +28,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Override
     public InnerApplicationDto findById(long innerApplicationId) {
         InnerApplication innerApplication = innerApplicationRepository.findById(innerApplicationId)
-                .orElse(new InnerApplication());
+                                                                      .orElse(new InnerApplication());
 
         return innerApplicationConverter.entityToDto(innerApplication);
     }
@@ -52,7 +52,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     public InnerApplicationDto update(InnerApplicationDto innerApplicationDto) {
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         InnerApplication persistInnerApplication = innerApplicationRepository.findById(innerApplication.getId())
-                .orElse(new InnerApplication());
+                                                                             .orElse(new InnerApplication());
 
         persistInnerApplication.setApplicationNumber(innerApplication.getApplicationNumber());
         persistInnerApplication.setApplicationStatus(innerApplication.getApplicationStatus());
@@ -65,7 +65,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         persistInnerApplication.setTotalUnitNumber(innerApplication.getTotalUnitNumber());
         persistInnerApplication.setUpdater(innerApplication.getUpdater());
         persistInnerApplication.setUpdatingDateTime(innerApplication.getUpdatingDateTime());
-        persistInnerApplication=innerApplicationRepository.save(persistInnerApplication);
+        persistInnerApplication = innerApplicationRepository.save(persistInnerApplication);
 
         return innerApplicationConverter.entityToDto(persistInnerApplication);
     }

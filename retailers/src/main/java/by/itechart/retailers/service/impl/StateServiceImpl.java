@@ -26,7 +26,8 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public StateDto findById(long stateID) {
-        State state = stateRepository.findById(stateID).orElse(new State());
+        State state = stateRepository.findById(stateID)
+                                     .orElse(new State());
 
         return stateConverter.entityToDto(state);
     }
@@ -49,11 +50,12 @@ public class StateServiceImpl implements StateService {
     @Override
     public StateDto update(StateDto stateDto) {
         State state = stateConverter.dtoToEntity(stateDto);
-        State persistState = stateRepository.findById(state.getId()).orElse(new State());
+        State persistState = stateRepository.findById(state.getId())
+                                            .orElse(new State());
 
         persistState.setName(state.getName());
         persistState.setStateTax(state.getStateTax());
-        persistState=stateRepository.save(persistState);
+        persistState = stateRepository.save(persistState);
 
         return stateConverter.entityToDto(persistState);
     }

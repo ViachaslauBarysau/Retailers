@@ -59,7 +59,7 @@ public class WriteOffActRecordServiceImpl implements WriteOffActRecordService {
         persistWriteOffActRecord.setAmount(productRecord.getAmount());
         persistWriteOffActRecord.setProduct(productRecord.getProduct());
         persistWriteOffActRecord.setReason(productRecord.getReason());
-        persistWriteOffActRecord=writeOffActRecordRepository.save(persistWriteOffActRecord);
+        persistWriteOffActRecord = writeOffActRecordRepository.save(persistWriteOffActRecord);
 
         return writeOffActRecordConverter.entityToDto(persistWriteOffActRecord);
     }
