@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/innerApplications")
+@RequestMapping("/api/inner_applications")
 public class InnerApplicationController {
 
     private final InnerApplicationService innerApplicationService;

@@ -5,10 +5,12 @@ import by.itechart.retailers.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ApplicationRecordRepository extends JpaRepository<ApplicationRecord, Long> {
-    ApplicationRecord findApplicationProductRecordByProduct(Product product);
+    List<ApplicationRecord> findAllByProduct(Product product);
 
-    boolean existsByProduct(Product product);
+    ApplicationRecord findApplicationRecordByProduct(Product product);
 
 }

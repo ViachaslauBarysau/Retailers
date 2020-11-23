@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/locationProducts")
+@RequestMapping("/api/location_products")
 public class LocationProductController {
 
     private final LocationProductService locationProductService;

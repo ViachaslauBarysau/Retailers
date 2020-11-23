@@ -52,4 +52,8 @@ public class Location implements Serializable {
 
     @Column(name = "location_tax")
     private BigDecimal locationTax;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "deleted_status")
+    private DeletedStatus status;
 }

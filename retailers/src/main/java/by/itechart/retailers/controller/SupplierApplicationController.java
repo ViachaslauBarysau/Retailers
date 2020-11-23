@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/supplierApplications")
+@RequestMapping("/api/supplier_applications")
 public class SupplierApplicationController {
 
     private final SupplierApplicationService supplierApplicationService;

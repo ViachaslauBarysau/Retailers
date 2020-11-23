@@ -8,7 +8,6 @@ import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Role;
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.entity.User;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.interfaces.SendingCredentialsService;
 import by.itechart.retailers.service.interfaces.UserService;
@@ -61,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto findByEmail(String email) {
-        User user = userRepository.findUserByEmail(email);
+        User user = userRepository.findByEmail(email);
         return userConverter.entityToDto(user);
     }
 
@@ -87,7 +86,6 @@ public class UserServiceImpl implements UserService {
         return encoder.encode(password);
     }
 
-
     @Override
     public UserDto findById(long userId) {
         User user = userRepository.findById(userId)
@@ -112,11 +110,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(UserDto userDto) throws NotUniqueDataException {
+    public UserDto create(UserDto userDto) {
         User user = userConverter.dtoToEntity(userDto);
-        if (emailExists(user.getEmail())) {
-            throw new NotUniqueDataException("Email should be unique");
-        }
         String password = generatePassword();
         user.setPassword(encodePassword(password));
         User persistUser = userRepository.save(user);
@@ -127,11 +122,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(CustomerDto customerDto) throws NotUniqueDataException {
+    public UserDto create(CustomerDto customerDto) {
         Customer customer = customerConverter.dtoToEntity(customerDto);
-        if (emailExists(customer.getEmail())) {
-            throw new NotUniqueDataException("Email should be unique");
-        }
         User user = new User();
         user.setFirstName(customerDto.getName());
         user.setLastName(customerDto.getName());
@@ -149,16 +141,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(UserDto userDto) throws NotUniqueDataException {
+    public UserDto update(UserDto userDto) {
         User user = userConverter.dtoToEntity(userDto);
         User persistUser = userRepository.findById(user.getId())
                                          .orElse(new User());
 
         persistUser.setAddress(user.getAddress());
         persistUser.setBirthday(user.getBirthday());
-        if (loginExists(user.getLogin())) {
-            throw new NotUniqueDataException("Login should be unique");
-        }
+        persistUser.setEmail(user.getEmail());
         persistUser.setLogin(user.getLogin());
         persistUser.setFirstName(user.getFirstName());
         persistUser.setLastName(user.getLastName());
@@ -168,20 +158,8 @@ public class UserServiceImpl implements UserService {
         persistUser.setCustomer(user.getCustomer());
         persistUser.setLocation(user.getLocation());
         persistUser.setLogin(user.getLogin());
-        persistUser = userRepository.save(persistUser);
+        persistUser=userRepository.save(persistUser);
 
         return userConverter.entityToDto(persistUser);
-    }
-
-    @Override
-    public boolean emailExists(String email) {
-        return userRepository.findByEmail(email)
-                             .isPresent();
-    }
-
-    @Override
-    public boolean loginExists(String login) {
-        return userRepository.findByLogin(login)
-                             .isPresent();
     }
 }

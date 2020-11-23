@@ -1,5 +1,6 @@
 package by.itechart.retailers.dto;
 
+import by.itechart.retailers.entity.DeletedStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +26,6 @@ public class ProductDto {
     private Integer volume;
     @Valid
     private CustomerDto customer;
+
+    private DeletedStatus status;
 }
