@@ -68,17 +68,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
                 .findById(supplierApplication.getId())
                 .orElse(new SupplierApplication());
 
-        persistSupplierApplication.setApplicationNumber(supplierApplication.getApplicationNumber());
-        persistSupplierApplication.setApplicationStatus(supplierApplication.getApplicationStatus());
-        persistSupplierApplication.setCreator(supplierApplication.getCreator());
         persistSupplierApplication.setDestinationLocation(supplierApplication.getDestinationLocation());
-        persistSupplierApplication.setRecordsList(supplierApplication.getRecordsList());
-        persistSupplierApplication.setRegistrationDateTime(supplierApplication.getRegistrationDateTime());
-        persistSupplierApplication.setSupplier(supplierApplication.getSupplier());
-        persistSupplierApplication.setTotalProductAmount(supplierApplication.getTotalProductAmount());
-        persistSupplierApplication.setTotalUnitNumber(supplierApplication.getTotalUnitNumber());
-        persistSupplierApplication.setUpdater(supplierApplication.getUpdater());
-        persistSupplierApplication.setUpdatingDateTime(supplierApplication.getUpdatingDateTime());
         persistSupplierApplication = supplierApplicationRepository.save(persistSupplierApplication);
 
         return supplierApplicationConverter.entityToDto(persistSupplierApplication);
