@@ -13,8 +13,8 @@
     </changeSet>
     <changeSet author="viachaslau.barysau" id="20201124-2">
         <dropColumn catalogName="retailers"
-                    schemaName= "public"
-                    tableName="location_product" >
+                    schemaName="public"
+                    tableName="location_product">
             <column name="price"/>
         </dropColumn>
     </changeSet>
