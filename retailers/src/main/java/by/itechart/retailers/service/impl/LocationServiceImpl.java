@@ -5,6 +5,7 @@ import by.itechart.retailers.dto.LocationDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.DeletedStatus;
 import by.itechart.retailers.entity.Location;
+import by.itechart.retailers.entity.LocationType;
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.repository.UserRepository;
@@ -44,11 +45,26 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<LocationDto> findAll(Pageable pageable) {
-        //List<Location> locationList = locationRepository.findAll();
         UserDto userDto = userService.getUser();
         Page<Location> locationPage = locationRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
                                                                                                .getId());
         return locationConverter.entityToDto(locationPage.toList());
+    }
+
+    @Override
+    public List<LocationDto> findAllWarehouses() {
+        UserDto userDto = userService.getUser();
+        List<Location> warehouses = locationRepository.findAllByCustomer_IdAndLocationType(userDto.getCustomer()
+                                                                                                    .getId(), LocationType.WAREHOUSE);
+        return locationConverter.entityToDto(warehouses);
+    }
+
+    @Override
+    public List<LocationDto> findAllShops() {
+        UserDto userDto = userService.getUser();
+        List<Location> shopList = locationRepository.findAllByCustomer_IdAndLocationType(userDto.getCustomer()
+                                                                                                    .getId(), LocationType.SHOP);
+        return locationConverter.entityToDto(shopList);
     }
 
     @Override

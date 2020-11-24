@@ -26,6 +26,16 @@ public class LocationController {
         return new ResponseEntity<>(locationService.findAll(pageable), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/warehouses")
+    public ResponseEntity findAllWarehouses() {
+        return new ResponseEntity<>(locationService.findAllWarehouses(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/shops")
+    public ResponseEntity findAllShops() {
+        return new ResponseEntity<>(locationService.findAllShops(), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{locationId}")
     public ResponseEntity findById(@PathVariable(name = "locationId") Long locationId) {
         return new ResponseEntity<>(locationService.findById(locationId), HttpStatus.OK);
