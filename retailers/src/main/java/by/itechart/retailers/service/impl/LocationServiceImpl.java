@@ -7,6 +7,7 @@ import by.itechart.retailers.entity.DeletedStatus;
 import by.itechart.retailers.entity.Location;
 import by.itechart.retailers.entity.LocationType;
 import by.itechart.retailers.entity.Status;
+import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.interfaces.LocationService;
@@ -70,6 +71,9 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDto create(LocationDto locationDto) {
         Location location = locationConverter.dtoToEntity(locationDto);
+        if(identifierExists(location.getIdentifier())){
+            throw new NotUniqueDataException("Identifier should be unique");
+        }
         Location persistLocation = locationRepository.save(location);
 
         return locationConverter.entityToDto(persistLocation);
@@ -104,5 +108,10 @@ public class LocationServiceImpl implements LocationService {
             }
         }
         return locationConverter.entityToDto(locations);
+    }
+
+    @Override
+    public boolean identifierExists(String identifier) {
+        return locationRepository.findByIdentifier(identifier).isPresent();
     }
 }

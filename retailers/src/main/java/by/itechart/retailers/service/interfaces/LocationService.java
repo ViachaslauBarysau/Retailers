@@ -20,4 +20,6 @@ public interface LocationService {
 
     List<LocationDto> delete(List<LocationDto> locationDtos);
 
+    boolean identifierExists(String identifier);
+
 }
