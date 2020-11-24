@@ -6,11 +6,11 @@ import by.itechart.retailers.dto.SupplierApplicationDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
+import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.repository.SupplierApplicationRepository;
 import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,8 +36,6 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     }
 
 
-
-
     @Override
     public SupplierApplicationDto findById(long supplierApplicationId) {
         SupplierApplication supplierApplication = supplierApplicationRepository.findById(supplierApplicationId)
@@ -56,6 +54,9 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     @Override
     public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) {
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
+        if (applicationNumberExists(supplierApplication.getApplicationNumber())) {
+            throw new NotUniqueDataException("Application number should be unique");
+        }
         SupplierApplication persistSupplierApplication = supplierApplicationRepository.save(supplierApplication);
 
         return supplierApplicationConverter.entityToDto(persistSupplierApplication);
@@ -124,5 +125,11 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
         supplierApplication.setUpdatingDateTime(LocalDateTime.now());
         supplierApplicationRepository.save(supplierApplication);
         return supplierApplicationConverter.entityToDto(supplierApplication);
+    }
+
+    @Override
+    public boolean applicationNumberExists(Integer applicationNumber) {
+        return supplierApplicationRepository.findByApplicationNumber(applicationNumber)
+                                            .isPresent();
     }
 }
