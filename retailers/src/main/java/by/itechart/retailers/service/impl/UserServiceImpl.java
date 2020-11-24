@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserDto create(UserDto userDto) throws NotUniqueDataException {
         User user = userConverter.dtoToEntity(userDto);
         if (emailExists(user.getEmail())) {
             throw new NotUniqueDataException("Email should be unique");
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(CustomerDto customerDto) {
+    public UserDto create(CustomerDto customerDto) throws NotUniqueDataException {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         if (emailExists(customer.getEmail())) {
             throw new NotUniqueDataException("Email should be unique");

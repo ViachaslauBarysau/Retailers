@@ -3,6 +3,7 @@ package by.itechart.retailers.service.impl;
 import by.itechart.retailers.converter.WriteOffActConverter;
 import by.itechart.retailers.dto.WriteOffActDto;
 import by.itechart.retailers.entity.WriteOffAct;
+import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.WriteOffActRepository;
 import by.itechart.retailers.service.interfaces.WriteOffActService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public WriteOffActDto findById(long writeOffActId) {
-        WriteOffAct writeOffAct = writeOffActRepository.findById(writeOffActId).orElse(new WriteOffAct());
+        WriteOffAct writeOffAct = writeOffActRepository.findById(writeOffActId)
+                                                       .orElse(new WriteOffAct());
 
         return converter.entityToDto(writeOffAct);
     }
@@ -40,8 +42,11 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     }
 
     @Override
-    public WriteOffActDto create(WriteOffActDto writeOffActDto) {
+    public WriteOffActDto create(WriteOffActDto writeOffActDto) throws NotUniqueDataException {
         WriteOffAct writeOffAct = converter.dtoToEntity(writeOffActDto);
+        if (writeOffActNumberExists(writeOffAct.getWriteOffActNumber())) {
+            throw new NotUniqueDataException("Write-off act number should be unique");
+        }
         WriteOffAct persistWriteOffAct = writeOffActRepository.save(writeOffAct);
 
         return converter.entityToDto(persistWriteOffAct);
@@ -58,8 +63,15 @@ public class WriteOffActServiceImpl implements WriteOffActService {
         persistWriteOffAct.setTotalProductAmount(writeOffAct.getTotalProductAmount());
         persistWriteOffAct.setWriteOffActRecords(writeOffAct.getWriteOffActRecords());
         persistWriteOffAct.setTotalProductSum(writeOffAct.getTotalProductSum());
-        persistWriteOffAct=writeOffActRepository.save(persistWriteOffAct);
+        persistWriteOffAct = writeOffActRepository.save(persistWriteOffAct);
 
         return converter.entityToDto(persistWriteOffAct);
     }
+
+    @Override
+    public boolean writeOffActNumberExists(Integer writeOffActNumber) {
+        return writeOffActRepository.findByWriteOffActNumber(writeOffActNumber)
+                                    .isPresent();
+    }
+
 }

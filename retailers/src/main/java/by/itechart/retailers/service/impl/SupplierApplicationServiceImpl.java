@@ -52,7 +52,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     }
 
     @Override
-    public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) {
+    public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) throws NotUniqueDataException {
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
         if (applicationNumberExists(supplierApplication.getApplicationNumber())) {
             throw new NotUniqueDataException("Application number should be unique");

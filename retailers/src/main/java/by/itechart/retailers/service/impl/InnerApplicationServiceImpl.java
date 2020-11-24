@@ -54,7 +54,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     }
 
     @Override
-    public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) {
+    public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) throws NotUniqueDataException {
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         if (applicationNumberExists(innerApplication.getApplicationNumber())) {
             throw new NotUniqueDataException("Application number should be unique");
