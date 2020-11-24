@@ -6,6 +6,7 @@ import by.itechart.retailers.dto.InnerApplicationDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
+import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.InnerApplicationRepository;
 import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.service.interfaces.InnerApplicationService;
@@ -55,6 +56,9 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Override
     public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) {
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
+        if (applicationNumberExists(innerApplication.getApplicationNumber())) {
+            throw new NotUniqueDataException("Application number should be unique");
+        }
         InnerApplication persistInnerApplication = innerApplicationRepository.save(innerApplication);
 
         return innerApplicationConverter.entityToDto(persistInnerApplication);
@@ -122,5 +126,11 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         innerApplication.setUpdatingDateTime(LocalDateTime.now());
         innerApplicationRepository.save(innerApplication);
         return innerApplicationConverter.entityToDto(innerApplication);
+    }
+
+    @Override
+    public boolean applicationNumberExists(Integer applicationNumber) {
+        return innerApplicationRepository.findByApplicationNumber(applicationNumber)
+                                         .isPresent();
     }
 }

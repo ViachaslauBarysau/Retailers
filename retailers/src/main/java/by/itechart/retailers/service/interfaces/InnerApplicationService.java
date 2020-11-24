@@ -1,7 +1,6 @@
 package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.InnerApplicationDto;
-import by.itechart.retailers.dto.SupplierApplicationDto;
 import by.itechart.retailers.exceptions.BusinessException;
 import org.springframework.data.domain.Pageable;
 
@@ -17,5 +16,7 @@ public interface InnerApplicationService {
     InnerApplicationDto update(InnerApplicationDto innerApplicationDto);
 
     InnerApplicationDto updateStatus(Long innerApplicationId) throws BusinessException;
+
+    boolean applicationNumberExists(Integer applicationNumber);
 
 }
