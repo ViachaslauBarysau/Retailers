@@ -38,7 +38,7 @@ public class SupplierApplicationController {
     public ResponseEntity update(@RequestBody SupplierApplicationDto supplierApplicationDto) {
         return new ResponseEntity<>(supplierApplicationService.update(supplierApplicationDto), HttpStatus.OK);
     }
-    @PutMapping(value = "/supplier_application_status")
+    @PutMapping(value = "/status")
     public ResponseEntity updateStatus(@RequestBody Long supplierApplicationId) {
         return new ResponseEntity<>(supplierApplicationService.updateStatus(supplierApplicationId), HttpStatus.OK);
     }
