@@ -36,4 +36,8 @@ public class LocationProduct implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
+
+
+
+
 }
