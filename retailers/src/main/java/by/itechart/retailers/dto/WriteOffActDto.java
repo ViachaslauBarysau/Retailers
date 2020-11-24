@@ -18,6 +18,8 @@ import java.util.List;
 @Builder
 public class WriteOffActDto {
     private Long id;
+    @Min(value = 0, message = "Wrong write-off act number.")
+    private Integer writeOffActNumber;
     @Valid
     private List<WriteOffActRecordDto> writeOffActRecords;
     @Past(message = "Date and time of act can't be in the future.")
