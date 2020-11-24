@@ -1,7 +1,6 @@
 package by.itechart.retailers.repository;
 
 import by.itechart.retailers.entity.WriteOffAct;
-import jdk.nashorn.internal.ir.Optimistic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
