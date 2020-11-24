@@ -16,4 +16,6 @@ public interface ProductService {
     ProductDto update(ProductDto productDto);
 
     List<ProductDto> delete(List<ProductDto> productDtos);
+
+    boolean upcExists(Integer upc);
 }

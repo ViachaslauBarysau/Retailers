@@ -10,10 +10,16 @@ public interface LocationService {
 
     List<LocationDto> findAll(Pageable pageable);
 
+    List<LocationDto> findAllWarehouses();
+
+    List<LocationDto> findAllShops();
+
     LocationDto create(LocationDto locationDto);
 
     LocationDto update(LocationDto locationDto);
 
-    List<LocationDto>  delete(List<LocationDto> locationDtos);
+    List<LocationDto> delete(List<LocationDto> locationDtos);
+
+    boolean identifierExists(String identifier);
 
 }

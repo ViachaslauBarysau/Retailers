@@ -29,4 +29,8 @@ public interface UserService {
 
     List<UserDto> updateStatus(List<Long> userIds);
 
+    boolean emailExists(String email);
+
+    boolean loginExists(String login);
+
 }

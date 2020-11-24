@@ -3,6 +3,7 @@ package by.itechart.retailers.service.impl;
 import by.itechart.retailers.converter.ProductConverter;
 import by.itechart.retailers.dto.ProductDto;
 import by.itechart.retailers.entity.*;
+import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.*;
 import by.itechart.retailers.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto create(ProductDto productDto) {
         Product product = productConverter.dtoToEntity(productDto);
+        if(upcExists(product.getUpc())){
+            throw new NotUniqueDataException("Upc should be unique");
+        }
         Product persistProduct = productRepository.save(product);
 
         return productConverter.entityToDto(persistProduct);
@@ -109,6 +113,11 @@ public class ProductServiceImpl implements ProductService {
             products.remove(product);
         }
         return productConverter.entityToDto(products);
+    }
+
+    @Override
+    public boolean upcExists(Integer upc) {
+        return productRepository.findByUpc(upc).isPresent();
     }
 }
 

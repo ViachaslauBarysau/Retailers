@@ -11,4 +11,8 @@ import java.util.List;
 public interface LocationProductRepository extends JpaRepository<LocationProduct, Long> {
 
     List<LocationProduct> findAllByProduct(Product product);
+
+   LocationProduct findByLocation_IdAndProduct_Id(Long locationId,Long productId);
+
+
 }

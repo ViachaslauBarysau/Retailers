@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -16,4 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAllByCustomer_Id(Pageable pageable, Long id);
 
     List<User> findAllByLocation_IdAndUserStatus(Long locationId, Status status);
+
+    Optional<User> findUserByEmail(String email);
+
+    Optional<User> findUserByLogin(String login);
+
 }

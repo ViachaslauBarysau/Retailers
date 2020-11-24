@@ -57,7 +57,6 @@ public class LocationProductServiceImpl implements LocationProductService {
 
         persistLocationProduct.setCost(locationProduct.getCost());
         persistLocationProduct.setProduct(locationProduct.getProduct());
-        persistLocationProduct.setPrice(locationProduct.getPrice());
         persistLocationProduct = locationProductRepository.save(persistLocationProduct);
 
         return locationProductConverter.entityToDto(persistLocationProduct);

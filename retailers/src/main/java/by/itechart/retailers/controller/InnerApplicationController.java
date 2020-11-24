@@ -39,5 +39,9 @@ public class InnerApplicationController {
         return new ResponseEntity<>(innerApplicationService.update(innerApplicationDto), HttpStatus.OK);
     }
 
+    @PutMapping(value = "/status")
+    public ResponseEntity updateStatus(@RequestBody Long innerApplicationId) {
+        return new ResponseEntity<>(innerApplicationService.updateStatus(innerApplicationId), HttpStatus.OK);
+    }
 
 }

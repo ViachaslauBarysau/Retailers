@@ -27,13 +27,14 @@ public class LocationProduct implements Serializable {
     @Column(name = "cost")
     private BigDecimal cost;
 
-    @Column(name = "price")
-    private BigDecimal price;
-
     @Column(name = "amount")
     private Integer amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
+
+
+
+
 }

@@ -16,4 +16,10 @@ public class ExceptionHelper {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
     }
+
+    @ExceptionHandler(value = {BusinessException.class})
+    public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+
+    }
 }
