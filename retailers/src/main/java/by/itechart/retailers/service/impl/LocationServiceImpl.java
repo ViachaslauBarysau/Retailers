@@ -56,7 +56,7 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationDto> findAllWarehouses() {
         UserDto userDto = userService.getUser();
         List<Location> warehouses = locationRepository.findAllByCustomer_IdAndLocationType(userDto.getCustomer()
-                                                                                                    .getId(), LocationType.WAREHOUSE);
+                                                                                                  .getId(), LocationType.WAREHOUSE);
         return locationConverter.entityToDto(warehouses);
     }
 
@@ -64,14 +64,14 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationDto> findAllShops() {
         UserDto userDto = userService.getUser();
         List<Location> shopList = locationRepository.findAllByCustomer_IdAndLocationType(userDto.getCustomer()
-                                                                                                    .getId(), LocationType.SHOP);
+                                                                                                .getId(), LocationType.SHOP);
         return locationConverter.entityToDto(shopList);
     }
 
     @Override
-    public LocationDto create(LocationDto locationDto) {
+    public LocationDto create(LocationDto locationDto) throws NotUniqueDataException {
         Location location = locationConverter.dtoToEntity(locationDto);
-        if(identifierExists(location.getIdentifier())){
+        if (identifierExists(location.getIdentifier())) {
             throw new NotUniqueDataException("Identifier should be unique");
         }
         Location persistLocation = locationRepository.save(location);
@@ -112,6 +112,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public boolean identifierExists(String identifier) {
-        return locationRepository.findByIdentifier(identifier).isPresent();
+        return locationRepository.findByIdentifier(identifier)
+                                 .isPresent();
     }
 }

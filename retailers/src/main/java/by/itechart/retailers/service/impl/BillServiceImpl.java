@@ -3,6 +3,7 @@ package by.itechart.retailers.service.impl;
 import by.itechart.retailers.converter.BillConverter;
 import by.itechart.retailers.dto.BillDto;
 import by.itechart.retailers.entity.Bill;
+import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.BillRepository;
 import by.itechart.retailers.service.interfaces.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,11 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public BillDto create(BillDto billDto) {
+    public BillDto create(BillDto billDto) throws NotUniqueDataException {
         Bill bill = billConverter.dtoToEntity(billDto);
+        if (billNumberExists(bill.getBillNumber())) {
+            throw new NotUniqueDataException("Bill number should be unique");
+        }
         Bill persistBill = billRepository.save(bill);
         return billConverter.entityToDto(persistBill);
     }
@@ -61,5 +65,11 @@ public class BillServiceImpl implements BillService {
         persistBill = billRepository.save(persistBill);
 
         return billConverter.entityToDto(persistBill);
+    }
+
+    @Override
+    public boolean billNumberExists(Integer billNumber) {
+        return billRepository.findByBillNumber(billNumber)
+                             .isPresent();
     }
 }

@@ -50,9 +50,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto create(ProductDto productDto) {
+    public ProductDto create(ProductDto productDto) throws NotUniqueDataException {
         Product product = productConverter.dtoToEntity(productDto);
-        if(upcExists(product.getUpc())){
+        if (upcExists(product.getUpc())) {
             throw new NotUniqueDataException("Upc should be unique");
         }
         Product persistProduct = productRepository.save(product);
@@ -117,7 +117,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean upcExists(Integer upc) {
-        return productRepository.findByUpc(upc).isPresent();
+        return productRepository.findByUpc(upc)
+                                .isPresent();
     }
 }
 
