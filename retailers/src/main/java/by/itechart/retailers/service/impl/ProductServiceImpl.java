@@ -3,6 +3,7 @@ package by.itechart.retailers.service.impl;
 import by.itechart.retailers.converter.ProductConverter;
 import by.itechart.retailers.dto.ProductDto;
 import by.itechart.retailers.entity.*;
+import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.*;
 import by.itechart.retailers.service.interfaces.ProductService;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -83,34 +85,40 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : products) {
             List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
             List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
-            List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
-            List<InnerApplication> innerApplications = innerApplicationRepository.findAllByRecordsListIn(applicationRecords);
+            List<SupplierApplication> supplierApplications = supplierApplicationRepository.
+                    findAllByRecordsListIn(applicationRecords);
+            List<InnerApplication> innerApplications = innerApplicationRepository.
+                    findAllByRecordsListIn(applicationRecords);
 
             long locationProductCount = locationProducts.stream()
-                                                        .filter(locationProduct -> (locationProduct.getAmount() != 0))
-                                                        .count();
+                    .filter(locationProduct -> (locationProduct.getAmount() != 0))
+                    .count();
             if (locationProductCount > 0) {
                 continue;
             }
 
             long supplierApplicationCount = supplierApplications.stream()
-                                                                .filter(supplierApplication -> (supplierApplication.getApplicationStatus()
-                                                                                                                   .equals(ApplicationStatus.OPEN)))
-                                                                .count();
+                    .filter(supplierApplication -> (supplierApplication.getApplicationStatus()
+                            .equals(ApplicationStatus.OPEN)))
+                    .count();
             if (supplierApplicationCount > 0) {
                 continue;
             }
 
             long innerApplicationCount = innerApplications.stream()
-                                                          .filter(innerApplication -> (innerApplication.getApplicationStatus()
-                                                                                                       .equals(ApplicationStatus.OPEN)))
-                                                          .count();
+                    .filter(innerApplication -> (innerApplication.getApplicationStatus()
+                            .equals(ApplicationStatus.OPEN)))
+                    .count();
             if (innerApplicationCount > 0) {
                 continue;
             }
-            product.setStatus(DeletedStatus.DELETED);
-            productRepository.save(product);
-            products.remove(product);
+
+            Optional<Product> productById = productRepository.findById(product.getId());
+            productById.ifPresent(prod -> {
+                prod.setStatus(DeletedStatus.DELETED);
+                productRepository.save(prod);
+                products.remove(product);
+            });
         }
         return productConverter.entityToDto(products);
     }
