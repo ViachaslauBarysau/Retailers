@@ -6,6 +6,7 @@ import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.*;
+import by.itechart.retailers.service.interfaces.CategoryService;
 import by.itechart.retailers.service.interfaces.ProductService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,11 @@ public class ProductServiceImpl implements ProductService {
     private final InnerApplicationRepository innerApplicationRepository;
     private final SupplierApplicationRepository supplierApplicationRepository;
     private final UserService userService;
+    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, ApplicationRecordRepository applicationRecordRepository, LocationProductRepository locationProductRepository, InnerApplicationRepository innerApplicationRepository, SupplierApplicationRepository supplierApplicationRepository, UserService userService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, ApplicationRecordRepository applicationRecordRepository, LocationProductRepository locationProductRepository, InnerApplicationRepository innerApplicationRepository, SupplierApplicationRepository supplierApplicationRepository, UserService userService, CategoryRepository categoryRepository, CategoryService categoryService) {
         this.productRepository = productRepository;
         this.productConverter = productConverter;
         this.applicationRecordRepository = applicationRecordRepository;
@@ -36,7 +39,10 @@ public class ProductServiceImpl implements ProductService {
         this.innerApplicationRepository = innerApplicationRepository;
         this.supplierApplicationRepository = supplierApplicationRepository;
         this.userService = userService;
+        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
+
 
     @Override
     public ProductDto findById(long productId) {
@@ -58,9 +64,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto create(ProductDto productDto) throws NotUniqueDataException {
         Product product = productConverter.dtoToEntity(productDto);
-        if (upcExists(product.getUpc(),product.getCustomer().getId(), DeletedStatus.ACTIVE)) {
+        if (upcExists(product.getUpc(), product.getCustomer()
+                                               .getId(), DeletedStatus.ACTIVE)) {
             throw new NotUniqueDataException("Upc should be unique");
         }
+        Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
+                                                                               .getName(), product.getCustomer()
+                                                                                                  .getId());
+        if (category == null) {
+            category = new Category();
+            category.setCustomer(product.getCustomer());
+            category.setName(product.getCategory()
+                                    .getName());
+            product.setCategory(category);
+        } else {
+            product.setCategory(category);
+        }
+
         Product persistProduct = productRepository.save(product);
 
         return productConverter.entityToDto(persistProduct);
@@ -128,8 +148,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean upcExists(Integer upc,Long customerId, DeletedStatus status) {
-        return productRepository.findByUpcAndCustomer_IdAndStatus(upc,customerId, status)
+    public boolean upcExists(Integer upc, Long customerId, DeletedStatus status) {
+        return productRepository.findByUpcAndCustomer_IdAndStatus(upc, customerId, status)
                                 .isPresent();
     }
 }

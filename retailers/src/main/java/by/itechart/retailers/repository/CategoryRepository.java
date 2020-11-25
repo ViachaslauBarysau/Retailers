@@ -12,4 +12,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Page<Category> findAllByCustomer_Id(Pageable pageable, Long customerId);
 
+    Category findByNameAndCustomer_Id(String name, Long customerId);
 }
