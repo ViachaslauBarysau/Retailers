@@ -48,8 +48,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findAll(Pageable pageable) {
-        UserDto userDto=userService.getUser();
-        Page<Product> productPage = productRepository.findAllByCustomer_IdAndAndStatus(pageable,userDto.getCustomer().getId(),DeletedStatus.ACTIVE);
+        UserDto userDto = userService.getUser();
+        Page<Product> productPage = productRepository.findAllByCustomer_IdAndAndStatus(pageable, userDto.getCustomer()
+                                                                                                        .getId(), DeletedStatus.ACTIVE);
 
         return productConverter.entityToDto(productPage.toList());
     }
@@ -57,8 +58,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto create(ProductDto productDto) throws NotUniqueDataException {
         Product product = productConverter.dtoToEntity(productDto);
-        //проверять чтобы у продукта не был статуса deleted
-        if (upcExists(product.getUpc())) {
+        if (upcExists(product.getUpc(), DeletedStatus.ACTIVE)) {
             throw new NotUniqueDataException("Upc should be unique");
         }
         Product persistProduct = productRepository.save(product);
@@ -128,8 +128,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean upcExists(Integer upc) {
-        return productRepository.findByUpc(upc)
+    public boolean upcExists(Integer upc, DeletedStatus status) {
+        return productRepository.findByUpcAndStatus(upc, status)
                                 .isPresent();
     }
 }

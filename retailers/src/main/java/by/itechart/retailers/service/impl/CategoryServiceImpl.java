@@ -33,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> findAll(Pageable pageable) {
+        //проверка на кастомера
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
         return categoryConverter.entityToDto(categoryPage.toList());
     }
