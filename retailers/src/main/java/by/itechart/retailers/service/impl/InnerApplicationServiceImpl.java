@@ -49,8 +49,6 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public List<InnerApplicationDto> findAll(Pageable pageable) {
-        //доставать с учетом location
-        //и supplier тоже
         UserDto userDto=userService.getUser();
         Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation().getId(), Sort.by("registration_date_time").ascending());
 
