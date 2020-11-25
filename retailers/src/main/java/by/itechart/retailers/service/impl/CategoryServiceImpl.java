@@ -37,8 +37,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> findAll(Pageable pageable) {
-        UserDto userDto=userService.getUser();
-        Page<Category> categoryPage = categoryRepository.findAllByCustomer_Id(pageable,userDto.getCustomer().getId());
+        UserDto userDto = userService.getUser();
+        Page<Category> categoryPage = categoryRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
+                                                                                               .getId());
         return categoryConverter.entityToDto(categoryPage.toList());
     }
 
