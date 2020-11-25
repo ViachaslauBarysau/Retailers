@@ -61,7 +61,7 @@ public class BillServiceImpl implements BillService {
         persistBill.setRegistrationDateTime(bill.getRegistrationDateTime());
         persistBill.setShopManager(bill.getShopManager());
         persistBill.setTotalProductAmount(bill.getTotalProductAmount());
-        persistBill.setTotalUnitNumber(bill.getTotalUnitNumber());
+        persistBill.setTotalPrice(bill.getTotalPrice());
         persistBill = billRepository.save(persistBill);
 
         return billConverter.entityToDto(persistBill);

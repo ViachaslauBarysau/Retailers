@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,6 +43,6 @@ public class Bill implements Serializable {
     @Column(name = "total_product_amount")
     private Integer totalProductAmount;
 
-    @Column(name = "total_unit_number")
-    private Integer totalUnitNumber;
+    @Column(name = "total_product_price")
+    private BigDecimal totalPrice;
 }
