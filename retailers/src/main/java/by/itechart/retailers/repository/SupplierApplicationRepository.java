@@ -19,5 +19,5 @@ public interface SupplierApplicationRepository extends JpaRepository<SupplierApp
 
     Optional<SupplierApplication> findByApplicationNumber(Integer applicationNumber);
 
-    Page<SupplierApplication> findAllByDestinationLocation_Id(Pageable pageable, Long locationId, Sort sort );
+    Page<SupplierApplication> findAllByDestinationLocation_Id(Pageable pageable, Long locationId );
 }

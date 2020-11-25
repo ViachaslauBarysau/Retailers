@@ -48,7 +48,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     @Override
     public List<SupplierApplicationDto> findAll(Pageable pageable) {
         UserDto userDto=userService.getUser();
-        Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation().getId(), Sort.by("registration_date_time").ascending());
+        Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation().getId());
 
 
         return supplierApplicationConverter.entityToDto(supplierApplicationPage.toList());

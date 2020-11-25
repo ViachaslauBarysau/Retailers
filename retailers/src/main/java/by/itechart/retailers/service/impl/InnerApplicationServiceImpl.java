@@ -13,6 +13,7 @@ import by.itechart.retailers.service.interfaces.InnerApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Override
     public List<InnerApplicationDto> findAll(Pageable pageable) {
         UserDto userDto=userService.getUser();
-        Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation().getId(), Sort.by("registration_date_time").ascending());
+        Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation().getId());
 
         return innerApplicationConverter.entityToDto(innerApplicationPage.toList());
     }
