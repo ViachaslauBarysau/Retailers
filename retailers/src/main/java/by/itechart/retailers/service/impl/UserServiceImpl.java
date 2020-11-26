@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -60,6 +61,20 @@ public class UserServiceImpl implements UserService {
             }
             userRepository.save(user);
         }
+        return userConverter.entityToDto(users);
+    }
+
+    @Override
+    @Transactional
+    public List<UserDto> findByBirthday(LocalDate date) {
+        List<User> users = userRepository.findAllByBirthdayAndUserStatus(date, Status.ACTIVE);
+        return userConverter.entityToDto(users);
+    }
+
+    @Override
+    @Transactional
+    public List<UserDto> findAllByRole(Role role) {
+        List<User> users = userRepository.findAllByUserRoleAndUserStatus(role, Status.ACTIVE);
         return userConverter.entityToDto(users);
     }
 

@@ -2,9 +2,11 @@ package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.dto.UserDto;
+import by.itechart.retailers.entity.Role;
 import by.itechart.retailers.exceptions.NotUniqueDataException;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UserService {
@@ -29,6 +31,10 @@ public interface UserService {
     String encodePassword(String password);
 
     List<UserDto> updateStatus(List<Long> userIds);
+
+    List<UserDto> findByBirthday(LocalDate date);
+
+    List<UserDto> findAllByRole(Role role);
 
     boolean emailExists(String email);
 
