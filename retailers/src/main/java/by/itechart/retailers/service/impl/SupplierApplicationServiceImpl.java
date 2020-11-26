@@ -13,6 +13,7 @@ import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -46,7 +47,9 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public List<SupplierApplicationDto> findAll(Pageable pageable) {
-        Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAll(pageable);
+        UserDto userDto=userService.getUser();
+        Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation().getId());
+
 
         return supplierApplicationConverter.entityToDto(supplierApplicationPage.toList());
     }

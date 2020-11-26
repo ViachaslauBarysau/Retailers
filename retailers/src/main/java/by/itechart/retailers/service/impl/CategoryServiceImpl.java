@@ -2,9 +2,11 @@ package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.CategoryConverter;
 import by.itechart.retailers.dto.CategoryDto;
+import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Category;
 import by.itechart.retailers.repository.CategoryRepository;
 import by.itechart.retailers.service.interfaces.CategoryService;
+import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +19,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryConverter categoryConverter;
+    private final UserService userService;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryConverter categoryConverter) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryConverter categoryConverter, UserService userService) {
         this.categoryRepository = categoryRepository;
         this.categoryConverter = categoryConverter;
+        this.userService = userService;
     }
 
     @Override
@@ -33,7 +37,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> findAll(Pageable pageable) {
-        Page<Category> categoryPage = categoryRepository.findAll(pageable);
+        UserDto userDto = userService.getUser();
+        Page<Category> categoryPage = categoryRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
+                                                                                               .getId());
         return categoryConverter.entityToDto(categoryPage.toList());
     }
 
@@ -53,7 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
         persistCategory.setName(category.getName());
         persistCategory.setCategoryTax(category.getCategoryTax());
         persistCategory.setCustomer(category.getCustomer());
-        persistCategory=categoryRepository.save(persistCategory);
+        persistCategory = categoryRepository.save(persistCategory);
 
         return categoryConverter.entityToDto(persistCategory);
     }

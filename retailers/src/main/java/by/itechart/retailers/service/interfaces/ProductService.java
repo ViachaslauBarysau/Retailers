@@ -1,6 +1,7 @@
 package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.ProductDto;
+import by.itechart.retailers.entity.DeletedStatus;
 import by.itechart.retailers.exceptions.NotUniqueDataException;
 import org.springframework.data.domain.Pageable;
 
@@ -17,5 +18,5 @@ public interface ProductService {
 
     List<ProductDto> delete(List<ProductDto> productDtos);
 
-    boolean upcExists(Integer upc);
+    boolean upcExists(Integer upc,Long customerId, DeletedStatus status);
 }
