@@ -13,10 +13,9 @@ import by.itechart.retailers.service.interfaces.InnerApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,17 +49,34 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public List<InnerApplicationDto> findAll(Pageable pageable) {
-        UserDto userDto=userService.getUser();
-        Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation().getId());
+        UserDto userDto = userService.getUser();
+        Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
+                                                                                                                                  .getId());
 
         return innerApplicationConverter.entityToDto(innerApplicationPage.toList());
     }
 
     @Override
+    @Transactional
     public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) throws NotUniqueDataException {
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
+        Location location = innerApplication.getSourceLocation();
         if (applicationNumberExists(innerApplication.getApplicationNumber())) {
             throw new NotUniqueDataException("Application number should be unique");
+        }
+        List<ApplicationRecord> applicationRecords = innerApplication.getRecordsList();
+        for (ApplicationRecord applicationRecord : applicationRecords) {
+            Long productId = applicationRecord.getProduct()
+                                              .getId();
+            LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
+
+            if (applicationRecord.getAmount() > locationProduct.getAmount()) {
+                throw new BusinessException("Not enough amount of " + locationProduct.getAmount() + " in location " + locationProduct.getLocation()
+                                                                                                                                     .getIdentifier());
+            }
+            Integer availableCapacity = location.getAvailableCapacity();
+            location.setAvailableCapacity(availableCapacity - applicationRecord.getAmount());
+            innerApplication.setSourceLocation(location);
         }
         InnerApplication persistInnerApplication = innerApplicationRepository.save(innerApplication);
 
