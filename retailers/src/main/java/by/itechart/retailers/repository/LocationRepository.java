@@ -20,4 +20,6 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     Optional<Location> findByIdentifier(String identifier);
 
+    List<Location> findAllByCustomer_Id(Long customerId);
+
 }
