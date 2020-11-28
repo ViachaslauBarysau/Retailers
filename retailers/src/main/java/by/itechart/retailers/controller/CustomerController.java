@@ -2,7 +2,6 @@ package by.itechart.retailers.controller;
 
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.service.interfaces.CustomerService;
-import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,14 +15,12 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final UserService userService;
 
     @Autowired
-    public CustomerController(CustomerService customerService, UserService userService) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.userService = userService;
-    }
 
+    }
 
     @GetMapping
     public ResponseEntity findAll(Pageable pageable) {
@@ -39,11 +36,6 @@ public class CustomerController {
     public ResponseEntity create(@RequestBody CustomerDto customerDto) {
         return new ResponseEntity<>(customerService.create(customerDto), HttpStatus.CREATED);
     }
-
-  /*   @PutMapping
-    public ResponseEntity update(@RequestBody CustomerDto customerDto) {
-        return new ResponseEntity<>(customerService.update(customerDto), HttpStatus.OK);
-    }*/
 
     @PutMapping
     public ResponseEntity updateStatus(@RequestBody List<Long> customerIds) {
