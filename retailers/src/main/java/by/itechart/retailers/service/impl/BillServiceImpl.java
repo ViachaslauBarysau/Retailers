@@ -5,7 +5,6 @@ import by.itechart.retailers.dto.BillDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.BillRepository;
 import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.repository.LocationRepository;
@@ -57,10 +56,10 @@ public class BillServiceImpl implements BillService {
 
     @Override
     @Transactional
-    public BillDto create(BillDto billDto) throws NotUniqueDataException {
+    public BillDto create(BillDto billDto) throws BusinessException {
         Bill bill = billConverter.dtoToEntity(billDto);
         if (billNumberExists(bill.getBillNumber())) {
-            throw new NotUniqueDataException("Bill number should be unique");
+            throw new BusinessException("Bill number should be unique");
         }
         Location location = bill.getLocation();
         List<BillRecord> billRecords = bill.getRecordList();

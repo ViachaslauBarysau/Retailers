@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Status;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
+import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.CustomerRepository;
 import by.itechart.retailers.service.interfaces.CustomerService;
 import by.itechart.retailers.service.interfaces.SendingCredentialsService;
@@ -46,10 +46,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto create(CustomerDto customerDto) throws NotUniqueDataException {
+    public CustomerDto create(CustomerDto customerDto) throws BusinessException {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         if(emailExists(customer.getEmail())){
-            throw new NotUniqueDataException("Email should be unique");
+            throw new BusinessException("Email should be unique");
         }
         Customer persistsCustomer = customerRepository.save(customer);
         userService.create(customerConverter.entityToDto(persistsCustomer));

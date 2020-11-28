@@ -6,7 +6,6 @@ import by.itechart.retailers.dto.InnerApplicationDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.InnerApplicationRepository;
 import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.service.interfaces.InnerApplicationService;
@@ -58,11 +57,11 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     @Transactional
-    public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) throws NotUniqueDataException {
+    public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) throws BusinessException {
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         Location location = innerApplication.getSourceLocation();
         if (applicationNumberExists(innerApplication.getApplicationNumber())) {
-            throw new NotUniqueDataException("Application number should be unique");
+            throw new BusinessException("Application number should be unique");
         }
         List<ApplicationRecord> applicationRecords = innerApplication.getRecordsList();
         for (ApplicationRecord applicationRecord : applicationRecords) {

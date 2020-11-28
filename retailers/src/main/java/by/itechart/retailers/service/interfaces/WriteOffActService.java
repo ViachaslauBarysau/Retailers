@@ -1,7 +1,7 @@
 package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.WriteOffActDto;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
+import by.itechart.retailers.exceptions.BusinessException;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public interface WriteOffActService {
 
     List<WriteOffActDto> findAll(Pageable pageable);
 
-    WriteOffActDto create(WriteOffActDto writeOffActDto) throws NotUniqueDataException;
+    WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException;
 
     boolean writeOffActNumberExists(Integer writeOffActNumber);
 }

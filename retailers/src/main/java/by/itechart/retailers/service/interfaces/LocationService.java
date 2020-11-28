@@ -1,7 +1,7 @@
 package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.LocationDto;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
+import by.itechart.retailers.exceptions.BusinessException;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface LocationService {
 
     List<LocationDto> findAllShops();
 
-    LocationDto create(LocationDto locationDto) throws NotUniqueDataException;
+    LocationDto create(LocationDto locationDto) throws BusinessException;
 
     LocationDto update(LocationDto locationDto);
 

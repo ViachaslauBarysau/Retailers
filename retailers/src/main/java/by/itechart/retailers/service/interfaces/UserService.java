@@ -3,7 +3,7 @@ package by.itechart.retailers.service.interfaces;
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Role;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
+import by.itechart.retailers.exceptions.BusinessException;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
@@ -16,9 +16,9 @@ public interface UserService {
 
     List<UserDto> findAllByCustomerId(Pageable pageable);
 
-    UserDto create(UserDto userDto) throws NotUniqueDataException;
+    UserDto create(UserDto userDto) throws BusinessException;
 
-    UserDto create(CustomerDto customerDto) throws NotUniqueDataException;
+    UserDto create(CustomerDto customerDto) throws BusinessException;
 
     UserDto update(UserDto userDto);
 

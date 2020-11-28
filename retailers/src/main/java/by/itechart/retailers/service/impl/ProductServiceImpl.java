@@ -4,7 +4,7 @@ import by.itechart.retailers.converter.ProductConverter;
 import by.itechart.retailers.dto.ProductDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
+import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.*;
 import by.itechart.retailers.service.interfaces.CategoryService;
 import by.itechart.retailers.service.interfaces.ProductService;
@@ -62,11 +62,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto create(ProductDto productDto) throws NotUniqueDataException {
+    public ProductDto create(ProductDto productDto) throws BusinessException {
         Product product = productConverter.dtoToEntity(productDto);
         if (upcExists(product.getUpc(), product.getCustomer()
                                                .getId(), DeletedStatus.ACTIVE)) {
-            throw new NotUniqueDataException("Upc should be unique");
+            throw new BusinessException("Upc should be unique");
         }
         Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
                                                                                .getName(), product.getCustomer()

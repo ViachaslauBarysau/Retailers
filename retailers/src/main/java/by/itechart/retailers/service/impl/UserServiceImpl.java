@@ -8,7 +8,7 @@ import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Role;
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.entity.User;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
+import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.interfaces.SendingCredentialsService;
 import by.itechart.retailers.service.interfaces.UserService;
@@ -140,10 +140,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(UserDto userDto) throws NotUniqueDataException {
+    public UserDto create(UserDto userDto) throws BusinessException {
         User user = userConverter.dtoToEntity(userDto);
         if (emailExists(user.getEmail())) {
-            throw new NotUniqueDataException("Email should be unique");
+            throw new BusinessException("Email should be unique");
         }
         String password = generatePassword();
         user.setPassword(encodePassword(password));
@@ -155,10 +155,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(CustomerDto customerDto) throws NotUniqueDataException {
+    public UserDto create(CustomerDto customerDto) throws BusinessException {
         Customer customer = customerConverter.dtoToEntity(customerDto);
         if (emailExists(customer.getEmail())) {
-            throw new NotUniqueDataException("Email should be unique");
+            throw new BusinessException("Email should be unique");
         }
         User user = new User();
         user.setFirstName(customerDto.getName());

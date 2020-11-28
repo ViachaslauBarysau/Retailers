@@ -8,7 +8,6 @@ import by.itechart.retailers.entity.LocationProduct;
 import by.itechart.retailers.entity.WriteOffAct;
 import by.itechart.retailers.entity.WriteOffActRecord;
 import by.itechart.retailers.exceptions.BusinessException;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
 import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.repository.WriteOffActRepository;
@@ -61,10 +60,10 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     @Transactional
-    public WriteOffActDto create(WriteOffActDto writeOffActDto) throws NotUniqueDataException {
+    public WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException {
         WriteOffAct writeOffAct = converter.dtoToEntity(writeOffActDto);
         if (writeOffActNumberExists(writeOffAct.getWriteOffActNumber())) {
-            throw new NotUniqueDataException("Write-off act number should be unique");
+            throw new BusinessException("Write-off act number should be unique");
         }
         Location location = writeOffAct.getLocation();
         List<WriteOffActRecord> writeOffActRecords = writeOffAct.getWriteOffActRecords();

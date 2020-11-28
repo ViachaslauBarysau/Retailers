@@ -5,7 +5,7 @@ import by.itechart.retailers.dto.SupplierDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Status;
 import by.itechart.retailers.entity.Supplier;
-import by.itechart.retailers.exceptions.NotUniqueDataException;
+import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.SupplierRepository;
 import by.itechart.retailers.service.interfaces.SupplierService;
 import by.itechart.retailers.service.interfaces.UserService;
@@ -47,10 +47,10 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public SupplierDto create(SupplierDto supplierDto) throws NotUniqueDataException {
+    public SupplierDto create(SupplierDto supplierDto) throws BusinessException {
         Supplier supplier = supplierConverter.dtoToEntity(supplierDto);
-        if(identifierExists(supplier.getIdentifier())){
-            throw new NotUniqueDataException("Identifier should be unique");
+        if (identifierExists(supplier.getIdentifier())) {
+            throw new BusinessException("Identifier should be unique");
         }
         Supplier persistSupplier = supplierRepository.save(supplier);
 
@@ -89,6 +89,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public boolean identifierExists(String identifier) {
-        return supplierRepository.findByIdentifier(identifier).isPresent();
+        return supplierRepository.findByIdentifier(identifier)
+                                 .isPresent();
     }
 }

@@ -11,11 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHelper {
 
-    @ExceptionHandler(value = {NotUniqueDataException.class})
-    public ResponseEntity<Object> handleNotUniqueDataException(NotUniqueDataException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-
-    }
 
     @ExceptionHandler(value = {BusinessException.class})
     public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
