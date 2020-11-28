@@ -82,24 +82,6 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public BillDto update(BillDto billDto) {
-        Bill bill = billConverter.dtoToEntity(billDto);
-        Bill persistBill = billRepository.findById(bill.getId())
-                                         .orElse(new Bill());
-
-        persistBill.setLocation(bill.getLocation());
-        persistBill.setBillNumber(bill.getBillNumber());
-        persistBill.setRecordList(bill.getRecordList());
-        persistBill.setRegistrationDateTime(bill.getRegistrationDateTime());
-        persistBill.setShopManager(bill.getShopManager());
-        persistBill.setTotalProductAmount(bill.getTotalProductAmount());
-        persistBill.setTotalPrice(bill.getTotalPrice());
-        persistBill = billRepository.save(persistBill);
-
-        return billConverter.entityToDto(persistBill);
-    }
-
-    @Override
     public boolean billNumberExists(Integer billNumber) {
         return billRepository.findByBillNumber(billNumber)
                              .isPresent();

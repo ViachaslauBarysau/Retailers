@@ -33,10 +33,4 @@ public class WriteOffActController {
     public ResponseEntity create(@RequestBody WriteOffActDto writeOffActDto) {
         return new ResponseEntity<>(writeOffActService.create(writeOffActDto), HttpStatus.CREATED);
     }
-
-    @PutMapping
-    public ResponseEntity update(@RequestBody WriteOffActDto writeOffActDto) {
-        return new ResponseEntity<>(writeOffActService.update(writeOffActDto), HttpStatus.OK);
-    }
-
 }

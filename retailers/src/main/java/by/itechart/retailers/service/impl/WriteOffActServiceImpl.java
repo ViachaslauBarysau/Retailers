@@ -87,22 +87,6 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     }
 
     @Override
-    public WriteOffActDto update(WriteOffActDto writeOffActDto) {
-        WriteOffAct writeOffAct = converter.dtoToEntity(writeOffActDto);
-        WriteOffAct persistWriteOffAct = writeOffActRepository
-                .findById(writeOffAct.getId())
-                .orElse(new WriteOffAct());
-
-        persistWriteOffAct.setActDateTime(writeOffAct.getActDateTime());
-        persistWriteOffAct.setTotalProductAmount(writeOffAct.getTotalProductAmount());
-        persistWriteOffAct.setWriteOffActRecords(writeOffAct.getWriteOffActRecords());
-        persistWriteOffAct.setTotalProductSum(writeOffAct.getTotalProductSum());
-        persistWriteOffAct = writeOffActRepository.save(persistWriteOffAct);
-
-        return converter.entityToDto(persistWriteOffAct);
-    }
-
-    @Override
     public boolean writeOffActNumberExists(Integer writeOffActNumber) {
         return writeOffActRepository.findByWriteOffActNumber(writeOffActNumber)
                                     .isPresent();

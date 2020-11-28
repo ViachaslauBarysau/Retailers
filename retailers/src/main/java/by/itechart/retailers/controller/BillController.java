@@ -33,9 +33,4 @@ public class BillController {
     public ResponseEntity create(@RequestBody BillDto billDto) {
         return new ResponseEntity<>(billService.create(billDto), HttpStatus.CREATED);
     }
-
-    @PutMapping
-    public ResponseEntity update(@RequestBody BillDto billDto) {
-        return new ResponseEntity<>(billService.update(billDto), HttpStatus.OK);
-    }
 }

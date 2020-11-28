@@ -13,7 +13,5 @@ public interface WriteOffActService {
 
     WriteOffActDto create(WriteOffActDto writeOffActDto) throws NotUniqueDataException;
 
-    WriteOffActDto update(WriteOffActDto writeOffActDto);
-
     boolean writeOffActNumberExists(Integer writeOffActNumber);
 }

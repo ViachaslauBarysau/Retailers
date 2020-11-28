@@ -13,7 +13,5 @@ public interface BillService {
 
     BillDto create(BillDto billDto);
 
-    BillDto update(BillDto billDto);
-
     boolean billNumberExists(Integer billNumber);
 }
