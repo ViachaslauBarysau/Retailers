@@ -37,4 +37,8 @@ public class WriteOffAct implements Serializable {
 
     @Column(name = "total_product_sum")
     private BigDecimal totalProductSum;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id")
+    private Location location;
 }

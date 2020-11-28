@@ -1,5 +1,6 @@
 package by.itechart.retailers.dto;
 
+import by.itechart.retailers.entity.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,4 +28,6 @@ public class WriteOffActDto {
     @Min(value = 1, message = "Product amount must be equals or greater than 1.")
     private Integer totalProductAmount;
     private BigDecimal totalProductSum;
+    @Valid
+    private LocationDto location;
 }
