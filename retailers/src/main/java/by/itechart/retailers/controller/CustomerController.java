@@ -37,7 +37,14 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.create(customerDto), HttpStatus.CREATED);
     }
 
-    @PutMapping
+
+    @PostMapping
+    public ResponseEntity update(@RequestBody CustomerDto customerDto) {
+        return new ResponseEntity<>(customerService.update(customerDto), HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping
     public ResponseEntity updateStatus(@RequestBody List<Long> customerIds) {
         return new ResponseEntity<>(customerService.updateStatus(customerIds), HttpStatus.OK);
     }
