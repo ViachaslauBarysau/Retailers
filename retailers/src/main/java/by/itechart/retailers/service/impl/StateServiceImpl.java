@@ -7,6 +7,7 @@ import by.itechart.retailers.repository.StateRepository;
 import by.itechart.retailers.service.interfaces.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -26,16 +27,18 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public StateDto findById(long stateID) {
-        State state = stateRepository.findById(stateID).orElse(new State());
+        State state = stateRepository.findById(stateID)
+                                     .orElse(new State());
 
         return stateConverter.entityToDto(state);
     }
 
     @Override
-    public List<StateDto> findAll(Pageable pageable) {
+    public Page<StateDto> findAll(Pageable pageable) {
         Page<State> statePage = stateRepository.findAll(pageable);
+        List<StateDto> stateDtos = stateConverter.entityToDto(statePage.getContent());
+        return new PageImpl<>(stateDtos, pageable, statePage.getTotalElements());
 
-        return stateConverter.entityToDto(statePage.toList());
     }
 
     @Override
@@ -49,11 +52,12 @@ public class StateServiceImpl implements StateService {
     @Override
     public StateDto update(StateDto stateDto) {
         State state = stateConverter.dtoToEntity(stateDto);
-        State persistState = stateRepository.findById(state.getId()).orElse(new State());
+        State persistState = stateRepository.findById(state.getId())
+                                            .orElse(new State());
 
         persistState.setName(state.getName());
         persistState.setStateTax(state.getStateTax());
-        persistState=stateRepository.save(persistState);
+        persistState = stateRepository.save(persistState);
 
         return stateConverter.entityToDto(persistState);
     }

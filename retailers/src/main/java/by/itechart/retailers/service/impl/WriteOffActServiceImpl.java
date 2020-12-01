@@ -15,6 +15,7 @@ import by.itechart.retailers.service.interfaces.UserService;
 import by.itechart.retailers.service.interfaces.WriteOffActService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ import java.util.List;
 public class WriteOffActServiceImpl implements WriteOffActService {
 
     private final WriteOffActRepository writeOffActRepository;
-    private final WriteOffActConverter converter;
+    private final WriteOffActConverter writeOffActConverter;
     private final LocationProductRepository locationProductRepository;
     private final UserService userService;
     private final LocationRepository locationRepository;
@@ -33,7 +34,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Autowired
     public WriteOffActServiceImpl(WriteOffActRepository writeOffActRepository, WriteOffActConverter converter, LocationProductRepository locationProductRepository, UserService userService, LocationRepository locationRepository) {
         this.writeOffActRepository = writeOffActRepository;
-        this.converter = converter;
+        this.writeOffActConverter = converter;
         this.locationProductRepository = locationProductRepository;
         this.userService = userService;
         this.locationRepository = locationRepository;
@@ -43,25 +44,26 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Override
     public WriteOffActDto findById(long writeOffActId) {
         WriteOffAct writeOffAct = writeOffActRepository.findById(writeOffActId)
-                .orElse(new WriteOffAct());
+                                                       .orElse(new WriteOffAct());
 
-        return converter.entityToDto(writeOffAct);
+        return writeOffActConverter.entityToDto(writeOffAct);
     }
 
     @Override
-    public List<WriteOffActDto> findAll(Pageable pageable) {
+    public Page<WriteOffActDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
         List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
-                .getId());
+                                                                                  .getId());
         Page<WriteOffAct> writeOffActPage = writeOffActRepository.findAllByLocationIn(pageable, locations);
+        List<WriteOffActDto> writeOffActDtos = writeOffActConverter.entityToDto(writeOffActPage.getContent());
+        return new PageImpl<>(writeOffActDtos, pageable, writeOffActPage.getTotalElements());
 
-        return converter.entityToDto(writeOffActPage.toList());
     }
 
     @Override
     @Transactional
     public WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException {
-        WriteOffAct writeOffAct = converter.dtoToEntity(writeOffActDto);
+        WriteOffAct writeOffAct = writeOffActConverter.dtoToEntity(writeOffActDto);
         if (writeOffActNumberExists(writeOffAct.getWriteOffActNumber())) {
             throw new BusinessException("Write-off act number should be unique");
         }
@@ -69,26 +71,27 @@ public class WriteOffActServiceImpl implements WriteOffActService {
         List<WriteOffActRecord> writeOffActRecords = writeOffAct.getWriteOffActRecords();
         for (WriteOffActRecord writeOffActRecord : writeOffActRecords) {
             Long productId = writeOffActRecord.getProduct()
-                    .getId();
+                                              .getId();
             LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
 
             if (writeOffActRecord.getAmount() > locationProduct.getAmount()) {
                 throw new BusinessException("Not enough amount of " + locationProduct.getAmount() + " in location " + locationProduct.getLocation()
-                        .getIdentifier());
+                                                                                                                                     .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount() * writeOffActRecord.getProduct().getVolume());
+            location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount() * writeOffActRecord.getProduct()
+                                                                                                               .getVolume());
             writeOffAct.setLocation(location);
         }
         WriteOffAct persistWriteOffAct = writeOffActRepository.save(writeOffAct);
 
-        return converter.entityToDto(persistWriteOffAct);
+        return writeOffActConverter.entityToDto(persistWriteOffAct);
     }
 
     @Override
     public boolean writeOffActNumberExists(Integer writeOffActNumber) {
         return writeOffActRepository.findByWriteOffActNumber(writeOffActNumber)
-                .isPresent();
+                                    .isPresent();
     }
 
 }

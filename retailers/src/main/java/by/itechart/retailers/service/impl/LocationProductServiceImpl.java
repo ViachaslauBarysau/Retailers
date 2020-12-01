@@ -9,6 +9,7 @@ import by.itechart.retailers.service.interfaces.LocationProductService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +39,13 @@ public class LocationProductServiceImpl implements LocationProductService {
     }
 
     @Override
-    public List<LocationProductDto> findAll(Pageable pageable) {
+    public Page<LocationProductDto> findAll(Pageable pageable) {
 
         UserDto userDto = userService.getUser();
         Page<LocationProduct> locationProductPage = locationProductRepository.findAllByLocation_IdAndAmountGreaterThan(pageable, userDto.getLocation()
                                                                                                                                         .getId(), 0);
-
-        return locationProductConverter.entityToDto(locationProductPage.toList());
+        List<LocationProductDto> locationProductDtos = locationProductConverter.entityToDto(locationProductPage.getContent());
+        return new PageImpl<>(locationProductDtos, pageable, locationProductPage.getTotalElements());
     }
 
     @Override

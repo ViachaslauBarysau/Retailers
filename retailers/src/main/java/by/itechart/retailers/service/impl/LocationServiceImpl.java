@@ -14,6 +14,7 @@ import by.itechart.retailers.service.interfaces.LocationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -39,25 +40,25 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDto findById(long locationProductId) {
         Location location = locationRepository.findById(locationProductId)
-                .orElse(new Location());
+                                              .orElse(new Location());
 
         return locationConverter.entityToDto(location);
     }
 
     @Override
-    public List<LocationDto> findAll(Pageable pageable) {
+    public Page<LocationDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
         Page<Location> locationPage = locationRepository.findAllByCustomer_IdAndStatus(pageable, userDto.getCustomer()
-                .getId(), DeletedStatus.ACTIVE);
-
-        return locationConverter.entityToDto(locationPage.toList());
+                                                                                                        .getId(), DeletedStatus.ACTIVE);
+        List<LocationDto> locationDtos = locationConverter.entityToDto(locationPage.getContent());
+        return new PageImpl<>(locationDtos, pageable, locationPage.getTotalElements());
     }
 
     @Override
     public List<LocationDto> findAllWarehouses() {
         UserDto userDto = userService.getUser();
         List<Location> warehouses = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(userDto.getCustomer()
-                .getId(), LocationType.WAREHOUSE, DeletedStatus.ACTIVE);
+                                                                                                           .getId(), LocationType.WAREHOUSE, DeletedStatus.ACTIVE);
         return locationConverter.entityToDto(warehouses);
     }
 
@@ -65,7 +66,7 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationDto> findAllShops() {
         UserDto userDto = userService.getUser();
         List<Location> shopList = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(userDto.getCustomer()
-                .getId(), LocationType.SHOP, DeletedStatus.ACTIVE);
+                                                                                                         .getId(), LocationType.SHOP, DeletedStatus.ACTIVE);
         return locationConverter.entityToDto(shopList);
     }
 
@@ -84,7 +85,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationDto update(LocationDto locationDto) {
         Location location = locationConverter.dtoToEntity(locationDto);
         Location persistLocation = locationRepository.findById(location.getId())
-                .orElse(new Location());
+                                                     .orElse(new Location());
 
         persistLocation.setAddress(location.getAddress());
         persistLocation.setAvailableCapacity(location.getAvailableCapacity());
@@ -101,7 +102,8 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationDto> delete(List<LocationDto> locationDtos) {
         List<Location> locations = locationConverter.dtoToEntity(locationDtos);
         for (Location location : locations) {
-            if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE).size() == 0) {
+            if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE)
+                              .size() == 0) {
                 location.setStatus(DeletedStatus.DELETED);
                 locationRepository.save(location);
                 locations.remove(location);
@@ -113,6 +115,6 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public boolean identifierExists(String identifier) {
         return locationRepository.findByIdentifier(identifier)
-                .isPresent();
+                                 .isPresent();
     }
 }

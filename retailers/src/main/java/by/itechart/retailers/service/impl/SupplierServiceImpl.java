@@ -11,6 +11,7 @@ import by.itechart.retailers.service.interfaces.SupplierService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +40,13 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public List<SupplierDto> findAll(Pageable pageable) {
+    public Page<SupplierDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
         Page<Supplier> supplierPage = supplierRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
                                                                                                .getId());
-        return supplierConverter.entityToDto(supplierPage.toList());
+        List<SupplierDto> supplierDtos = supplierConverter.entityToDto(supplierPage.getContent());
+        return new PageImpl<>(supplierDtos, pageable, supplierPage.getTotalElements());
+
     }
 
     @Override

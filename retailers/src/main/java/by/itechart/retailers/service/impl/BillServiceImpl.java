@@ -3,7 +3,10 @@ package by.itechart.retailers.service.impl;
 import by.itechart.retailers.converter.BillConverter;
 import by.itechart.retailers.dto.BillDto;
 import by.itechart.retailers.dto.UserDto;
-import by.itechart.retailers.entity.*;
+import by.itechart.retailers.entity.Bill;
+import by.itechart.retailers.entity.BillRecord;
+import by.itechart.retailers.entity.Location;
+import by.itechart.retailers.entity.LocationProduct;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.BillRepository;
 import by.itechart.retailers.repository.LocationProductRepository;
@@ -12,6 +15,7 @@ import by.itechart.retailers.service.interfaces.BillService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,13 +49,13 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public List<BillDto> findAll(Pageable pageable) {
+    public Page<BillDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
         List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
                                                                                   .getId());
         Page<Bill> billPage = billRepository.findAllByLocationIn(pageable, locations);
-
-        return billConverter.entityToDto(billPage.toList());
+        List<BillDto> billDtos = billConverter.entityToDto(billPage.getContent());
+        return new PageImpl<>(billDtos, pageable, billPage.getTotalElements());
     }
 
     @Override
@@ -73,7 +77,8 @@ public class BillServiceImpl implements BillService {
                                                                                                                                      .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - billRecord.getProduct().getVolume()*billRecord.getProductAmount());
+            location.setAvailableCapacity(availableCapacity - billRecord.getProduct()
+                                                                        .getVolume() * billRecord.getProductAmount());
             bill.setLocation(location);
         }
         Bill persistBill = billRepository.save(bill);

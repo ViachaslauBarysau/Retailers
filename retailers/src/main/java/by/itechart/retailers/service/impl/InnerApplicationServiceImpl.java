@@ -12,6 +12,7 @@ import by.itechart.retailers.service.interfaces.InnerApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,11 +48,13 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     }
 
     @Override
-    public List<InnerApplicationDto> findAll(Pageable pageable) {
+    public Page<InnerApplicationDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
         Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
                                                                                                                                   .getId());
-        return innerApplicationConverter.entityToDto(innerApplicationPage.toList());
+        List<InnerApplicationDto> innerApplicationDtos = innerApplicationConverter.entityToDto(innerApplicationPage.getContent());
+        return new PageImpl<>(innerApplicationDtos, pageable, innerApplicationPage.getTotalElements());
+
     }
 
     @Override
@@ -73,7 +76,8 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
                                                                                                                                      .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - applicationRecord.getAmount()*applicationRecord.getProduct().getVolume());
+            location.setAvailableCapacity(availableCapacity - applicationRecord.getAmount() * applicationRecord.getProduct()
+                                                                                                               .getVolume());
             innerApplication.setSourceLocation(location);
         }
         InnerApplication persistInnerApplication = innerApplicationRepository.save(innerApplication);

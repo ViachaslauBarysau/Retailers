@@ -2,6 +2,7 @@ package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.exceptions.BusinessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public interface CustomerService {
     CustomerDto findById(long customerId);
 
-    List<CustomerDto> findAll(Pageable pageable);
+    Page<CustomerDto> findAll(Pageable pageable);
 
     CustomerDto create(CustomerDto customerDto) throws BusinessException;
 

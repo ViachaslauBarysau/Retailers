@@ -4,6 +4,7 @@ import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Role;
 import by.itechart.retailers.exceptions.BusinessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface UserService {
     UserDto findById(long userId);
 
-    List<UserDto> findAll(Pageable pageable);
+    Page<UserDto> findAll(Pageable pageable);
 
     List<UserDto> findAllByCustomerId(Pageable pageable);
 

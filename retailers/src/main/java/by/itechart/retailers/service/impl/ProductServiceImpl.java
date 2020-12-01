@@ -11,9 +11,11 @@ import by.itechart.retailers.service.interfaces.ProductService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,10 +30,10 @@ public class ProductServiceImpl implements ProductService {
     private final SupplierApplicationRepository supplierApplicationRepository;
     private final UserService userService;
     private final CategoryRepository categoryRepository;
-    private final CategoryService categoryService;
+
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, ApplicationRecordRepository applicationRecordRepository, LocationProductRepository locationProductRepository, InnerApplicationRepository innerApplicationRepository, SupplierApplicationRepository supplierApplicationRepository, UserService userService, CategoryRepository categoryRepository, CategoryService categoryService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, ApplicationRecordRepository applicationRecordRepository, LocationProductRepository locationProductRepository, InnerApplicationRepository innerApplicationRepository, SupplierApplicationRepository supplierApplicationRepository, UserService userService, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productConverter = productConverter;
         this.applicationRecordRepository = applicationRecordRepository;
@@ -40,7 +42,6 @@ public class ProductServiceImpl implements ProductService {
         this.supplierApplicationRepository = supplierApplicationRepository;
         this.userService = userService;
         this.categoryRepository = categoryRepository;
-        this.categoryService = categoryService;
     }
 
 
@@ -53,12 +54,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findAll(Pageable pageable) {
+    public Page<ProductDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
         Page<Product> productPage = productRepository.findAllByCustomer_IdAndAndStatus(pageable, userDto.getCustomer()
                                                                                                         .getId(), DeletedStatus.ACTIVE);
+        List<ProductDto> productDtos = productConverter.entityToDto(productPage.getContent());
+        return new PageImpl<>(productDtos, pageable, productPage.getTotalElements());
 
-        return productConverter.entityToDto(productPage.toList());
     }
 
     @Override
@@ -68,19 +70,8 @@ public class ProductServiceImpl implements ProductService {
                                                .getId(), DeletedStatus.ACTIVE)) {
             throw new BusinessException("Upc should be unique");
         }
-        Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
-                                                                               .getName(), product.getCustomer()
-                                                                                                  .getId());
-        if (category == null) {
-            category = new Category();
-            category.setCustomer(product.getCustomer());
-            category.setName(product.getCategory()
-                                    .getName());
-            product.setCategory(category);
-        } else {
-            product.setCategory(category);
-        }
-
+        Category category = findCategory(product);
+        product.setCategory(category);
         Product persistProduct = productRepository.save(product);
 
         return productConverter.entityToDto(persistProduct);
@@ -92,7 +83,8 @@ public class ProductServiceImpl implements ProductService {
         Product persistProduct = productRepository.findById(product.getId())
                                                   .orElse(new Product());
 
-        persistProduct.setCategory(product.getCategory());
+        Category category = findCategory(product);
+        persistProduct.setCategory(category);
         persistProduct.setLabel(product.getLabel());
         persistProduct.setUpc(product.getUpc());
         persistProduct.setVolume(product.getVolume());
@@ -100,6 +92,20 @@ public class ProductServiceImpl implements ProductService {
         persistProduct = productRepository.save(persistProduct);
 
         return productConverter.entityToDto(persistProduct);
+    }
+
+    private Category findCategory(Product product) {
+        Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
+                                                                               .getName(), product.getCustomer()
+                                                                                                  .getId());
+        if (category == null) {
+            category = new Category();
+            category.setCustomer(product.getCustomer());
+            category.setName(product.getCategory()
+                                    .getName());
+            category.setCategoryTax(BigDecimal.valueOf(0));
+        }
+        return category;
     }
 
     @Override

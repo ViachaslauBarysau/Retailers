@@ -11,6 +11,7 @@ import by.itechart.retailers.repository.SupplierApplicationRepository;
 import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -44,12 +45,15 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     }
 
     @Override
-    public List<SupplierApplicationDto> findAll(Pageable pageable) {
-        UserDto userDto=userService.getUser();
-        Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation().getId());
+    public Page<SupplierApplicationDto> findAll(Pageable pageable) {
+        UserDto userDto = userService.getUser();
+        Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
+                                                                                                                                           .getId());
 
+        List<SupplierApplicationDto> supplierApplicationDtos = supplierApplicationConverter.entityToDto(supplierApplicationPage.getContent());
 
-        return supplierApplicationConverter.entityToDto(supplierApplicationPage.toList());
+        return new PageImpl<>(supplierApplicationDtos, pageable, supplierApplicationPage.getTotalElements());
+
     }
 
     @Override

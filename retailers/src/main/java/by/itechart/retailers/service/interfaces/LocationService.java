@@ -2,6 +2,7 @@ package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.LocationDto;
 import by.itechart.retailers.exceptions.BusinessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public interface LocationService {
     LocationDto findById(long locationId);
 
-    List<LocationDto> findAll(Pageable pageable);
+    Page<LocationDto> findAll(Pageable pageable);
 
     List<LocationDto> findAllWarehouses();
 

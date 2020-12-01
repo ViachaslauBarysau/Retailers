@@ -9,6 +9,7 @@ import by.itechart.retailers.service.interfaces.CategoryService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +37,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> findAll(Pageable pageable) {
+    public Page<CategoryDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
         Page<Category> categoryPage = categoryRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
                                                                                                .getId());
-        return categoryConverter.entityToDto(categoryPage.toList());
+        List<CategoryDto> categoryDtos = categoryConverter.entityToDto(categoryPage.getContent());
+        return new PageImpl<>(categoryDtos, pageable, categoryPage.getTotalElements());
     }
 
     @Override
@@ -58,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         persistCategory.setName(category.getName());
         persistCategory.setCategoryTax(category.getCategoryTax());
-        persistCategory.setCustomer(category.getCustomer());
+        //    persistCategory.setCustomer(category.getCustomer());
         persistCategory = categoryRepository.save(persistCategory);
 
         return categoryConverter.entityToDto(persistCategory);
