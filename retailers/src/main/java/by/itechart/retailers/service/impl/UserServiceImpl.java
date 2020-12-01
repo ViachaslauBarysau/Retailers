@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> updateStatus(List<Long> userIds) {
         List<User> users = userRepository.findAllById(userIds);
         for (User user : users) {
+            //проверить чтобы location был active
             if (user.getUserStatus()
                     .equals(Status.ACTIVE)) {
                 user.setUserStatus(Status.DISABLED);

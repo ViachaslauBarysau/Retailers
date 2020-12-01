@@ -47,24 +47,25 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<LocationDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
-        Page<Location> locationPage = locationRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
-                                                                                               .getId());
+        Page<Location> locationPage = locationRepository.findAllByCustomer_IdAndStatus(pageable, userDto.getCustomer()
+                                                                                               .getId(),Status.ACTIVE);
+
         return locationConverter.entityToDto(locationPage.toList());
     }
 
     @Override
     public List<LocationDto> findAllWarehouses() {
         UserDto userDto = userService.getUser();
-        List<Location> warehouses = locationRepository.findAllByCustomer_IdAndLocationType(userDto.getCustomer()
-                                                                                                  .getId(), LocationType.WAREHOUSE);
+        List<Location> warehouses = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(userDto.getCustomer()
+                                                                                                  .getId(), LocationType.WAREHOUSE,Status.ACTIVE);
         return locationConverter.entityToDto(warehouses);
     }
 
     @Override
     public List<LocationDto> findAllShops() {
         UserDto userDto = userService.getUser();
-        List<Location> shopList = locationRepository.findAllByCustomer_IdAndLocationType(userDto.getCustomer()
-                                                                                                .getId(), LocationType.SHOP);
+        List<Location> shopList = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(userDto.getCustomer()
+                                                                                                .getId(), LocationType.SHOP,Status.ACTIVE);
         return locationConverter.entityToDto(shopList);
     }
 
@@ -100,7 +101,7 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationDto> delete(List<LocationDto> locationDtos) {
         List<Location> locations = locationConverter.dtoToEntity(locationDtos);
         for (Location location : locations) {
-            if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE) == null) {
+            if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE).size()==0) {
                 location.setStatus(DeletedStatus.DELETED);
                 locationRepository.save(location);
                 locations.remove(location);

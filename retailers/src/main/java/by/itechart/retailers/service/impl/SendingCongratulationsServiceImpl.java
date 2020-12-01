@@ -41,7 +41,7 @@ public class SendingCongratulationsServiceImpl implements SendingCongratulations
             backoff = @Backoff(delay = 1000))
     @Scheduled(cron = "0 0 9 ? * MON-FRI")
     public void sendCongratulations() {
-        if (userDtos != null) {
+        if (userDtos.size()!=0) {
             for (UserDto userDto : userDtos) {
                 StringTemplateGroup group = new StringTemplateGroup("src/main/resources", DefaultTemplateLexer.class);
                 StringTemplate mail = group.getInstanceOf("Birthday");
@@ -56,7 +56,7 @@ public class SendingCongratulationsServiceImpl implements SendingCongratulations
     @Recover
     public void sendSystemAdminNotification(RuntimeException ex) {
         List<UserDto> systemAdmins = userService.findAllByRole(Role.SYSTEM_ADMIN);
-        if (systemAdmins != null) {
+        if (systemAdmins.size()!=0) {
             for (UserDto userDto : systemAdmins) {
                 StringTemplateGroup group = new StringTemplateGroup("src/main/resources", DefaultTemplateLexer.class);
                 StringTemplate mail = group.getInstanceOf("SystemAdminNotification");

@@ -2,9 +2,11 @@ package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.LocationProductConverter;
 import by.itechart.retailers.dto.LocationProductDto;
+import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.LocationProduct;
 import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.service.interfaces.LocationProductService;
+import by.itechart.retailers.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +19,15 @@ public class LocationProductServiceImpl implements LocationProductService {
 
     private final LocationProductRepository locationProductRepository;
     private final LocationProductConverter locationProductConverter;
+    private final UserService userService;
 
     @Autowired
-    public LocationProductServiceImpl(LocationProductRepository locationProductRepository,
-                                      LocationProductConverter locationProductConverter) {
+    public LocationProductServiceImpl(LocationProductRepository locationProductRepository, LocationProductConverter locationProductConverter, UserService userService) {
         this.locationProductRepository = locationProductRepository;
         this.locationProductConverter = locationProductConverter;
+        this.userService = userService;
     }
+
 
     @Override
     public LocationProductDto findById(long locationProductId) {
@@ -35,7 +39,10 @@ public class LocationProductServiceImpl implements LocationProductService {
 
     @Override
     public List<LocationProductDto> findAll(Pageable pageable) {
-        Page<LocationProduct> locationProductPage = locationProductRepository.findAll(pageable);
+
+        UserDto userDto = userService.getUser();
+        Page<LocationProduct> locationProductPage = locationProductRepository.findAllByLocation_IdAndAmountGreaterThan(pageable, userDto.getLocation()
+                                                                                                                                        .getId(), 0);
 
         return locationProductConverter.entityToDto(locationProductPage.toList());
     }

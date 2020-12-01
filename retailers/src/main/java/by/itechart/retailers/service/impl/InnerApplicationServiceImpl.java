@@ -51,7 +51,6 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         UserDto userDto = userService.getUser();
         Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
                                                                                                                                   .getId());
-
         return innerApplicationConverter.entityToDto(innerApplicationPage.toList());
     }
 
@@ -74,7 +73,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
                                                                                                                                      .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - applicationRecord.getAmount());
+            location.setAvailableCapacity(availableCapacity - applicationRecord.getAmount()*applicationRecord.getProduct().getVolume());
             innerApplication.setSourceLocation(location);
         }
         InnerApplication persistInnerApplication = innerApplicationRepository.save(innerApplication);

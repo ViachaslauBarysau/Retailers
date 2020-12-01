@@ -70,10 +70,10 @@ public class BillServiceImpl implements BillService {
 
             if (billRecord.getProductAmount() > locationProduct.getAmount()) {
                 throw new BusinessException("Not enough amount of " + locationProduct.getAmount() + " in location " + locationProduct.getLocation()
-                                                                                                                                     .getIdentifier());//какого конкретно продукт не хвататет
+                                                                                                                                     .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - billRecord.getProductAmount());
+            location.setAvailableCapacity(availableCapacity - billRecord.getProduct().getVolume()*billRecord.getProductAmount());
             bill.setLocation(location);
         }
         Bill persistBill = billRepository.save(bill);

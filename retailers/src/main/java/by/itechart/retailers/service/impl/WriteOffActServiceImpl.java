@@ -77,7 +77,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
                                                                                                                                      .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount());
+            location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount()*writeOffActRecord.getProduct().getVolume());
             writeOffAct.setLocation(location);
         }
         WriteOffAct persistWriteOffAct = writeOffActRepository.save(writeOffAct);

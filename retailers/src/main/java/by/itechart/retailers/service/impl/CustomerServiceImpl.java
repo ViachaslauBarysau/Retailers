@@ -22,14 +22,12 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerConverter customerConverter;
     private final UserService userService;
-    private final SendingCredentialsService sendingCredentialsService;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter customerConverter, UserService userService, SendingCredentialsService sendingCredentialsService) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter customerConverter, UserService userService) {
         this.customerRepository = customerRepository;
         this.customerConverter = customerConverter;
         this.userService = userService;
-        this.sendingCredentialsService = sendingCredentialsService;
     }
 
     @Override

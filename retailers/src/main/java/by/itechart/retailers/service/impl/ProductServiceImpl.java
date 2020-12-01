@@ -109,10 +109,8 @@ public class ProductServiceImpl implements ProductService {
         for (Product product : products) {
             List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
             List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
-            List<SupplierApplication> supplierApplications = supplierApplicationRepository.
-                                                                                                  findAllByRecordsListIn(applicationRecords);
-            List<InnerApplication> innerApplications = innerApplicationRepository.
-                                                                                         findAllByRecordsListIn(applicationRecords);
+            List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
+            List<InnerApplication> innerApplications = innerApplicationRepository.findAllByRecordsListIn(applicationRecords);
 
             long locationProductCount = locationProducts.stream()
                                                         .filter(locationProduct -> (locationProduct.getAmount() != 0))
