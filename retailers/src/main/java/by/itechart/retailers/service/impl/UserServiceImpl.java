@@ -4,10 +4,7 @@ import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.converter.UserConverter;
 import by.itechart.retailers.dto.CustomerDto;
 import by.itechart.retailers.dto.UserDto;
-import by.itechart.retailers.entity.Customer;
-import by.itechart.retailers.entity.Role;
-import by.itechart.retailers.entity.Status;
-import by.itechart.retailers.entity.User;
+import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.interfaces.SendingCredentialsService;
@@ -54,14 +51,15 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> updateStatus(List<Long> userIds) {
         List<User> users = userRepository.findAllById(userIds);
         for (User user : users) {
-            //проверить чтобы location был active
-            if (user.getUserStatus()
-                    .equals(Status.ACTIVE)) {
-                user.setUserStatus(Status.DISABLED);
-            } else {
-                user.setUserStatus(Status.ACTIVE);
+            if(user.getLocation().getStatus()!= DeletedStatus.DELETED) {
+                if (user.getUserStatus()
+                        .equals(Status.ACTIVE)) {
+                    user.setUserStatus(Status.DISABLED);
+                } else {
+                    user.setUserStatus(Status.ACTIVE);
+                }
+                userRepository.save(user);
             }
-            userRepository.save(user);
         }
         return userConverter.entityToDto(users);
     }
