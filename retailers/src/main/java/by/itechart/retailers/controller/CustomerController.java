@@ -38,7 +38,7 @@ public class CustomerController {
     }
 
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity update(@RequestBody CustomerDto customerDto) {
         return new ResponseEntity<>(customerService.update(customerDto), HttpStatus.CREATED);
     }

@@ -43,7 +43,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Override
     public WriteOffActDto findById(long writeOffActId) {
         WriteOffAct writeOffAct = writeOffActRepository.findById(writeOffActId)
-                                                       .orElse(new WriteOffAct());
+                .orElse(new WriteOffAct());
 
         return converter.entityToDto(writeOffAct);
     }
@@ -52,7 +52,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     public List<WriteOffActDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
         List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
-                                                                                  .getId());
+                .getId());
         Page<WriteOffAct> writeOffActPage = writeOffActRepository.findAllByLocationIn(pageable, locations);
 
         return converter.entityToDto(writeOffActPage.toList());
@@ -69,15 +69,15 @@ public class WriteOffActServiceImpl implements WriteOffActService {
         List<WriteOffActRecord> writeOffActRecords = writeOffAct.getWriteOffActRecords();
         for (WriteOffActRecord writeOffActRecord : writeOffActRecords) {
             Long productId = writeOffActRecord.getProduct()
-                                              .getId();
+                    .getId();
             LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
 
             if (writeOffActRecord.getAmount() > locationProduct.getAmount()) {
                 throw new BusinessException("Not enough amount of " + locationProduct.getAmount() + " in location " + locationProduct.getLocation()
-                                                                                                                                     .getIdentifier());
+                        .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount()*writeOffActRecord.getProduct().getVolume());
+            location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount() * writeOffActRecord.getProduct().getVolume());
             writeOffAct.setLocation(location);
         }
         WriteOffAct persistWriteOffAct = writeOffActRepository.save(writeOffAct);
@@ -88,7 +88,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Override
     public boolean writeOffActNumberExists(Integer writeOffActNumber) {
         return writeOffActRepository.findByWriteOffActNumber(writeOffActNumber)
-                                    .isPresent();
+                .isPresent();
     }
 
 }

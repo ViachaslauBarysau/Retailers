@@ -36,6 +36,5 @@ public class LocationDto {
     private LocationType locationType;
     @DecimalMin(value = "0", message = "Tax must be equals or greater than 0.")
     private BigDecimal locationTax;
-
     private DeletedStatus status;
 }

@@ -18,6 +18,7 @@ public class LocationProductDto {
     private Long id;
     @Valid
     private ProductDto product;
+    private Integer amount;
     @NotBlank(message = "Cost can't be empty.")
     @DecimalMin(value = "0.01", message = "Cost must be greater than 0.")
     private BigDecimal cost;
