@@ -5,6 +5,8 @@ import by.itechart.retailers.dto.StateDto;
 import by.itechart.retailers.entity.State;
 import by.itechart.retailers.repository.StateRepository;
 import by.itechart.retailers.service.interfaces.StateService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,7 +20,7 @@ public class StateServiceImpl implements StateService {
 
     private final StateRepository stateRepository;
     private final StateConverter stateConverter;
-
+    Logger logger = LoggerFactory.getLogger(StateServiceImpl.class);
     @Autowired
     public StateServiceImpl(StateRepository stateRepository, StateConverter stateConverter) {
         this.stateRepository = stateRepository;
@@ -26,8 +28,9 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public StateDto findById(long stateID) {
-        State state = stateRepository.findById(stateID)
+    public StateDto findById(long stateId) {
+        logger.info("Find by id {}",stateId);
+        State state = stateRepository.findById(stateId)
                                      .orElse(new State());
 
         return stateConverter.entityToDto(state);
@@ -35,6 +38,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public Page<StateDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         Page<State> statePage = stateRepository.findAll(pageable);
         List<StateDto> stateDtos = stateConverter.entityToDto(statePage.getContent());
         return new PageImpl<>(stateDtos, pageable, statePage.getTotalElements());
@@ -43,6 +47,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public StateDto create(StateDto stateDto) {
+        logger.info("Create");
         State state = stateConverter.dtoToEntity(stateDto);
         State persistState = stateRepository.save(state);
 
@@ -51,6 +56,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public StateDto update(StateDto stateDto) {
+        logger.info("Update");
         State state = stateConverter.dtoToEntity(stateDto);
         State persistState = stateRepository.findById(state.getId())
                                             .orElse(new State());

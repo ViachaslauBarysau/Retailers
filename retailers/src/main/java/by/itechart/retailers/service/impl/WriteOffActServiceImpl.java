@@ -13,6 +13,8 @@ import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.repository.WriteOffActRepository;
 import by.itechart.retailers.service.interfaces.UserService;
 import by.itechart.retailers.service.interfaces.WriteOffActService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +32,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     private final LocationProductRepository locationProductRepository;
     private final UserService userService;
     private final LocationRepository locationRepository;
+    Logger logger = LoggerFactory.getLogger(WriteOffActServiceImpl.class);
 
     @Autowired
     public WriteOffActServiceImpl(WriteOffActRepository writeOffActRepository, WriteOffActConverter converter, LocationProductRepository locationProductRepository, UserService userService, LocationRepository locationRepository) {
@@ -43,6 +46,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public WriteOffActDto findById(long writeOffActId) {
+        logger.info("Find by id {}",writeOffActId);
         WriteOffAct writeOffAct = writeOffActRepository.findById(writeOffActId)
                                                        .orElse(new WriteOffAct());
 
@@ -51,6 +55,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public Page<WriteOffActDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         UserDto userDto = userService.getUser();
         List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
                                                                                   .getId());
@@ -63,8 +68,10 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Override
     @Transactional
     public WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException {
+        logger.info("Create");
         WriteOffAct writeOffAct = writeOffActConverter.dtoToEntity(writeOffActDto);
         if (writeOffActNumberExists(writeOffAct.getWriteOffActNumber())) {
+            logger.error("Not unique number {}", writeOffAct.getWriteOffActNumber());
             throw new BusinessException("Write-off act number should be unique");
         }
         Location location = writeOffAct.getLocation();
@@ -75,7 +82,11 @@ public class WriteOffActServiceImpl implements WriteOffActService {
             LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
 
             if (writeOffActRecord.getAmount() > locationProduct.getAmount()) {
-                throw new BusinessException("Not enough amount of " + locationProduct.getAmount() + " in location " + locationProduct.getLocation()
+                logger.error("Not enough product {} in location", locationProduct.getProduct()
+                                                                                 .getId());
+
+                throw new BusinessException("Not enough amount of " + locationProduct.getProduct()
+                                                                                     .getLabel() + " in location " + locationProduct.getLocation()
                                                                                                                                      .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
@@ -90,6 +101,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public boolean writeOffActNumberExists(Integer writeOffActNumber) {
+        logger.info("Check for existing number {}", writeOffActNumber);
         return writeOffActRepository.findByWriteOffActNumber(writeOffActNumber)
                                     .isPresent();
     }
