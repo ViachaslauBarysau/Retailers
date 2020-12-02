@@ -7,6 +7,8 @@ import by.itechart.retailers.entity.Category;
 import by.itechart.retailers.repository.CategoryRepository;
 import by.itechart.retailers.service.interfaces.CategoryService;
 import by.itechart.retailers.service.interfaces.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryConverter categoryConverter;
     private final UserService userService;
-
+    Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
     @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryConverter categoryConverter, UserService userService) {
         this.categoryRepository = categoryRepository;
@@ -31,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findById(long categoryId) {
+        logger.info("Find by id {}",categoryId);
         Category persistCategory = categoryRepository.findById(categoryId)
                                                      .orElse(new Category());
         return categoryConverter.entityToDto(persistCategory);
@@ -38,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<CategoryDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         UserDto userDto = userService.getUser();
         Page<Category> categoryPage = categoryRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
                                                                                                .getId());
@@ -47,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
+        logger.info("Create");
         Category category = categoryConverter.dtoToEntity(categoryDto);
         Category persistCategory = categoryRepository.save(category);
         return categoryConverter.entityToDto(persistCategory);
@@ -54,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto update(CategoryDto categoryDto) {
+        logger.info("Update");
         Category category = categoryConverter.dtoToEntity(categoryDto);
         Category persistCategory = categoryRepository.findById(category.getId())
                                                      .orElse(new Category());

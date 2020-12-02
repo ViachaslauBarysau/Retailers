@@ -10,6 +10,8 @@ import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.repository.SupplierApplicationRepository;
 import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     private final SupplierApplicationConverter supplierApplicationConverter;
     private final UserConverter userConverter;
     private final UserService userService;
+    Logger logger = LoggerFactory.getLogger(SupplierApplicationServiceImpl.class);
 
     public SupplierApplicationServiceImpl(SupplierApplicationRepository supplierApplicationRepository, LocationProductRepository locationProductRepository, SupplierApplicationConverter supplierApplicationConverter, UserConverter userConverter, UserService userService) {
         this.supplierApplicationRepository = supplierApplicationRepository;
@@ -38,6 +41,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public SupplierApplicationDto findById(long supplierApplicationId) {
+        logger.info("Find by id {}", supplierApplicationId);
         SupplierApplication supplierApplication = supplierApplicationRepository.findById(supplierApplicationId)
                                                                                .orElse(new SupplierApplication());
 
@@ -46,6 +50,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public Page<SupplierApplicationDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         UserDto userDto = userService.getUser();
         Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
                                                                                                                                            .getId());
@@ -58,8 +63,10 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) throws BusinessException {
+        logger.info("Create");
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
         if (applicationNumberExists(supplierApplication.getApplicationNumber())) {
+            logger.error("Not unique number {}", supplierApplication.getApplicationNumber());
             throw new BusinessException("Application number should be unique");
         }
         SupplierApplication persistSupplierApplication = supplierApplicationRepository.save(supplierApplication);
@@ -69,6 +76,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public SupplierApplicationDto update(SupplierApplicationDto supplierApplicationDto) {
+        logger.info("Update");
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
         SupplierApplication persistSupplierApplication = supplierApplicationRepository
                 .findById(supplierApplication.getId())
@@ -82,6 +90,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public SupplierApplicationDto updateStatus(Long supplierApplicationId) throws BusinessException {
+        logger.info("Update status");
         UserDto userDto = userService.getUser();
         SupplierApplication supplierApplication = supplierApplicationRepository.findById(supplierApplicationId)
                                                                                .get();
@@ -89,6 +98,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
         Location location = supplierApplication.getDestinationLocation();
         Integer totalUnitAmount = supplierApplication.getTotalUnitNumber();
         if (totalUnitAmount > location.getAvailableCapacity()) {
+            logger.error("Not enough space in location {}",location.getId());
             throw new BusinessException("Not enough space in destination location");
         }
 
@@ -134,6 +144,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public boolean applicationNumberExists(Integer applicationNumber) {
+        logger.info("Check for existing number {}", applicationNumber);
         return supplierApplicationRepository.findByApplicationNumber(applicationNumber)
                                             .isPresent();
     }

@@ -10,6 +10,8 @@ import by.itechart.retailers.repository.InnerApplicationRepository;
 import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.service.interfaces.InnerApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,7 +30,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     private final UserConverter userConverter;
     private final UserService userService;
     private final LocationProductRepository locationProductRepository;
-
+    Logger logger = LoggerFactory.getLogger(InnerApplicationServiceImpl.class);
     @Autowired
     public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository, InnerApplicationConverter innerApplicationConverter, UserConverter userConverter, UserService userService, LocationProductRepository locationProductRepository) {
         this.innerApplicationRepository = innerApplicationRepository;
@@ -41,6 +43,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public InnerApplicationDto findById(long innerApplicationId) {
+        logger.info("Find by id {}",innerApplicationId);
         InnerApplication innerApplication = innerApplicationRepository.findById(innerApplicationId)
                                                                       .orElse(new InnerApplication());
 
@@ -49,6 +52,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public Page<InnerApplicationDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         UserDto userDto = userService.getUser();
         Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
                                                                                                                                   .getId());
@@ -60,9 +64,11 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Override
     @Transactional
     public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) throws BusinessException {
+        logger.info("Create");
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         Location location = innerApplication.getSourceLocation();
         if (applicationNumberExists(innerApplication.getApplicationNumber())) {
+            logger.error("Not unique number {}",innerApplication.getApplicationNumber());
             throw new BusinessException("Application number should be unique");
         }
         List<ApplicationRecord> applicationRecords = innerApplication.getRecordsList();
@@ -72,6 +78,8 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
             LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
 
             if (applicationRecord.getAmount() > locationProduct.getAmount()) {
+                logger.error("Not enough product {} in location", locationProduct.getProduct()
+                                                                                 .getId());
                 throw new BusinessException("Not enough amount of " + locationProduct.getAmount() + " in location " + locationProduct.getLocation()
                                                                                                                                      .getIdentifier());
             }
@@ -87,6 +95,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public InnerApplicationDto update(InnerApplicationDto innerApplicationDto) {
+        logger.info("Update");
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         InnerApplication persistInnerApplication = innerApplicationRepository.findById(innerApplication.getId())
                                                                              .orElse(new InnerApplication());
@@ -99,6 +108,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public InnerApplicationDto updateStatus(Long innerApplicationId) throws BusinessException {
+        logger.info("Update status {}",innerApplicationId);
         UserDto userDto = userService.getUser();
         InnerApplication innerApplication = innerApplicationRepository.findById(innerApplicationId)
                                                                       .get();

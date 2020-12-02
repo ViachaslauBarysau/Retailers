@@ -6,9 +6,10 @@ import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.*;
-import by.itechart.retailers.service.interfaces.CategoryService;
 import by.itechart.retailers.service.interfaces.ProductService;
 import by.itechart.retailers.service.interfaces.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final SupplierApplicationRepository supplierApplicationRepository;
     private final UserService userService;
     private final CategoryRepository categoryRepository;
-
+    Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, ApplicationRecordRepository applicationRecordRepository, LocationProductRepository locationProductRepository, InnerApplicationRepository innerApplicationRepository, SupplierApplicationRepository supplierApplicationRepository, UserService userService, CategoryRepository categoryRepository) {
@@ -47,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto findById(long productId) {
+        logger.info("Find by id {}", productId);
         Product product = productRepository.findById(productId)
                                            .orElse(new Product());
 
@@ -55,9 +57,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         UserDto userDto = userService.getUser();
         Page<Product> productPage = productRepository.findAllByCustomer_IdAndStatus(pageable, userDto.getCustomer()
-                                                                                                        .getId(), DeletedStatus.ACTIVE);
+                                                                                                     .getId(), DeletedStatus.ACTIVE);
         List<ProductDto> productDtos = productConverter.entityToDto(productPage.getContent());
         return new PageImpl<>(productDtos, pageable, productPage.getTotalElements());
 
@@ -65,9 +68,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto create(ProductDto productDto) throws BusinessException {
+        logger.info("Create");
         Product product = productConverter.dtoToEntity(productDto);
         if (upcExists(product.getUpc(), product.getCustomer()
                                                .getId(), DeletedStatus.ACTIVE)) {
+            logger.error("Not unique upc {}", product.getUpc() );
             throw new BusinessException("Upc should be unique");
         }
         Category category = findCategory(product);
@@ -79,6 +84,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(ProductDto productDto) {
+        logger.info("Update");
         Product product = productConverter.dtoToEntity(productDto);
         Product persistProduct = productRepository.findById(product.getId())
                                                   .orElse(new Product());
@@ -95,6 +101,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Category findCategory(Product product) {
+        logger.info("Find category");
         Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
                                                                                .getName(), product.getCustomer()
                                                                                                   .getId());
@@ -110,6 +117,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> delete(List<ProductDto> productDtos) {
+        logger.info("Delete");
         List<Product> products = productConverter.dtoToEntity(productDtos);
 
         for (Product product : products) {
@@ -153,6 +161,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean upcExists(Integer upc, Long customerId, DeletedStatus status) {
+        logger.info("Check for existing upc {}", upc);
         return productRepository.findByUpcAndCustomer_IdAndStatus(upc, customerId, status)
                                 .isPresent();
     }

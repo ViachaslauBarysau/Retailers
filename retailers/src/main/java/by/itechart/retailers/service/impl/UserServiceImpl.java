@@ -9,6 +9,8 @@ import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.UserRepository;
 import by.itechart.retailers.service.interfaces.SendingCredentialsService;
 import by.itechart.retailers.service.interfaces.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final CustomerConverter customerConverter;
     private final BCryptPasswordEncoder encoder;
     private final SendingCredentialsService sendingCredentialsService;
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, CustomerConverter customerConverter, @Lazy BCryptPasswordEncoder encoder, SendingCredentialsService sendingCredentialsService) {
@@ -49,9 +52,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> updateStatus(List<Long> userIds) {
+        logger.info("Update status {}", userIds.toString());
         List<User> users = userRepository.findAllById(userIds);
         for (User user : users) {
-            if(user.getLocation().getStatus()!= DeletedStatus.DELETED) {
+            if (user.getLocation()
+                    .getStatus() != DeletedStatus.DELETED) {
                 if (user.getUserStatus()
                         .equals(Status.ACTIVE)) {
                     user.setUserStatus(Status.DISABLED);
@@ -67,6 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<UserDto> findByBirthday(LocalDate date) {
+        logger.info("Find by birthday {}", date);
         List<User> users = userRepository.findAllByBirthdayAndUserStatus(date, Status.ACTIVE);
         return userConverter.entityToDto(users);
     }
@@ -74,6 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<UserDto> findAllByRole(Role role) {
+        logger.info("Find by role {}", role.toString());
         List<User> users = userRepository.findAllByUserRoleAndUserStatus(role, Status.ACTIVE);
         return userConverter.entityToDto(users);
     }
@@ -81,6 +88,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto getUser() {
+        logger.info("Get user");
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -90,12 +98,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto findByEmail(String email) {
+        logger.info("Find by email {}", email);
         User user = userRepository.findByEmail(email);
         return userConverter.entityToDto(user);
     }
 
     @Override
     public String generatePassword() {
+        logger.info("Generate password");
         String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
         Random random = new Random();
         char[] charPassword = new char[8];
@@ -113,11 +123,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String encodePassword(String password) {
+        logger.info("Encode password");
         return encoder.encode(password);
     }
 
     @Override
     public UserDto findById(long userId) {
+        logger.info("Find by id {}", userId);
         User user = userRepository.findById(userId)
                                   .orElse(new User());
 
@@ -126,6 +138,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         Page<User> userPage = userRepository.findAll(pageable);
         List<UserDto> userDtos = userConverter.entityToDto(userPage.getContent());
         return new PageImpl<>(userDtos, pageable, userPage.getTotalElements());
@@ -134,6 +147,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAllByCustomerId(Pageable pageable) {
+        logger.info("Find all by customer id");
         UserDto userDto = getUser();
         Page<User> customerEmployeesPage = userRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
                                                                                                 .getId());
@@ -142,6 +156,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto userDto) throws BusinessException {
+        logger.info("Create by admin");
         User user = userConverter.dtoToEntity(userDto);
         if (emailExists(user.getEmail())) {
             throw new BusinessException("Email should be unique");
@@ -157,8 +172,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(CustomerDto customerDto) throws BusinessException {
+        logger.info("Create by system admin");
         Customer customer = customerConverter.dtoToEntity(customerDto);
         if (emailExists(customer.getEmail())) {
+            logger.error("Not unique email {}",customer.getEmail());
             throw new BusinessException("Email should be unique");
         }
         User user = new User();
@@ -179,6 +196,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto userDto) {
+        logger.info("Update");
         User user = userConverter.dtoToEntity(userDto);
         User persistUser = userRepository.findById(user.getId())
                                          .orElse(new User());
@@ -202,12 +220,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean emailExists(String email) {
+        logger.info("Check for existing email {}", email);
         return userRepository.findUserByEmail(email)
                              .isPresent();
     }
 
     @Override
     public boolean loginExists(String login) {
+        logger.info("Check for existing login {}",login);
         return userRepository.findUserByLogin(login)
                              .isPresent();
     }

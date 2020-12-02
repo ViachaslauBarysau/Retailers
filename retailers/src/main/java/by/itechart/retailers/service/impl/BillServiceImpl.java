@@ -13,6 +13,8 @@ import by.itechart.retailers.repository.LocationProductRepository;
 import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.service.interfaces.BillService;
 import by.itechart.retailers.service.interfaces.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +32,7 @@ public class BillServiceImpl implements BillService {
     private final LocationProductRepository locationProductRepository;
     private final UserService userService;
     private final LocationRepository locationRepository;
+    Logger logger = LoggerFactory.getLogger(BillServiceImpl.class);
 
     @Autowired
     public BillServiceImpl(BillRepository billRepository, BillConverter billConverter, LocationProductRepository locationProductRepository, UserService userService, LocationRepository locationRepository) {
@@ -42,6 +45,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public BillDto findById(long billId) {
+        logger.info("Find by id: {}", billId);
         Bill bill = billRepository.findById(billId)
                                   .orElse(new Bill());
 
@@ -50,6 +54,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Page<BillDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         UserDto userDto = userService.getUser();
         List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
                                                                                   .getId());
@@ -61,6 +66,7 @@ public class BillServiceImpl implements BillService {
     @Override
     @Transactional
     public BillDto create(BillDto billDto) throws BusinessException {
+        logger.info("Create");
         Bill bill = billConverter.dtoToEntity(billDto);
         if (billNumberExists(bill.getBillNumber())) {
             throw new BusinessException("Bill number should be unique");
@@ -73,8 +79,11 @@ public class BillServiceImpl implements BillService {
             LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
 
             if (billRecord.getProductAmount() > locationProduct.getAmount()) {
-                throw new BusinessException("Not enough amount of " + locationProduct.getAmount() + " in location " + locationProduct.getLocation()
-                                                                                                                                     .getIdentifier());
+                logger.error("Not enough product {} in location", locationProduct.getProduct()
+                                                                                  .getId());
+                throw new BusinessException("Not enough amount of " + locationProduct.getProduct()
+                                                                                     .getLabel() + " in location " + locationProduct.getLocation()
+                                                                                                                                    .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
             location.setAvailableCapacity(availableCapacity - billRecord.getProduct()
@@ -87,6 +96,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public boolean billNumberExists(Integer billNumber) {
+        logger.info("Check for existing number {}",billNumber);
         return billRepository.findByBillNumber(billNumber)
                              .isPresent();
     }

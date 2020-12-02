@@ -8,6 +8,8 @@ import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.CustomerRepository;
 import by.itechart.retailers.service.interfaces.CustomerService;
 import by.itechart.retailers.service.interfaces.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,6 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerConverter customerConverter;
     private final UserService userService;
+    Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter customerConverter, UserService userService) {
@@ -32,6 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto findById(long customerId) {
+        logger.info("Find by id {}",customerId);
         Customer customer = customerRepository.findById(customerId)
                                               .orElse(new Customer());
         return customerConverter.entityToDto(customer);
@@ -39,6 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Page<CustomerDto> findAll(Pageable pageable) {
+        logger.info("Find all");
         Page<Customer> customerPage = customerRepository.findAll(pageable);
         List<CustomerDto> customerDtos = customerConverter.entityToDto(customerPage.getContent());
         return new PageImpl<>(customerDtos, pageable, customerPage.getTotalElements());
@@ -46,8 +51,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto create(CustomerDto customerDto) throws BusinessException {
+        logger.info("Create");
         Customer customer = customerConverter.dtoToEntity(customerDto);
         if (emailExists(customer.getEmail())) {
+            logger.error("Not unique email {}",customer.getEmail());
             throw new BusinessException("Email should be unique");
         }
         Customer persistsCustomer = customerRepository.save(customer);
@@ -57,6 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto update(CustomerDto customerDto) {
+        logger.info("Update");
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistCustomer = customerRepository.findById(customer.getId())
                                                      .orElse(new Customer());
@@ -70,6 +78,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDto> updateStatus(List<Long> customerIds) {
+        logger.info("Update status");
         List<Customer> customers = customerRepository.findAllById(customerIds);
         for (Customer customer : customers) {
             if (customer.getCustomerStatus()
@@ -85,6 +94,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean emailExists(String email) {
+        logger.info("Check for existing email {}",email);
         return customerRepository.findByEmail(email)
                                  .isPresent();
     }
