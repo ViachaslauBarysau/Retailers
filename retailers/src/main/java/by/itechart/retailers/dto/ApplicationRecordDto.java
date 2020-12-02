@@ -16,12 +16,16 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class ApplicationRecordDto {
+
     private Long id;
+
     @Valid
     private ProductDto product;
+
     @NotBlank(message = "Amount field can't be empty.")
     @Min(value = 0, message = "Amount must be equals or greater than 0.")
     private Integer amount;
+
     @NotBlank(message = "Cost can't be empty.")
     @DecimalMin(value = "0.01", message = "Cost must be greater than 0.")
     private BigDecimal cost;

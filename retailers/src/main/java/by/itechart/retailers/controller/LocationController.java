@@ -55,5 +55,4 @@ public class LocationController {
     public ResponseEntity delete(@RequestBody List<LocationDto> locationDtos) {
         return new ResponseEntity<>(locationService.delete(locationDtos), HttpStatus.OK);
     }
-
 }

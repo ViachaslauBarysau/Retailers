@@ -1,12 +1,10 @@
 package by.itechart.retailers.config;
 
 import by.itechart.retailers.security.jwt.JwtConfigurer;
-import by.itechart.retailers.security.jwt.JwtTokenFilter;
 import by.itechart.retailers.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,19 +50,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-               /* .and()
-                .authorizeRequests()
-                .antMatchers(LOGIN_ENDPOINT).permitAll()
-                .antMatchers(LOGOUT_ENDPOINT).permitAll()
-                .antMatchers(CUSTOMERS).hasAuthority("SYSTEM_ADMIN")
-                .antMatchers(LOCATIONS).hasAuthority("ADMIN")
-                .antMatchers(SUPPLIERS).hasAuthority("ADMIN")
-                .antMatchers(USERS).hasAuthority("ADMIN")
-                .antMatchers(PRODUCTS).hasAuthority("DISPATCHER")
-                .antMatchers(WRITE_OFF_ACTS).hasAuthority("DISPATCHER")
-                .antMatchers(WRITE_OFF_ACT_RECORDS).hasAuthority("DISPATCHER")
-                .anyRequest()
-                .authenticated()*/
+                /* .and()
+                 .authorizeRequests()
+                 .antMatchers(LOGIN_ENDPOINT).permitAll()
+                 .antMatchers(LOGOUT_ENDPOINT).permitAll()
+                 .antMatchers(CUSTOMERS).hasAuthority("SYSTEM_ADMIN")
+                 .antMatchers(LOCATIONS).hasAuthority("ADMIN")
+                 .antMatchers(SUPPLIERS).hasAuthority("ADMIN")
+                 .antMatchers(USERS).hasAuthority("ADMIN")
+                 .antMatchers(PRODUCTS).hasAuthority("DISPATCHER")
+                 .antMatchers(WRITE_OFF_ACTS).hasAuthority("DISPATCHER")
+                 .antMatchers(WRITE_OFF_ACT_RECORDS).hasAuthority("DISPATCHER")
+                 .anyRequest()
+                 .authenticated()*/
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }

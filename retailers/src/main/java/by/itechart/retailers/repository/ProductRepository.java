@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByUpcAndCustomer_IdAndStatus(Integer upc,Long customerId, DeletedStatus status);
 
-    Page<Product> findAllByCustomer_IdAndAndStatus(Pageable pageable, Long customerId, DeletedStatus status);
+    Page<Product> findAllByCustomer_IdAndStatus(Pageable pageable, Long customerId, DeletedStatus status);
 }

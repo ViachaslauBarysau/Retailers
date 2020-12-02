@@ -28,9 +28,7 @@ import java.util.Map;
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
-
     private final JwtTokenProvider jwtTokenProvider;
-
     private final UserService userService;
 
     @Autowired
@@ -55,7 +53,6 @@ public class AuthenticationController {
             Map<Object, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("user", user);
-
 
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {

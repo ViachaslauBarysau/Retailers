@@ -47,7 +47,6 @@ public class UserController {
         return new ResponseEntity<>(userService.update(userDto), HttpStatus.OK);
     }
 
-
     @DeleteMapping
     public ResponseEntity updateStatus(@RequestBody List<Long> userIds) {
         return new ResponseEntity<>(userService.updateStatus(userIds), HttpStatus.OK);

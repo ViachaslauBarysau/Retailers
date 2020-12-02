@@ -62,8 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
                                                      .orElse(new Customer());
 
         persistCustomer.setName(customer.getName());
-        //  persistCustomer.setRegistrationDate(customer.getRegistrationDate());
-        // persistCustomer.setCustomerStatus(customer.getCustomerStatus());
+        persistCustomer.setEmail(customer.getEmail());
         persistCustomer = customerRepository.save(persistCustomer);
 
         return customerConverter.entityToDto(persistCustomer);

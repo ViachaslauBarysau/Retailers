@@ -18,16 +18,23 @@ import java.util.List;
 @Data
 @Builder
 public class WriteOffActDto {
+
     private Long id;
+
     @Min(value = 0, message = "Wrong write-off act number.")
     private Integer writeOffActNumber;
+
     @Valid
     private List<WriteOffActRecordDto> writeOffActRecords;
+
     @Past(message = "Date and time of act can't be in the future.")
     private LocalDateTime actDateTime;
+
     @Min(value = 1, message = "Product amount must be equals or greater than 1.")
     private Integer totalProductAmount;
+
     private BigDecimal totalProductSum;
+
     @Valid
     private LocationDto location;
 }

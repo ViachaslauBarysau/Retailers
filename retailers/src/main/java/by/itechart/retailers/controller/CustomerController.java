@@ -19,7 +19,6 @@ public class CustomerController {
     @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-
     }
 
     @GetMapping
@@ -37,12 +36,10 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.create(customerDto), HttpStatus.CREATED);
     }
 
-
     @PutMapping
     public ResponseEntity update(@RequestBody CustomerDto customerDto) {
         return new ResponseEntity<>(customerService.update(customerDto), HttpStatus.CREATED);
     }
-
 
     @DeleteMapping
     public ResponseEntity updateStatus(@RequestBody List<Long> customerIds) {

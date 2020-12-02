@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDto> findAll(Pageable pageable) {
         UserDto userDto = userService.getUser();
-        Page<Product> productPage = productRepository.findAllByCustomer_IdAndAndStatus(pageable, userDto.getCustomer()
+        Page<Product> productPage = productRepository.findAllByCustomer_IdAndStatus(pageable, userDto.getCustomer()
                                                                                                         .getId(), DeletedStatus.ACTIVE);
         List<ProductDto> productDtos = productConverter.entityToDto(productPage.getContent());
         return new PageImpl<>(productDtos, pageable, productPage.getTotalElements());
