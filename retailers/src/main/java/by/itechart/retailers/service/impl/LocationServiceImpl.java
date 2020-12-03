@@ -113,9 +113,10 @@ public class LocationServiceImpl implements LocationService {
     public List<LocationDto> delete(List<LocationDto> locationDtos) {
         logger.info("Delete {}", locationDtos.toString());
         List<Location> locations = locationConverter.dtoToEntity(locationDtos);
-        Iterator<Location> location = locations.iterator();
-        while (location.hasNext()) {
-            Location persistLocation = locationRepository.findById(location.next().getId())
+        Iterator<Location> locationIterator = locations.iterator();
+        while (locationIterator.hasNext()) {
+            Location location=locationIterator.next();
+            Location persistLocation = locationRepository.findById(location.getId())
                                                          .get();
             if (userRepository.findAllByLocation_IdAndUserStatus(persistLocation.getId(), Status.ACTIVE)
                               .size() == 0) {
