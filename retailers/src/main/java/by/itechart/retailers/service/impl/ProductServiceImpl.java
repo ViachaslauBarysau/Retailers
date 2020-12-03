@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -119,10 +120,10 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> delete(List<ProductDto> productDtos) {
         logger.info("Delete");
         List<Product> products = productConverter.dtoToEntity(productDtos);
-
-        for (Product product : products) {
-            List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
-            List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
+        Iterator<Product> productIterator=products.iterator();
+        while(productIterator.hasNext()){
+            List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(productIterator.next());
+            List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(productIterator.next());
             List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
             List<InnerApplication> innerApplications = innerApplicationRepository.findAllByRecordsListIn(applicationRecords);
 
@@ -149,11 +150,11 @@ public class ProductServiceImpl implements ProductService {
                 continue;
             }
 
-            Optional<Product> productById = productRepository.findById(product.getId());
+            Optional<Product> productById = productRepository.findById(productIterator.next().getId());
             productById.ifPresent(prod -> {
                 prod.setStatus(DeletedStatus.DELETED);
                 productRepository.save(prod);
-                products.remove(product);
+                products.remove(productIterator.next());
             });
         }
         return productConverter.entityToDto(products);
