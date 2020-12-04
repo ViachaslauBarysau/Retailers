@@ -139,7 +139,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        Page<User> userPage = userRepository.findAll(pageable);
+        UserDto userDto = getUser();
+        Page<User> userPage = userRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
+                                                                                   .getId());
         List<UserDto> userDtos = userConverter.entityToDto(userPage.getContent());
         return new PageImpl<>(userDtos, pageable, userPage.getTotalElements());
 
@@ -175,7 +177,7 @@ public class UserServiceImpl implements UserService {
         logger.info("Create by system admin");
         Customer customer = customerConverter.dtoToEntity(customerDto);
         if (emailExists(customer.getEmail())) {
-            logger.error("Not unique email {}",customer.getEmail());
+            logger.error("Not unique email {}", customer.getEmail());
             throw new BusinessException("Email should be unique");
         }
         User user = new User();
@@ -227,7 +229,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean loginExists(String login) {
-        logger.info("Check for existing login {}",login);
+        logger.info("Check for existing login {}", login);
         return userRepository.findUserByLogin(login)
                              .isPresent();
     }

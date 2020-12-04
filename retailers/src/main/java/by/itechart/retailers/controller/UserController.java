@@ -27,11 +27,6 @@ public class UserController {
         return new ResponseEntity<>(userService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/customer_employees")
-    public ResponseEntity findAllCustomerEmployees(Pageable pageable) {
-        return new ResponseEntity<>(userService.findAllByCustomerId(pageable), HttpStatus.OK);
-    }
-
     @GetMapping(value = "/{userId}")
     public ResponseEntity findById(@PathVariable(name = "userId") Long userId) {
         return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);

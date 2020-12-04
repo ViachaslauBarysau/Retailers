@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -46,36 +47,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic()
                 .disable()
+                .cors()
+                .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and()
                 .csrf()
                 .disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                /* .and()
-                 .authorizeRequests()
-                 .antMatchers(LOGIN_ENDPOINT).permitAll()
-                 .antMatchers(LOGOUT_ENDPOINT).permitAll()
-                 .antMatchers(CUSTOMERS).hasAuthority("SYSTEM_ADMIN")
-                 .antMatchers(LOCATIONS).hasAuthority("ADMIN")
-                 .antMatchers(SUPPLIERS).hasAuthority("ADMIN")
-                 .antMatchers(USERS).hasAuthority("ADMIN")
-                 .antMatchers(PRODUCTS).hasAuthority("DISPATCHER")
-                 .antMatchers(WRITE_OFF_ACTS).hasAuthority("DISPATCHER")
-                 .antMatchers(WRITE_OFF_ACT_RECORDS).hasAuthority("DISPATCHER")
-                 .anyRequest()
-                 .authenticated()*/
+                .and()
+                .authorizeRequests()
+                .antMatchers(LOGIN_ENDPOINT).permitAll()
+                .antMatchers(LOGOUT_ENDPOINT).permitAll()
+                .antMatchers(CUSTOMERS).hasAuthority("SYSTEM_ADMIN")
+                .antMatchers(LOCATIONS).hasAuthority("ADMIN")
+                .antMatchers(SUPPLIERS).hasAuthority("ADMIN")
+                .antMatchers(USERS).hasAuthority("ADMIN")
+                .antMatchers(PRODUCTS).hasAuthority("DISPATCHER")
+                .antMatchers(WRITE_OFF_ACTS).hasAuthority("DISPATCHER")
+                .antMatchers(WRITE_OFF_ACT_RECORDS).hasAuthority("DISPATCHER")
+                .anyRequest()
+                .authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
-            }
-        };
-    }
 }
 
