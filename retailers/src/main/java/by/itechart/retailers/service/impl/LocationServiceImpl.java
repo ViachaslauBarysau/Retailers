@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -30,6 +31,7 @@ public class LocationServiceImpl implements LocationService {
     private final LocationConverter locationConverter;
     private final UserRepository userRepository;
     Logger logger = LoggerFactory.getLogger(LocationServiceImpl.class);
+
     @Autowired
     public LocationServiceImpl(UserService userService, LocationRepository locationRepository, LocationConverter locationConverter, UserRepository userRepository) {
         this.userService = userService;
@@ -41,7 +43,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationDto findById(long locationProductId) {
-        logger.info("Find by id {}",locationProductId);
+        logger.info("Find by id {}", locationProductId);
         Location location = locationRepository.findById(locationProductId)
                                               .orElse(new Location());
 
@@ -109,13 +111,17 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<LocationDto> delete(List<LocationDto> locationDtos) {
-        logger.info("Delete {}",locationDtos.toString());
+        logger.info("Delete {}", locationDtos.toString());
         List<Location> locations = locationConverter.dtoToEntity(locationDtos);
-        for (Location location : locations) {
-            if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE)
+        Iterator<Location> locationIterator = locations.iterator();
+        while (locationIterator.hasNext()) {
+            Location location=locationIterator.next();
+            Location persistLocation = locationRepository.findById(location.getId())
+                                                         .get();
+            if (userRepository.findAllByLocation_IdAndUserStatus(persistLocation.getId(), Status.ACTIVE)
                               .size() == 0) {
-                location.setStatus(DeletedStatus.DELETED);
-                locationRepository.save(location);
+                persistLocation.setStatus(DeletedStatus.DELETED);
+                locationRepository.save(persistLocation);
                 locations.remove(location);
             }
         }

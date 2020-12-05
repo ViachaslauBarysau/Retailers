@@ -17,8 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productConverter.dtoToEntity(productDto);
         if (upcExists(product.getUpc(), product.getCustomer()
                                                .getId(), DeletedStatus.ACTIVE)) {
-            logger.error("Not unique upc {}", product.getUpc() );
+            logger.error("Not unique upc {}", product.getUpc());
             throw new BusinessException("Upc should be unique");
         }
         Category category = findCategory(product);
@@ -119,8 +119,11 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> delete(List<ProductDto> productDtos) {
         logger.info("Delete");
         List<Product> products = productConverter.dtoToEntity(productDtos);
-
-        for (Product product : products) {
+        Iterator<Product> productIterator = products.iterator();
+        while (productIterator.hasNext()) {
+            Product product = productIterator.next();
+            Product persistProduct = productRepository.findById(product.getId())
+                                                      .get();
             List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
             List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
             List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
@@ -149,12 +152,10 @@ public class ProductServiceImpl implements ProductService {
                 continue;
             }
 
-            Optional<Product> productById = productRepository.findById(product.getId());
-            productById.ifPresent(prod -> {
-                prod.setStatus(DeletedStatus.DELETED);
-                productRepository.save(prod);
-                products.remove(product);
-            });
+            persistProduct.setStatus(DeletedStatus.DELETED);
+            productRepository.save(persistProduct);
+            products.remove(product);
+
         }
         return productConverter.entityToDto(products);
     }
