@@ -2,6 +2,7 @@ package by.itechart.retailers.dto;
 
 import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Status;
+import by.itechart.retailers.entity.SupplierWarehouse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +31,7 @@ public class SupplierDto {
     private String identifier;
 
     @Valid
-    private List<LocationDto> wareHouseList;
+    private List<SupplierWarehouse> wareHouseList;
 
     @Valid
     private CustomerDto customer;
