@@ -1,4 +1,4 @@
-package by.itechart.retailers;
+package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.CustomerConverter;
 import by.itechart.retailers.dto.CustomerDto;

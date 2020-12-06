@@ -33,7 +33,7 @@ public class BillDto {
     private LocalDateTime registrationDateTime;
 
     @Valid
-    private List<BillIRecordDto> recordList;
+    private List<BillRecordDto> recordList;
 
     @Min(value = 1, message = "Product amount must be greater than 0.")
     private Integer totalProductAmount;

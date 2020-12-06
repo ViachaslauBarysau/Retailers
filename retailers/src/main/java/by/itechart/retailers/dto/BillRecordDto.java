@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 @Builder
-public class BillIRecordDto {
+public class BillRecordDto {
 
     private Long id;
 

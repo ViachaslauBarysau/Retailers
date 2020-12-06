@@ -82,8 +82,7 @@ public class BillServiceImpl implements BillService {
                 logger.error("Not enough product {} in location", locationProduct.getProduct()
                                                                                   .getId());
                 throw new BusinessException("Not enough amount of " + locationProduct.getProduct()
-                                                                                     .getLabel() + " in location " + locationProduct.getLocation()
-                                                                                                                                    .getIdentifier());
+                                                                                     .getLabel() + " in location ");
             }
             Integer availableCapacity = location.getAvailableCapacity();
             location.setAvailableCapacity(availableCapacity - billRecord.getProduct()

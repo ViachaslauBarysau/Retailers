@@ -86,8 +86,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
                                                                                  .getId());
 
                 throw new BusinessException("Not enough amount of " + locationProduct.getProduct()
-                                                                                     .getLabel() + " in location " + locationProduct.getLocation()
-                                                                                                                                     .getIdentifier());
+                                                                                     .getLabel() + " in location ");
             }
             Integer availableCapacity = location.getAvailableCapacity();
             location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount() * writeOffActRecord.getProduct()
