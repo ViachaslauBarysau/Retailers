@@ -4,6 +4,8 @@ import by.itechart.retailers.dto.LocationProductDto;
 import by.itechart.retailers.service.interfaces.LocationProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ public class LocationProductController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = "cost", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(locationProductService.findAll(pageable), HttpStatus.OK);
     }
 
