@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -122,14 +123,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> delete(List<ProductDto> productDtos) {
+    public List<ProductDto> delete(List<Long> productIds) {
         logger.info("Delete");
-        List<Product> products = productConverter.dtoToEntity(productDtos);
-        Iterator<Product> productIterator = products.iterator();
-        while (productIterator.hasNext()) {
-            Product product = productIterator.next();
-            Product persistProduct = productRepository.findById(product.getId())
-                                                      .get();
+        List<Product> products=productRepository.findAllById(productIds);
+        List<Product> undeletedProducts=new ArrayList<>(products);
+        for(Product product:products){
             List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
             List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
             List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
@@ -158,12 +156,13 @@ public class ProductServiceImpl implements ProductService {
                 continue;
             }
 
-            persistProduct.setStatus(DeletedStatus.DELETED);
-            productRepository.save(persistProduct);
-            products.remove(product);
+            product.setStatus(DeletedStatus.DELETED);
+            productRepository.save(product);
+            undeletedProducts.remove(product);
+           // products.remove(product);
 
         }
-        return productConverter.entityToDto(products);
+        return productConverter.entityToDto(undeletedProducts);
     }
 
     @Override

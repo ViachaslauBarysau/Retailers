@@ -20,7 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -98,7 +98,8 @@ public class LocationServiceImpl implements LocationService {
 
         Location persistLocation = locationRepository.findById(location.getId())
                                                      .orElse(new Location());
-        if(!location.getIdentifier().equals(persistLocation.getIdentifier())) {
+        if (!location.getIdentifier()
+                     .equals(persistLocation.getIdentifier())) {
             if (identifierExists(location.getIdentifier())) {
                 logger.error("Not unique identifier {}", location.getIdentifier());
                 throw new BusinessException("Identifier should be unique");
@@ -116,22 +117,19 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<LocationDto> delete(List<LocationDto> locationDtos) {
-        logger.info("Delete {}", locationDtos.toString());
-        List<Location> locations = locationConverter.dtoToEntity(locationDtos);
-        Iterator<Location> locationIterator = locations.iterator();
-        while (locationIterator.hasNext()) {
-            Location location = locationIterator.next();
-            Location persistLocation = locationRepository.findById(location.getId())
-                                                         .get();
-            if (userRepository.findAllByLocation_IdAndUserStatus(persistLocation.getId(), Status.ACTIVE)
+    public List<LocationDto> delete(List<Long> locationIds) {
+        logger.info("Delete");
+        List<Location> locations=locationRepository.findAllById(locationIds);
+        List<Location> undeletedLocations = new ArrayList<>(locations);
+        for (Location location : locations) {
+            if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE)
                               .size() == 0) {
-                persistLocation.setStatus(DeletedStatus.DELETED);
-                locationRepository.save(persistLocation);
-                locations.remove(location);
+                location.setStatus(DeletedStatus.DELETED);
+                locationRepository.save(location);
+                undeletedLocations.remove(location);
             }
         }
-        return locationConverter.entityToDto(locations);
+        return locationConverter.entityToDto(undeletedLocations);
     }
 
     @Override

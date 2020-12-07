@@ -44,7 +44,7 @@ public class ProductController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestBody List<ProductDto> productDtos) {
-        return new ResponseEntity<>(productService.delete(productDtos), HttpStatus.OK);
+    public ResponseEntity delete(@RequestBody List<Long> productIds) {
+        return new ResponseEntity<>(productService.delete(productIds), HttpStatus.OK);
     }
 }

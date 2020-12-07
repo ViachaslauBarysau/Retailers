@@ -54,7 +54,7 @@ public class LocationController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestBody List<LocationDto> locationDtos) {
-        return new ResponseEntity<>(locationService.delete(locationDtos), HttpStatus.OK);
+    public ResponseEntity delete(@RequestBody List<Long> locationIds) {
+        return new ResponseEntity<>(locationService.delete(locationIds), HttpStatus.OK);
     }
 }

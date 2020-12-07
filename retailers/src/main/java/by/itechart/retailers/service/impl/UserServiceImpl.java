@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> updateStatus(List<Long> userIds) {
         logger.info("Update status {}", userIds.toString());
         List<User> users = userRepository.findAllById(userIds);
+        List<User> undeletedUsers=new ArrayList<>(users);
         for (User user : users) {
             if (user.getLocation()
                     .getStatus() != DeletedStatus.DELETED) {
@@ -64,9 +66,11 @@ public class UserServiceImpl implements UserService {
                     user.setUserStatus(Status.ACTIVE);
                 }
                 userRepository.save(user);
+            }else{
+                undeletedUsers.remove(user);
             }
         }
-        return userConverter.entityToDto(users);
+        return userConverter.entityToDto(undeletedUsers);
     }
 
     @Override

@@ -20,7 +20,7 @@ public interface LocationService {
 
     LocationDto update(LocationDto locationDto);
 
-    List<LocationDto> delete(List<LocationDto> locationDtos);
+    List<LocationDto> delete(List<Long> locationIds);
 
     boolean identifierExists(String identifier);
 
