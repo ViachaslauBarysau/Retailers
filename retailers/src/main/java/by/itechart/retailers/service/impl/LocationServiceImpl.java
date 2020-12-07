@@ -82,7 +82,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationDto create(LocationDto locationDto) throws BusinessException {
         logger.info("Create");
         Location location = locationConverter.dtoToEntity(locationDto);
-        if (identifierExists(location.getIdentifier())) {
+        if (identifierExistsForCreate(location.getIdentifier())) {
             logger.error("Not unique identifier {}", location.getIdentifier());
             throw new BusinessException("Identifier should be unique");
         }
@@ -95,6 +95,10 @@ public class LocationServiceImpl implements LocationService {
     public LocationDto update(LocationDto locationDto) {
         logger.info("Update");
         Location location = locationConverter.dtoToEntity(locationDto);
+        if (identifierExistsForUpdate(location.getIdentifier())) {
+            logger.error("Not unique identifier {}", location.getIdentifier());
+            throw new BusinessException("Identifier should be unique");
+        }
         Location persistLocation = locationRepository.findById(location.getId())
                                                      .orElse(new Location());
 
@@ -115,7 +119,7 @@ public class LocationServiceImpl implements LocationService {
         List<Location> locations = locationConverter.dtoToEntity(locationDtos);
         Iterator<Location> locationIterator = locations.iterator();
         while (locationIterator.hasNext()) {
-            Location location=locationIterator.next();
+            Location location = locationIterator.next();
             Location persistLocation = locationRepository.findById(location.getId())
                                                          .get();
             if (userRepository.findAllByLocation_IdAndUserStatus(persistLocation.getId(), Status.ACTIVE)
@@ -129,9 +133,23 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public boolean identifierExists(String identifier) {
+    public boolean identifierExistsForCreate(String identifier) {
         logger.info("Check for existing identifier {}", identifier);
-        return locationRepository.findByIdentifier(identifier)
-                                 .isPresent();
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return locationRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
+                                 .size() == 0;
+    }
+
+    @Override
+    public boolean identifierExistsForUpdate(String identifier) {
+        logger.info("Check for existing identifier {}", identifier);
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return locationRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
+                                 .size() == 1;
+
     }
 }

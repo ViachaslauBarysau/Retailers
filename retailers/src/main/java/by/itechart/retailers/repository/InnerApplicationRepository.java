@@ -2,6 +2,7 @@ package by.itechart.retailers.repository;
 
 import by.itechart.retailers.entity.ApplicationRecord;
 import by.itechart.retailers.entity.InnerApplication;
+import by.itechart.retailers.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,7 +16,7 @@ import java.util.Optional;
 public interface InnerApplicationRepository extends JpaRepository<InnerApplication, Long> {
     List<InnerApplication> findAllByRecordsListIn(List<ApplicationRecord> applicationRecords);
 
-    Optional<InnerApplication> findByApplicationNumber(Integer applicationNumber);
+    List<InnerApplication> findAllByApplicationNumberAndCreator(Integer applicationNumber, User creator);
 
     Page<InnerApplication> findAllByDestinationLocation_Id(Pageable pageable, Long locationId);
 }

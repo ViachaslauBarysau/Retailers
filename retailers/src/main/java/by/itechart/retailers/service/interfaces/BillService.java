@@ -12,5 +12,5 @@ public interface BillService {
 
     BillDto create(BillDto billDto) throws BusinessException;
 
-    boolean billNumberExists(Integer billNumber);
+    boolean billNumberExistsForCreate(Integer billNumber);
 }

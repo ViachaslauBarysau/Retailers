@@ -70,8 +70,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto create(ProductDto productDto) throws BusinessException {
         logger.info("Create");
         Product product = productConverter.dtoToEntity(productDto);
-        if (upcExists(product.getUpc(), product.getCustomer()
-                                               .getId(), DeletedStatus.ACTIVE)) {
+        if (upcExistsForCreate(product.getUpc())) {
             logger.error("Not unique upc {}", product.getUpc());
             throw new BusinessException("Upc should be unique");
         }
@@ -86,6 +85,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto update(ProductDto productDto) {
         logger.info("Update");
         Product product = productConverter.dtoToEntity(productDto);
+        if (upcExistsForUpdate(product.getUpc())) {
+            logger.error("Not unique upc {}", product.getUpc());
+            throw new BusinessException("Upc should be unique");
+        }
         Product persistProduct = productRepository.findById(product.getId())
                                                   .orElse(new Product());
 
@@ -104,7 +107,8 @@ public class ProductServiceImpl implements ProductService {
         logger.info("Find category");
         Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
                                                                                .getName(), product.getCustomer()
-                                                                                                  .getId());
+                                                                                                  .getId())
+                                              .get();
         if (category == null) {
             category = new Category();
             category.setCustomer(product.getCustomer());
@@ -161,10 +165,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean upcExists(Integer upc, Long customerId, DeletedStatus status) {
+    public boolean upcExistsForCreate(Integer upc) {
         logger.info("Check for existing upc {}", upc);
-        return productRepository.findByUpcAndCustomer_IdAndStatus(upc, customerId, status)
-                                .isPresent();
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return productRepository.findAllByUpcAndCustomer_IdAndStatus(upc, customerId, DeletedStatus.ACTIVE)
+                                .size() == 0;
+    }
+
+    @Override
+    public boolean upcExistsForUpdate(Integer upc) {
+        logger.info("Check for existing upc {}", upc);
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return productRepository.findAllByUpcAndCustomer_IdAndStatus(upc, customerId, DeletedStatus.ACTIVE)
+                                .size()== 1;
     }
 }
 

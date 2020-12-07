@@ -65,7 +65,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) throws BusinessException {
         logger.info("Create");
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
-        if (applicationNumberExists(supplierApplication.getApplicationNumber())) {
+        if (applicationNumberExistsForCreate(supplierApplication.getApplicationNumber())) {
             logger.error("Not unique number {}", supplierApplication.getApplicationNumber());
             throw new BusinessException("Application number should be unique");
         }
@@ -143,9 +143,10 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     }
 
     @Override
-    public boolean applicationNumberExists(Integer applicationNumber) {
-        logger.info("Check for existing number {}", applicationNumber);
-        return supplierApplicationRepository.findByApplicationNumber(applicationNumber)
-                                            .isPresent();
+    public boolean applicationNumberExistsForCreate(Integer applicationNumber) {
+        UserDto userDto = userService.getUser();
+        User user = userConverter.dtoToEntity(userDto);
+        return supplierApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)
+                                         .size() == 0;
     }
 }

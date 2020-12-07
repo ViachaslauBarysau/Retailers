@@ -14,4 +14,8 @@ public interface CategoryService {
     CategoryDto create(CategoryDto categoryDto);
 
     CategoryDto update(CategoryDto categoryDto);
+
+    boolean nameExistsForCreate(String name);
+
+    boolean nameExistsForUpdate(String name);
 }

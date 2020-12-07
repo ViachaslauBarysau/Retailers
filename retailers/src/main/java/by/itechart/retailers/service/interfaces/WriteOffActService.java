@@ -14,5 +14,5 @@ public interface WriteOffActService {
 
     WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException;
 
-    boolean writeOffActNumberExists(Integer writeOffActNumber);
+    boolean writeOffActNumberExistsForCreate(Integer writeOffActNumber);
 }

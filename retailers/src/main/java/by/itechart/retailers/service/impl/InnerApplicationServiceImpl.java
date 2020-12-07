@@ -31,6 +31,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     private final UserService userService;
     private final LocationProductRepository locationProductRepository;
     Logger logger = LoggerFactory.getLogger(InnerApplicationServiceImpl.class);
+
     @Autowired
     public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository, InnerApplicationConverter innerApplicationConverter, UserConverter userConverter, UserService userService, LocationProductRepository locationProductRepository) {
         this.innerApplicationRepository = innerApplicationRepository;
@@ -43,7 +44,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public InnerApplicationDto findById(long innerApplicationId) {
-        logger.info("Find by id {}",innerApplicationId);
+        logger.info("Find by id {}", innerApplicationId);
         InnerApplication innerApplication = innerApplicationRepository.findById(innerApplicationId)
                                                                       .orElse(new InnerApplication());
 
@@ -67,8 +68,8 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         logger.info("Create");
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         Location location = innerApplication.getSourceLocation();
-        if (applicationNumberExists(innerApplication.getApplicationNumber())) {
-            logger.error("Not unique number {}",innerApplication.getApplicationNumber());
+        if (applicationNumberExistsForCreate(innerApplication.getApplicationNumber())) {
+            logger.error("Not unique number {}", innerApplication.getApplicationNumber());
             throw new BusinessException("Application number should be unique");
         }
         List<ApplicationRecord> applicationRecords = innerApplication.getRecordsList();
@@ -108,7 +109,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public InnerApplicationDto updateStatus(Long innerApplicationId) throws BusinessException {
-        logger.info("Update status {}",innerApplicationId);
+        logger.info("Update status {}", innerApplicationId);
         UserDto userDto = userService.getUser();
         InnerApplication innerApplication = innerApplicationRepository.findById(innerApplicationId)
                                                                       .get();
@@ -160,8 +161,11 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     }
 
     @Override
-    public boolean applicationNumberExists(Integer applicationNumber) {
-        return innerApplicationRepository.findByApplicationNumber(applicationNumber)
-                                         .isPresent();
+    public boolean applicationNumberExistsForCreate(Integer applicationNumber) {
+        UserDto userDto = userService.getUser();
+        User user = userConverter.dtoToEntity(userDto);
+        return innerApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)
+                                         .size() == 0;
     }
+
 }

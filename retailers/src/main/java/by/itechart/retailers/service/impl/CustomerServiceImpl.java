@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto findById(long customerId) {
-        logger.info("Find by id {}",customerId);
+        logger.info("Find by id {}", customerId);
         Customer customer = customerRepository.findById(customerId)
                                               .orElse(new Customer());
         return customerConverter.entityToDto(customer);
@@ -52,11 +52,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto create(CustomerDto customerDto) throws BusinessException {
         logger.info("Create");
-        Customer customer = customerConverter.dtoToEntity(customerDto);
-        if (emailExists(customer.getEmail())) {
-            logger.error("Not unique email {}",customer.getEmail());
+        if (emailExistsForCreate(customerDto.getEmail())) {
+            logger.error("Not unique email {}", customerDto.getEmail());
             throw new BusinessException("Email should be unique");
         }
+        Customer customer = customerConverter.dtoToEntity(customerDto);
+
         Customer persistsCustomer = customerRepository.save(customer);
         userService.create(customerConverter.entityToDto(persistsCustomer));
         return customerConverter.entityToDto(persistsCustomer);
@@ -65,6 +66,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto update(CustomerDto customerDto) {
         logger.info("Update");
+        if (emailExistsForUpdate(customerDto.getEmail())) {
+            logger.error("Not unique email {}", customerDto.getEmail());
+            throw new BusinessException("Email should be unique");
+        }
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistCustomer = customerRepository.findById(customer.getId())
                                                      .orElse(new Customer());
@@ -93,10 +98,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean emailExists(String email) {
-        logger.info("Check for existing email {}",email);
-        return customerRepository.findByEmail(email)
-                                 .isPresent();
+    public boolean emailExistsForCreate(String email) {
+        logger.info("Check for existing email {}", email);
+        return customerRepository.findAllByEmail(email)
+                                 .size() == 0;
+    }
+
+    @Override
+    public boolean emailExistsForUpdate(String email) {
+        logger.info("Check for existing email {}", email);
+        return customerRepository.findAllByEmail(email)
+                                 .size() == 1;
     }
 
 }

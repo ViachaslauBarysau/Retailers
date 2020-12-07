@@ -86,6 +86,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean emailExistsForCreate(String email) {
+        logger.info("Check for existing email {}", email);
+        return userRepository.findAllByEmail(email)
+                             .size() == 0;
+    }
+
+    @Override
+    public boolean emailExistsForUpdate(String email) {
+        logger.info("Check for existing login {}", email);
+        return userRepository.findAllByEmail(email)
+                             .size() == 1;
+    }
+
+    @Override
+    public boolean loginExistsForCreate(String login) {
+        logger.info("Check for existing login {}", login);
+        return userRepository.findAllByLogin(login)
+                             .size() == 0;
+    }
+
+    @Override
+    public boolean loginExistsForUpdate(String login) {
+        logger.info("Check for existing login {}", login);
+        return userRepository.findAllByLogin(login)
+                             .size() == 1;
+    }
+
+    @Override
     @Transactional
     public UserDto getUser() {
         logger.info("Get user");
@@ -139,7 +167,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = getUser();
+        UserDto userDto = getUser();//доставать всех кроме админов
         Page<User> userPage = userRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
                                                                                    .getId());
         List<UserDto> userDtos = userConverter.entityToDto(userPage.getContent());
@@ -160,7 +188,7 @@ public class UserServiceImpl implements UserService {
     public UserDto create(UserDto userDto) throws BusinessException {
         logger.info("Create by admin");
         User user = userConverter.dtoToEntity(userDto);
-        if (emailExists(user.getEmail())) {
+        if (emailExistsForCreate(user.getEmail())) {
             throw new BusinessException("Email should be unique");
         }
         String password = generatePassword();
@@ -176,7 +204,7 @@ public class UserServiceImpl implements UserService {
     public UserDto create(CustomerDto customerDto) throws BusinessException {
         logger.info("Create by system admin");
         Customer customer = customerConverter.dtoToEntity(customerDto);
-        if (emailExists(customer.getEmail())) {
+        if (emailExistsForCreate(customer.getEmail())) {
             logger.error("Not unique email {}", customer.getEmail());
             throw new BusinessException("Email should be unique");
         }
@@ -184,7 +212,6 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(customerDto.getName());
         user.setLastName(customerDto.getName());
         user.setEmail(customerDto.getEmail());
-        user.setLogin(customerDto.getEmail());
         user.setCustomer(customer);
         String password = generatePassword();
         user.setPassword(password);
@@ -200,6 +227,14 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) {
         logger.info("Update");
         User user = userConverter.dtoToEntity(userDto);
+        if (emailExistsForUpdate(user.getEmail())) {
+            logger.error("Not unique email {}", user.getEmail());
+            throw new BusinessException("Email should be unique");
+        }
+        if (loginExistsForUpdate(user.getLogin())) {
+            logger.error("Not unique login {}", user.getLogin());
+            throw new BusinessException("Login should be unique");
+        }
         User persistUser = userRepository.findById(user.getId())
                                          .orElse(new User());
 
@@ -220,18 +255,5 @@ public class UserServiceImpl implements UserService {
         return userConverter.entityToDto(persistUser);
     }
 
-    @Override
-    public boolean emailExists(String email) {
-        logger.info("Check for existing email {}", email);
-        return userRepository.findUserByEmail(email)
-                             .isPresent();
-    }
-
-    @Override
-    public boolean loginExists(String login) {
-        logger.info("Check for existing login {}", login);
-        return userRepository.findUserByLogin(login)
-                             .isPresent();
-    }
 
 }
