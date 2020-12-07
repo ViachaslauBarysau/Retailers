@@ -92,6 +92,13 @@ public class WriteOffActServiceTest {
     @Test(expected = BusinessException.class)
     public void createTestBusinessExceptionBillNumber() {
         //given
+        Long customerId = 1L;
+        CustomerDto customer = CustomerDto.builder()
+                                          .id(customerId)
+                                          .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customer)
+                                 .build();
         List<WriteOffActRecordDto> writeOffActDtos = new ArrayList<>();
         WriteOffActDto writeOffActDto = WriteOffActDto.builder()
                                                       .writeOffActNumber(1)
@@ -102,18 +109,31 @@ public class WriteOffActServiceTest {
                                              .writeOffActNumber(1)
                                              .writeOffActRecords(writeOffActRecords)
                                              .build();
-
+        List<WriteOffAct> writeOffActs=new ArrayList<WriteOffAct>(){{
+            add(writeOffAct);
+        }};
         when(writeOffActConverter.dtoToEntity(writeOffActDto)).thenReturn(writeOffAct);
-        when(writeOffActRepository.findByWriteOffActNumber(writeOffAct.getWriteOffActNumber())).thenReturn(Optional.of(writeOffAct));
+        when(userService.getUser()).thenReturn(userDto);
+        when(writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId)).thenReturn(writeOffActs);
         //when
         writeOffActService.create(writeOffActDto);
         //than
         verify(writeOffActConverter).dtoToEntity(writeOffActDto);
+        verify(userService).getUser();
+        verify(writeOffActRepository).findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId);
+
     }
 
     @Test(expected = BusinessException.class)
     public void createTestBusinessExceptionProductAmount() {
         //given
+        Long customerId = 1L;
+        CustomerDto customer = CustomerDto.builder()
+                                          .id(customerId)
+                                          .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customer)
+                                 .build();
         Product product = Product.builder()
                                  .id(1L)
                                  .label("label")
@@ -148,7 +168,8 @@ public class WriteOffActServiceTest {
                                                          .build();
 
         when(writeOffActConverter.dtoToEntity(writeOffActDto)).thenReturn(writeOffAct);
-        assertThat(writeOffActRepository.findByWriteOffActNumber(writeOffAct.getWriteOffActNumber())).isEmpty();
+        when(userService.getUser()).thenReturn(userDto);
+        when(writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId)).thenReturn(new ArrayList<>());
         when(locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), writeOffActRecord.getProduct()
                                                                                                          .getId())).thenReturn(locationProduct);
         assertThat(writeOffActRecords.get(0)
@@ -163,7 +184,13 @@ public class WriteOffActServiceTest {
     public void createTest() {
         //given
         List<WriteOffActRecordDto> writeOffActRecordDtos = new ArrayList<>();
-
+        Long customerId = 1L;
+        CustomerDto customer = CustomerDto.builder()
+                                          .id(customerId)
+                                          .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customer)
+                                 .build();
 
         Location location = Location.builder()
                                     .availableCapacity(1)
@@ -200,7 +227,8 @@ public class WriteOffActServiceTest {
                                                          .build();
 
         when(writeOffActConverter.dtoToEntity(writeOffActDto)).thenReturn(writeOffAct);
-        assertThat(writeOffActRepository.findByWriteOffActNumber(writeOffAct.getWriteOffActNumber())).isEmpty();
+        when(userService.getUser()).thenReturn(userDto);
+        when(writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId)).thenReturn(new ArrayList<>());
         when(locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), writeOffActRecord.getProduct()
                                                                                                          .getId())).thenReturn(locationProduct);
         assertThat(writeOffActRecords.get(0)
@@ -213,3 +241,4 @@ public class WriteOffActServiceTest {
 
 
 }
+
