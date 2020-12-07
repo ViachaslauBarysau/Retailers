@@ -238,7 +238,5 @@ public class WriteOffActServiceTest {
         //than
         verify(writeOffActConverter).dtoToEntity(writeOffActDto);
     }
-
-
 }
 

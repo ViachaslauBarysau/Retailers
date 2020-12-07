@@ -38,10 +38,12 @@ public class CustomerServiceTest {
     @Test
     public void findAllTest() {
         //given
-        List<Customer> customers = new ArrayList<>();
-        customers.add(new Customer());
-        List<CustomerDto> customerDtos = new ArrayList<>();
-        customerDtos.add(new CustomerDto());
+        List<Customer> customers = new ArrayList<Customer>() {{
+            add(new Customer());
+        }};
+        List<CustomerDto> customerDtos = new ArrayList<CustomerDto>() {{
+            add(new CustomerDto());
+        }};
         PageRequest pageable = PageRequest.of(0, 1);
         Page<Customer> customerPage = new PageImpl<>(customers, pageable, 1);
 
@@ -73,16 +75,17 @@ public class CustomerServiceTest {
     @Test(expected = BusinessException.class)
     public void createTestBusinessException() {
         //given
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setEmail("string");
+        CustomerDto customerDto = CustomerDto.builder()
+                                             .email("string")
+                                             .build();
 
-        Customer customer = new Customer();
-        customer.setEmail("string");
+        Customer customer = Customer.builder()
+                                    .email("string")
+                                    .build();
+
         List<Customer> customers = new ArrayList<Customer>() {{
             add(customer);
         }};
-
-
         when(customerRepository.findAllByEmail(customer.getEmail())).thenReturn(customers);
         //when
         customerService.create(customerDto);
@@ -93,21 +96,19 @@ public class CustomerServiceTest {
     @Test
     public void createTest() {
         //given
-
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setEmail("string");
-        customerDto.setName("name");
-
-        Customer customer = new Customer();
-        customerDto.setEmail("string");
-        customerDto.setName("name");
+        CustomerDto customerDto = CustomerDto.builder()
+                                             .email("string")
+                                             .name("name")
+                                             .build();
+        Customer customer = Customer.builder()
+                                    .email("string")
+                                    .name("name")
+                                    .build();
         UserDto userDto = UserDto.builder()
                                  .id(1L)
                                  .customer(customerDto)
                                  .build();
         when(customerConverter.dtoToEntity(customerDto)).thenReturn(customer);
-
-
         when(customerConverter.dtoToEntity(customerDto)).thenReturn(customer);
         when(customerRepository.save(customer)).thenReturn(customer);
         when(customerConverter.entityToDto(customer)).thenReturn(customerDto);
@@ -123,7 +124,6 @@ public class CustomerServiceTest {
         CustomerDto customerDto = CustomerDto.builder()
                                              .email("string")
                                              .build();
-
         Customer customer = Customer.builder()
                                     .email("string")
                                     .build();
@@ -131,9 +131,7 @@ public class CustomerServiceTest {
         List<Customer> customers = new ArrayList<Customer>() {{
             add(customer);
         }};
-
         when(customerConverter.dtoToEntity(customerDto)).thenReturn(customer);
-
         when(customerRepository.findAllByEmail(customer.getEmail())).thenReturn(customers);
         //when
         customerService.update(customerDto);
@@ -149,7 +147,6 @@ public class CustomerServiceTest {
                                              .email("string")
                                              .id(1L)
                                              .build();
-
         Customer customer = Customer.builder()
                                     .name("name")
                                     .email("string")
@@ -173,10 +170,12 @@ public class CustomerServiceTest {
             add(1L);
             add(2L);
         }};
-        Customer customer1 =Customer.builder()
-                .customerStatus(Status.ACTIVE).build();
-        Customer customer2 =Customer.builder()
-                                    .customerStatus(Status.DISABLED).build();
+        Customer customer1 = Customer.builder()
+                                     .customerStatus(Status.ACTIVE)
+                                     .build();
+        Customer customer2 = Customer.builder()
+                                     .customerStatus(Status.DISABLED)
+                                     .build();
 
         List<Customer> customers = new ArrayList<Customer>() {{
             add(customer1);

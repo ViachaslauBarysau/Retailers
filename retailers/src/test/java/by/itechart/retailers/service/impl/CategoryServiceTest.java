@@ -41,10 +41,12 @@ public class CategoryServiceTest {
     public void findAllTest() {
         //given
         Long customerId = 1L;
-        List<Category> categories = new ArrayList<>();
-        categories.add(new Category());
-        List<CategoryDto> categoryDtos = new ArrayList<>();
-        categoryDtos.add(new CategoryDto());
+        List<Category> categories = new ArrayList<Category>() {{
+            add(new Category());
+        }};
+        List<CategoryDto> categoryDtos = new ArrayList<CategoryDto>() {{
+            add(new CategoryDto());
+        }};
         PageRequest pageable = PageRequest.of(0, 1);
         Page<Category> categoryPage = new PageImpl<>(categories, pageable, 1);
         CustomerDto customerDto = CustomerDto.builder()
@@ -83,12 +85,13 @@ public class CategoryServiceTest {
     @Test(expected = BusinessException.class)
     public void createTestBusinessExceptionName() {
         //given
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setName("name");
+        CategoryDto categoryDto = CategoryDto.builder()
+                                             .name("name")
+                                             .build();
 
-        Category category = new Category();
-        category.setName("name");
-
+        Category category = Category.builder()
+                                    .name("name")
+                                    .build();
         Long customerId = 1L;
         CustomerDto customer = CustomerDto.builder()
                                           .id(customerId)
@@ -111,12 +114,12 @@ public class CategoryServiceTest {
     @Test
     public void createTest() {
         //given
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setName("name");
-
-        Category category = new Category();
-        category.setName("name");
-
+        CategoryDto categoryDto = CategoryDto.builder()
+                                             .name("name")
+                                             .build();
+        Category category = Category.builder()
+                                    .name("name")
+                                    .build();
         Long customerId = 1L;
         CustomerDto customer = CustomerDto.builder()
                                           .id(customerId)
