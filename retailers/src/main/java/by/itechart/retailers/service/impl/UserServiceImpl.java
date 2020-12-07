@@ -86,31 +86,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean emailExistsForCreate(String email) {
+    public boolean emailExists(String email) {
         logger.info("Check for existing email {}", email);
         return userRepository.findAllByEmail(email)
                              .size() != 0;
     }
 
     @Override
-    public boolean emailExistsForUpdate(String email) {
-        logger.info("Check for existing login {}", email);
-        return userRepository.findAllByEmail(email)
-                             .size() != 1;
-    }
-
-    @Override
-    public boolean loginExistsForCreate(String login) {
+    public boolean loginExists(String login) {
         logger.info("Check for existing login {}", login);
         return userRepository.findAllByLogin(login)
                              .size() != 0;
-    }
-
-    @Override
-    public boolean loginExistsForUpdate(String login) {
-        logger.info("Check for existing login {}", login);
-        return userRepository.findAllByLogin(login)
-                             .size() != 1;
     }
 
     @Override
@@ -188,7 +174,7 @@ public class UserServiceImpl implements UserService {
     public UserDto create(UserDto userDto) throws BusinessException {
         logger.info("Create by admin");
         User user = userConverter.dtoToEntity(userDto);
-        if (emailExistsForCreate(user.getEmail())) {
+        if (emailExists(user.getEmail())) {
             throw new BusinessException("Email should be unique");
         }
         String password = generatePassword();
@@ -204,7 +190,7 @@ public class UserServiceImpl implements UserService {
     public UserDto create(CustomerDto customerDto) throws BusinessException {
         logger.info("Create by system admin");
         Customer customer = customerConverter.dtoToEntity(customerDto);
-        if (emailExistsForCreate(customer.getEmail())) {
+        if (emailExists(customer.getEmail())) {
             logger.error("Not unique email {}", customer.getEmail());
             throw new BusinessException("Email should be unique");
         }
@@ -227,17 +213,21 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) {
         logger.info("Update");
         User user = userConverter.dtoToEntity(userDto);
-        if (emailExistsForUpdate(user.getEmail())) {
-            logger.error("Not unique email {}", user.getEmail());
-            throw new BusinessException("Email should be unique");
-        }
-        if (loginExistsForUpdate(user.getLogin())) {
-            logger.error("Not unique login {}", user.getLogin());
-            throw new BusinessException("Login should be unique");
-        }
+
         User persistUser = userRepository.findById(user.getId())
                                          .orElse(new User());
-
+        if(!user.getEmail().equals(persistUser.getEmail())) {
+            if (emailExists(user.getEmail())) {
+                logger.error("Not unique email {}", user.getEmail());
+                throw new BusinessException("Email should be unique");
+            }
+        }
+        if(!user.getLogin().equals(persistUser.getLogin())) {
+            if (loginExists(user.getLogin())) {
+                logger.error("Not unique login {}", user.getLogin());
+                throw new BusinessException("Login should be unique");
+            }
+        }
         persistUser.setAddress(user.getAddress());
         persistUser.setBirthday(user.getBirthday());
         persistUser.setEmail(user.getEmail());

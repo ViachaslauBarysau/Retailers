@@ -18,8 +18,8 @@ public interface CustomerService {
 
     List<CustomerDto> updateStatus(List<Long> customerIds);
 
-    boolean emailExistsForCreate(String email);
+    boolean emailExists(String email);
 
-    boolean emailExistsForUpdate(String email);
+
 
 }

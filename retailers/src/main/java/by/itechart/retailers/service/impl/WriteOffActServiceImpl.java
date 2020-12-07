@@ -70,7 +70,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     public WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException {
         logger.info("Create");
         WriteOffAct writeOffAct = writeOffActConverter.dtoToEntity(writeOffActDto);
-        if (writeOffActNumberExistsForCreate(writeOffAct.getWriteOffActNumber())) {
+        if (writeOffActNumberExists(writeOffAct.getWriteOffActNumber())) {
             logger.error("Not unique number {}", writeOffAct.getWriteOffActNumber());
             throw new BusinessException("Write-off act number should be unique");
         }
@@ -99,7 +99,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     }
 
     @Override
-    public boolean writeOffActNumberExistsForCreate(Integer writeOffActNumber) {
+    public boolean writeOffActNumberExists(Integer writeOffActNumber) {
         logger.info("Check for existing number {}", writeOffActNumber);
         UserDto userDto = userService.getUser();
         Long customerId=userDto.getCustomer().getId();

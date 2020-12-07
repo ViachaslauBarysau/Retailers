@@ -18,7 +18,7 @@ public interface SupplierService {
 
     List<SupplierDto> updateStatus(List<Long> supplierIdsList);
 
-    boolean identifierExistsForCreate(String identifier);
+    boolean identifierExists(String identifier);
 
-    boolean identifierExistsForUpdate(String identifier);
+
 }

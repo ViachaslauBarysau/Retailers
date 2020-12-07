@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto create(ProductDto productDto) throws BusinessException {
         logger.info("Create");
         Product product = productConverter.dtoToEntity(productDto);
-        if (upcExistsForCreate(product.getUpc())) {
+        if (upcExists(product.getUpc())) {
             logger.error("Not unique upc {}", product.getUpc());
             throw new BusinessException("Upc should be unique");
         }
@@ -85,13 +85,15 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto update(ProductDto productDto) {
         logger.info("Update");
         Product product = productConverter.dtoToEntity(productDto);
-        if (upcExistsForUpdate(product.getUpc())) {
-            logger.error("Not unique upc {}", product.getUpc());
-            throw new BusinessException("Upc should be unique");
-        }
+
         Product persistProduct = productRepository.findById(product.getId())
                                                   .orElse(new Product());
-
+        if(!product.getUpc().equals(persistProduct.getUpc())) {
+            if (upcExists(product.getUpc())) {
+                logger.error("Not unique upc {}", product.getUpc());
+                throw new BusinessException("Upc should be unique");
+            }
+        }
         Category category = findCategory(product);
         persistProduct.setCategory(category);
         persistProduct.setLabel(product.getLabel());
@@ -165,7 +167,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean upcExistsForCreate(Integer upc) {
+    public boolean upcExists(Integer upc) {
         logger.info("Check for existing upc {}", upc);
         UserDto userDto = userService.getUser();
         Long customerId = userDto.getCustomer()
@@ -174,15 +176,7 @@ public class ProductServiceImpl implements ProductService {
                                 .size() != 0;
     }
 
-    @Override
-    public boolean upcExistsForUpdate(Integer upc) {
-        logger.info("Check for existing upc {}", upc);
-        UserDto userDto = userService.getUser();
-        Long customerId = userDto.getCustomer()
-                                 .getId();
-        return productRepository.findAllByUpcAndCustomer_IdAndStatus(upc, customerId, DeletedStatus.ACTIVE)
-                                .size()!= 1;
-    }
+
 }
 
 

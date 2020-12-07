@@ -82,7 +82,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationDto create(LocationDto locationDto) throws BusinessException {
         logger.info("Create");
         Location location = locationConverter.dtoToEntity(locationDto);
-        if (identifierExistsForCreate(location.getIdentifier())) {
+        if (identifierExists(location.getIdentifier())) {
             logger.error("Not unique identifier {}", location.getIdentifier());
             throw new BusinessException("Identifier should be unique");
         }
@@ -95,13 +95,15 @@ public class LocationServiceImpl implements LocationService {
     public LocationDto update(LocationDto locationDto) {
         logger.info("Update");
         Location location = locationConverter.dtoToEntity(locationDto);
-        if (identifierExistsForUpdate(location.getIdentifier())) {
-            logger.error("Not unique identifier {}", location.getIdentifier());
-            throw new BusinessException("Identifier should be unique");
-        }
+
         Location persistLocation = locationRepository.findById(location.getId())
                                                      .orElse(new Location());
-
+        if(!location.getIdentifier().equals(persistLocation.getIdentifier())) {
+            if (identifierExists(location.getIdentifier())) {
+                logger.error("Not unique identifier {}", location.getIdentifier());
+                throw new BusinessException("Identifier should be unique");
+            }
+        }
         persistLocation.setAddress(location.getAddress());
         persistLocation.setAvailableCapacity(location.getAvailableCapacity());
         persistLocation.setCustomer(location.getCustomer());
@@ -133,7 +135,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public boolean identifierExistsForCreate(String identifier) {
+    public boolean identifierExists(String identifier) {
         logger.info("Check for existing identifier {}", identifier);
         UserDto userDto = userService.getUser();
         Long customerId = userDto.getCustomer()
@@ -142,14 +144,5 @@ public class LocationServiceImpl implements LocationService {
                                  .size() != 0;
     }
 
-    @Override
-    public boolean identifierExistsForUpdate(String identifier) {
-        logger.info("Check for existing identifier {}", identifier);
-        UserDto userDto = userService.getUser();
-        Long customerId = userDto.getCustomer()
-                                 .getId();
-        return locationRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
-                                 .size() != 1;
 
-    }
 }

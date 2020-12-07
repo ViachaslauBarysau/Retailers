@@ -18,5 +18,5 @@ public interface SupplierApplicationService {
 
     SupplierApplicationDto updateStatus(Long supplierApplicationId) throws BusinessException;
 
-    boolean applicationNumberExistsForCreate(Integer applicationNumber);
+    boolean applicationNumberExists(Integer applicationNumber);
 }

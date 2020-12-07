@@ -19,7 +19,7 @@ public interface ProductService {
 
     List<ProductDto> delete(List<ProductDto> productDtos);
 
-    boolean upcExistsForCreate(Integer upc);
+    boolean upcExists(Integer upc);
 
-    boolean upcExistsForUpdate(Integer upc);
+
 }

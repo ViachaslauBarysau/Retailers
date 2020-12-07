@@ -68,7 +68,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         logger.info("Create");
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         Location location = innerApplication.getSourceLocation();
-        if (applicationNumberExistsForCreate(innerApplication.getApplicationNumber())) {
+        if (applicationNumberExists(innerApplication.getApplicationNumber())) {
             logger.error("Not unique number {}", innerApplication.getApplicationNumber());
             throw new BusinessException("Application number should be unique");
         }
@@ -161,7 +161,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     }
 
     @Override
-    public boolean applicationNumberExistsForCreate(Integer applicationNumber) {
+    public boolean applicationNumberExists(Integer applicationNumber) {
         UserDto userDto = userService.getUser();
         User user = userConverter.dtoToEntity(userDto);
         return innerApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)

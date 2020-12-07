@@ -22,8 +22,8 @@ public interface LocationService {
 
     List<LocationDto> delete(List<LocationDto> locationDtos);
 
-    boolean identifierExistsForCreate(String identifier);
+    boolean identifierExists(String identifier);
 
-    boolean identifierExistsForUpdate(String identifier);
+
 
 }

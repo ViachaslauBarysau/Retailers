@@ -69,7 +69,7 @@ public class BillServiceImpl implements BillService {
     public BillDto create(BillDto billDto) throws BusinessException {
         logger.info("Create");
         Bill bill = billConverter.dtoToEntity(billDto);
-        if (billNumberExistsForCreate(bill.getBillNumber())) {
+        if (billNumberExists(bill.getBillNumber())) {
             throw new BusinessException("Bill number should be unique");
         }
         Location location = bill.getLocation();
@@ -95,7 +95,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public boolean billNumberExistsForCreate(Integer billNumber) {
+    public boolean billNumberExists(Integer billNumber) {
         logger.info("Check for existing number {}", billNumber);
         UserDto userDto = userService.getUser();
         Long customerId=userDto.getCustomer().getId();

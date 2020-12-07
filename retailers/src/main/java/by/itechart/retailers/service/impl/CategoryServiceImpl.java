@@ -54,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
         logger.info("Create");
-        if (nameExistsForCreate(categoryDto.getName())) {
+        if (nameExists(categoryDto.getName())) {
             logger.error("Not unique name {}", categoryDto.getName());
             throw new BusinessException("Name should be unique");
         }
@@ -66,13 +66,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto update(CategoryDto categoryDto) {
         logger.info("Update");
-        if (nameExistsForUpdate(categoryDto.getName())) {
-            logger.error("Not unique name {}", categoryDto.getName());
-            throw new BusinessException("Name should be unique");
-        }
         Category category = categoryConverter.dtoToEntity(categoryDto);
         Category persistCategory = categoryRepository.findById(category.getId())
                                                      .orElse(new Category());
+        if(!category.getName().equals(persistCategory.getName())) {
+            if (nameExists(categoryDto.getName())) {
+                logger.error("Not unique name {}", categoryDto.getName());
+                throw new BusinessException("Name should be unique");
+            }
+        }
 
         persistCategory.setName(category.getName());
         persistCategory.setCategoryTax(category.getCategoryTax());
@@ -82,7 +84,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean nameExistsForCreate(String name) {
+    public boolean nameExists(String name) {
+        logger.info("Check for unique name {}",name);
         UserDto userDto = userService.getUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -90,12 +93,5 @@ public class CategoryServiceImpl implements CategoryService {
                                  .size() != 0;
     }
 
-    @Override
-    public boolean nameExistsForUpdate(String name) {
-        UserDto userDto = userService.getUser();
-        Long customerId = userDto.getCustomer()
-                                 .getId();
-        return categoryRepository.findAllByNameAndCustomer_Id(name, customerId)
-                                 .size() != 1;
-    }
+
 }

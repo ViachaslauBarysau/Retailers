@@ -52,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto create(CustomerDto customerDto) throws BusinessException {
         logger.info("Create");
-        if (emailExistsForCreate(customerDto.getEmail())) {
+        if (emailExists(customerDto.getEmail())) {
             logger.error("Not unique email {}", customerDto.getEmail());
             throw new BusinessException("Email should be unique");
         }
@@ -66,13 +66,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto update(CustomerDto customerDto) {
         logger.info("Update");
-        if (emailExistsForUpdate(customerDto.getEmail())) {
-            logger.error("Not unique email {}", customerDto.getEmail());
-            throw new BusinessException("Email should be unique");
-        }
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistCustomer = customerRepository.findById(customer.getId())
                                                      .orElse(new Customer());
+        if (!customer.getEmail().equals(persistCustomer.getEmail())) {
+            if (emailExists(customer.getEmail())) {
+                logger.error("Not unique email {}", customer.getEmail());
+                throw new BusinessException("Email should be unique");
+            }
+        }
 
         persistCustomer.setName(customer.getName());
         persistCustomer.setEmail(customer.getEmail());
@@ -98,17 +100,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean emailExistsForCreate(String email) {
+    public boolean emailExists(String email) {
         logger.info("Check for existing email {}", email);
         return customerRepository.findAllByEmail(email)
                                  .size() != 0;
     }
 
-    @Override
-    public boolean emailExistsForUpdate(String email) {
-        logger.info("Check for existing email {}", email);
-        return customerRepository.findAllByEmail(email)
-                                 .size() != 1;
-    }
 
 }

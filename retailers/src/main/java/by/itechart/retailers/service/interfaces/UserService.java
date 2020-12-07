@@ -37,13 +37,13 @@ public interface UserService {
 
     List<UserDto> findAllByRole(Role role);
 
-    boolean emailExistsForCreate(String email);
+    boolean emailExists(String email);
 
-    boolean emailExistsForUpdate(String email);
 
-    boolean loginExistsForCreate(String login);
 
-    boolean loginExistsForUpdate(String login);
+    boolean loginExists(String login);
+
+
 
 
 }

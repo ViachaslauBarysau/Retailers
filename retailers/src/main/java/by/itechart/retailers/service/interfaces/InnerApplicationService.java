@@ -16,6 +16,6 @@ public interface InnerApplicationService {
 
     InnerApplicationDto updateStatus(Long innerApplicationId) throws BusinessException;
 
-    boolean applicationNumberExistsForCreate(Integer applicationNumber);
+    boolean applicationNumberExists(Integer applicationNumber);
 
 }
