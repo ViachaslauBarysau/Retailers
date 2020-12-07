@@ -63,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(LOGIN_ENDPOINT)
                 .permitAll()
                 .antMatchers(LOGOUT_ENDPOINT)
-                .permitAll()
+                .hasAnyAuthority("SYSTEM_ADMIN", "DIRECTOR", "WAREHOUSE_MANAGER", "SHOP_MANAGER", "DISPATCHER", "ADMIN")
                 .antMatchers(BILLS)
                 .hasAnyAuthority("DIRECTOR", "SHOP_MANAGER")
                 .antMatchers(CATEGORIES)
