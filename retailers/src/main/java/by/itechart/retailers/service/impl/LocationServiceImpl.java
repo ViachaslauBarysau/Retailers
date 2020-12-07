@@ -139,7 +139,7 @@ public class LocationServiceImpl implements LocationService {
         Long customerId = userDto.getCustomer()
                                  .getId();
         return locationRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
-                                 .size() == 0;
+                                 .size() != 0;
     }
 
     @Override
@@ -149,7 +149,7 @@ public class LocationServiceImpl implements LocationService {
         Long customerId = userDto.getCustomer()
                                  .getId();
         return locationRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
-                                 .size() == 1;
+                                 .size() != 1;
 
     }
 }

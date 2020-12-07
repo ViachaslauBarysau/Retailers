@@ -104,7 +104,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
         UserDto userDto = userService.getUser();
         Long customerId=userDto.getCustomer().getId();
         return writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffActNumber, customerId)
-                             .size() == 0;
+                             .size() != 0;
     }
 
 }

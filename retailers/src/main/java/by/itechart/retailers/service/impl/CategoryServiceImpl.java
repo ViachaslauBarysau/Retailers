@@ -87,7 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
         Long customerId = userDto.getCustomer()
                                  .getId();
         return categoryRepository.findAllByNameAndCustomer_Id(name, customerId)
-                                 .size() == 0;
+                                 .size() != 0;
     }
 
     @Override
@@ -96,6 +96,6 @@ public class CategoryServiceImpl implements CategoryService {
         Long customerId = userDto.getCustomer()
                                  .getId();
         return categoryRepository.findAllByNameAndCustomer_Id(name, customerId)
-                                 .size() == 1;
+                                 .size() != 1;
     }
 }

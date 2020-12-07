@@ -171,7 +171,7 @@ public class ProductServiceImpl implements ProductService {
         Long customerId = userDto.getCustomer()
                                  .getId();
         return productRepository.findAllByUpcAndCustomer_IdAndStatus(upc, customerId, DeletedStatus.ACTIVE)
-                                .size() == 0;
+                                .size() != 0;
     }
 
     @Override
@@ -181,7 +181,7 @@ public class ProductServiceImpl implements ProductService {
         Long customerId = userDto.getCustomer()
                                  .getId();
         return productRepository.findAllByUpcAndCustomer_IdAndStatus(upc, customerId, DeletedStatus.ACTIVE)
-                                .size()== 1;
+                                .size()!= 1;
     }
 }
 

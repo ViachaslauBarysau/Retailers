@@ -36,7 +36,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SupplierDto findById(long supplierId) {
-        logger.info("Find by id {}",supplierId);
+        logger.info("Find by id {}", supplierId);
         Supplier supplier = supplierRepository.findById(supplierId)
                                               .orElse(new Supplier());
 
@@ -58,7 +58,7 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierDto create(SupplierDto supplierDto) throws BusinessException {
         logger.info("Create");
         Supplier supplier = supplierConverter.dtoToEntity(supplierDto);
-        if (identifierExists(supplier.getIdentifier())) {
+        if (identifierExistsForCreate(supplier.getIdentifier())) {
             logger.error("Not unique identifier {}", supplier.getIdentifier());
             throw new BusinessException("Identifier should be unique");
         }
@@ -71,6 +71,10 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierDto update(SupplierDto supplierDto) {
         logger.info("Update");
         Supplier supplier = supplierConverter.dtoToEntity(supplierDto);
+        if (identifierExistsForUpdate(supplier.getIdentifier())) {
+            logger.error("Not unique identifier {}", supplier.getIdentifier());
+            throw new BusinessException("Identifier should be unique");
+        }
         Supplier persistSupplier = supplierRepository.findById(supplier.getId())
                                                      .orElse(new Supplier());
 
@@ -100,9 +104,22 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public boolean identifierExists(String identifier) {
+    public boolean identifierExistsForCreate(String identifier) {
         logger.info("Check for exiting identifier {}", identifier);
-        return supplierRepository.findByIdentifier(identifier)
-                                 .isPresent();
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return supplierRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
+                                 .size() != 0;
+    }
+
+    @Override
+    public boolean identifierExistsForUpdate(String identifier) {
+        logger.info("Check for exiting identifier {}", identifier);
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return supplierRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
+                                 .size() != 1;
     }
 }

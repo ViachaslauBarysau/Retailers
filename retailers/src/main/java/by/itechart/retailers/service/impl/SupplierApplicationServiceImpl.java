@@ -147,6 +147,6 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
         UserDto userDto = userService.getUser();
         User user = userConverter.dtoToEntity(userDto);
         return supplierApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)
-                                         .size() == 0;
+                                         .size() != 0;
     }
 }

@@ -101,14 +101,14 @@ public class CustomerServiceImpl implements CustomerService {
     public boolean emailExistsForCreate(String email) {
         logger.info("Check for existing email {}", email);
         return customerRepository.findAllByEmail(email)
-                                 .size() == 0;
+                                 .size() != 0;
     }
 
     @Override
     public boolean emailExistsForUpdate(String email) {
         logger.info("Check for existing email {}", email);
         return customerRepository.findAllByEmail(email)
-                                 .size() == 1;
+                                 .size() != 1;
     }
 
 }

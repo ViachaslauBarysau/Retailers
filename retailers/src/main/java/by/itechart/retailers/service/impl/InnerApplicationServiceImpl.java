@@ -165,7 +165,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         UserDto userDto = userService.getUser();
         User user = userConverter.dtoToEntity(userDto);
         return innerApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)
-                                         .size() == 0;
+                                         .size() != 0;
     }
 
 }

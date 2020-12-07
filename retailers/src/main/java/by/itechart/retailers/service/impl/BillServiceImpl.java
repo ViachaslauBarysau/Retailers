@@ -99,7 +99,7 @@ public class BillServiceImpl implements BillService {
         logger.info("Check for existing number {}", billNumber);
         UserDto userDto = userService.getUser();
         Long customerId=userDto.getCustomer().getId();
-        return billRepository.findAllByBillNumberAAndCustomer_Id(billNumber, customerId)
-                             .size() == 0;
+        return billRepository.findAllByBillNumberAndCustomer_Id(billNumber, customerId)
+                             .size() != 0;
     }
 }

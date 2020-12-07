@@ -89,28 +89,28 @@ public class UserServiceImpl implements UserService {
     public boolean emailExistsForCreate(String email) {
         logger.info("Check for existing email {}", email);
         return userRepository.findAllByEmail(email)
-                             .size() == 0;
+                             .size() != 0;
     }
 
     @Override
     public boolean emailExistsForUpdate(String email) {
         logger.info("Check for existing login {}", email);
         return userRepository.findAllByEmail(email)
-                             .size() == 1;
+                             .size() != 1;
     }
 
     @Override
     public boolean loginExistsForCreate(String login) {
         logger.info("Check for existing login {}", login);
         return userRepository.findAllByLogin(login)
-                             .size() == 0;
+                             .size() != 0;
     }
 
     @Override
     public boolean loginExistsForUpdate(String login) {
         logger.info("Check for existing login {}", login);
         return userRepository.findAllByLogin(login)
-                             .size() == 1;
+                             .size() != 1;
     }
 
     @Override
