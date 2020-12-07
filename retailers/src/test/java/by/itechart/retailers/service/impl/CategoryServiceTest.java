@@ -161,8 +161,8 @@ public class CategoryServiceTest {
                                  .build();
         List<Category> categories = new ArrayList<Category>() {{
             add(category);
-            add(category);
         }};
+        when(categoryConverter.dtoToEntity(categoryDto)).thenReturn(category);
         when(userService.getUser()).thenReturn(userDto);
         when(categoryRepository.findAllByNameAndCustomer_Id(category.getName(), customerId)).thenReturn(categories);
         //when
@@ -193,12 +193,8 @@ public class CategoryServiceTest {
         UserDto userDto = UserDto.builder()
                                  .customer(customerDto)
                                  .build();
-        List<Category> categories = new ArrayList<Category>() {{
-            add(category);
-        }};
+
         when(categoryConverter.dtoToEntity(categoryDto)).thenReturn(category);
-        when(userService.getUser()).thenReturn(userDto);
-        when(categoryRepository.findAllByNameAndCustomer_Id(category.getName(), customerId)).thenReturn(categories);
         when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
         //when
         categoryService.update(categoryDto);
