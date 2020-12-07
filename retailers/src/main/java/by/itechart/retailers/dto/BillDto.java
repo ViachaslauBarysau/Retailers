@@ -41,5 +41,6 @@ public class BillDto {
     @Min(value = 1, message = "Unit number must be greater than 0.")
     private BigDecimal totalPrice;
 
+    @Valid
     private CustomerDto customer;
 }
