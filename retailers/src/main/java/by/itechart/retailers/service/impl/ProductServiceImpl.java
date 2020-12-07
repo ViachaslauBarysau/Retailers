@@ -166,7 +166,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean upcExists(Integer upc) {
+    public boolean upcExists(Long upc) {
         logger.info("Check for existing upc {}", upc);
         UserDto userDto = userService.getUser();
         Long customerId = userDto.getCustomer()

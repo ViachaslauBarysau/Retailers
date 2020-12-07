@@ -19,7 +19,7 @@ public interface ProductService {
 
     List<ProductDto> delete(List<Long> productIds);
 
-    boolean upcExists(Integer upc);
+    boolean upcExists(Long upc);
 
 
 }

@@ -1,5 +1,6 @@
 package by.itechart.retailers.dto;
 
+import by.itechart.retailers.annotation.Upc;
 import by.itechart.retailers.entity.DeletedStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +19,8 @@ public class ProductDto {
 
     private Long id;
 
-    @Min(value = 0, message = "Wrong upc number.")
-    private Integer upc;
+    @Upc
+    private Long upc;
 
     @NotBlank(message = "Label can't be empty.")
     private String label;

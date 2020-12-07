@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findAllByUpcAndCustomer_IdAndStatus(Integer upc,Long customerId, DeletedStatus status);
+    List<Product> findAllByUpcAndCustomer_IdAndStatus(Long upc,Long customerId, DeletedStatus status);
 
     Page<Product> findAllByCustomer_IdAndStatus(Pageable pageable, Long customerId, DeletedStatus status);
 }

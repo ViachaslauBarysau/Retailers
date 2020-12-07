@@ -20,7 +20,7 @@ public class Product implements Serializable {
     private Long id;
 
     @Column(name = "upc")
-    private Integer upc;
+    private Long upc;
 
     @Column(name = "label")
     private String label;
