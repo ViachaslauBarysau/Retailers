@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
-    Page<User> findAllByCustomer_Id(Pageable pageable, Long id);
+    Page<User> findAllByCustomer_IdAndUserRoleIsNotContaining(Pageable pageable, Long id, Role role);
 
     List<User> findAllByLocation_IdAndUserStatus(Long locationId, Status status);
 

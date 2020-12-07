@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> updateStatus(List<Long> userIds) {
         logger.info("Update status {}", userIds.toString());
         List<User> users = userRepository.findAllById(userIds);
-        List<User> undeletedUsers=new ArrayList<>(users);
+        List<User> undeletedUsers = new ArrayList<>(users);
         for (User user : users) {
             if (user.getLocation()
                     .getStatus() != DeletedStatus.DELETED) {
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
                     user.setUserStatus(Status.ACTIVE);
                 }
                 userRepository.save(user);
-            }else{
+            } else {
                 undeletedUsers.remove(user);
             }
         }
@@ -158,12 +158,13 @@ public class UserServiceImpl implements UserService {
     public Page<UserDto> findAll(Pageable pageable) {
         logger.info("Find all");
         UserDto userDto = getUser();//доставать всех кроме админов
-        Page<User> userPage = userRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
-                                                                                   .getId());
+        Page<User> userPage = userRepository.findAllByCustomer_IdAndUserRoleIsNotContaining(pageable, userDto.getCustomer()
+                                                                                                             .getId(), Role.ADMIN);
         List<UserDto> userDtos = userConverter.entityToDto(userPage.getContent());
         return new PageImpl<>(userDtos, pageable, userPage.getTotalElements());
 
     }
+/*
 
     @Override
     public List<UserDto> findAllByCustomerId(Pageable pageable) {
@@ -173,6 +174,7 @@ public class UserServiceImpl implements UserService {
                                                                                                 .getId());
         return userConverter.entityToDto(customerEmployeesPage.toList());
     }
+*/
 
     @Override
     public UserDto create(UserDto userDto) throws BusinessException {
@@ -220,13 +222,15 @@ public class UserServiceImpl implements UserService {
 
         User persistUser = userRepository.findById(user.getId())
                                          .orElse(new User());
-        if(!user.getEmail().equals(persistUser.getEmail())) {
+        if (!user.getEmail()
+                 .equals(persistUser.getEmail())) {
             if (emailExists(user.getEmail())) {
                 logger.error("Not unique email {}", user.getEmail());
                 throw new BusinessException("Email should be unique");
             }
         }
-        if(!user.getLogin().equals(persistUser.getLogin())) {
+        if (!user.getLogin()
+                 .equals(persistUser.getLogin())) {
             if (loginExists(user.getLogin())) {
                 logger.error("Not unique login {}", user.getLogin());
                 throw new BusinessException("Login should be unique");
