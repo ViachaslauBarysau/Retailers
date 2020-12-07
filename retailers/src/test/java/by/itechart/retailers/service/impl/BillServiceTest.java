@@ -92,6 +92,13 @@ public class BillServiceTest {
     @Test(expected = BusinessException.class)
     public void createTestBusinessExceptionBillNumber() {
         //given
+        Long customerId = 1L;
+        CustomerDto customer = CustomerDto.builder()
+                                          .id(customerId)
+                                          .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customer)
+                                 .build();
         List<BillRecordDto> billRecordDtos = new ArrayList<>();
         BillDto billDto = BillDto.builder()
                                  .billNumber(1)
@@ -102,18 +109,30 @@ public class BillServiceTest {
                         .billNumber(1)
                         .recordList(billRecords)
                         .build();
-
+        List<Bill> bills = new ArrayList<Bill>() {{
+            add(bill);
+        }};
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
-        when(billRepository.findByBillNumber(bill.getBillNumber())).thenReturn(Optional.of(bill));
+        when(userService.getUser()).thenReturn(userDto);
+        when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(bills);
         //when
         billService.create(billDto);
         //than
         verify(billConverter).dtoToEntity(billDto);
+        verify(userService).getUser();
+        verify(billRepository).findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId);
     }
 
     @Test(expected = BusinessException.class)
     public void createTestBusinessExceptionProductAmount() {
         //given
+        Long customerId = 1L;
+        CustomerDto customer = CustomerDto.builder()
+                                          .id(customerId)
+                                          .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customer)
+                                 .build();
         Product product = Product.builder()
                                  .id(1L)
                                  .label("label")
@@ -148,7 +167,8 @@ public class BillServiceTest {
                                                          .build();
 
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
-        assertThat(billRepository.findByBillNumber(bill.getBillNumber())).isEmpty();
+        when(userService.getUser()).thenReturn(userDto);
+        when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(new ArrayList<>());
         when(locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), billRecord.getProduct()
                                                                                                   .getId())).thenReturn(locationProduct);
         assertThat(billRecords.get(0)
@@ -164,7 +184,13 @@ public class BillServiceTest {
         //given
         List<BillRecordDto> billRecordDtos = new ArrayList<>();
 
-
+        Long customerId = 1L;
+        CustomerDto customer = CustomerDto.builder()
+                                          .id(customerId)
+                                          .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customer)
+                                 .build();
         Location location = Location.builder()
                                     .availableCapacity(1)
                                     .id(1L)
@@ -200,7 +226,8 @@ public class BillServiceTest {
                                                          .build();
 
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
-        assertThat(billRepository.findByBillNumber(bill.getBillNumber())).isEmpty();
+        when(userService.getUser()).thenReturn(userDto);
+        when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(new ArrayList<>());
         when(locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), billRecord.getProduct()
                                                                                                   .getId())).thenReturn(locationProduct);
         assertThat(billRecords.get(0)
