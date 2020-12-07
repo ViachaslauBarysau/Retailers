@@ -1,11 +1,10 @@
 package by.itechart.retailers.repository;
 
 import by.itechart.retailers.entity.ApplicationRecord;
-import by.itechart.retailers.entity.InnerApplication;
 import by.itechart.retailers.entity.SupplierApplication;
+import by.itechart.retailers.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +16,7 @@ public interface SupplierApplicationRepository extends JpaRepository<SupplierApp
 
     List<SupplierApplication> findAllByRecordsListIn(List<ApplicationRecord> applicationRecords);
 
-    Optional<SupplierApplication> findByApplicationNumber(Integer applicationNumber);
+    List<SupplierApplication> findAllByApplicationNumberAndCreator(Integer applicationNumber, User creator);
 
-    Page<SupplierApplication> findAllByDestinationLocation_Id(Pageable pageable, Long locationId );
+    Page<SupplierApplication> findAllByDestinationLocation_Id(Pageable pageable, Long locationId);
 }

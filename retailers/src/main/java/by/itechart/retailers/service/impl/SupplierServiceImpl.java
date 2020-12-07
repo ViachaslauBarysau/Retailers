@@ -36,7 +36,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SupplierDto findById(long supplierId) {
-        logger.info("Find by id {}",supplierId);
+        logger.info("Find by id {}", supplierId);
         Supplier supplier = supplierRepository.findById(supplierId)
                                               .orElse(new Supplier());
 
@@ -71,9 +71,15 @@ public class SupplierServiceImpl implements SupplierService {
     public SupplierDto update(SupplierDto supplierDto) {
         logger.info("Update");
         Supplier supplier = supplierConverter.dtoToEntity(supplierDto);
+
         Supplier persistSupplier = supplierRepository.findById(supplier.getId())
                                                      .orElse(new Supplier());
-
+        if(!supplier.getIdentifier().equals(persistSupplier.getIdentifier())) {
+            if (identifierExists(supplier.getIdentifier())) {
+                logger.error("Not unique identifier {}", supplier.getIdentifier());
+                throw new BusinessException("Identifier should be unique");
+            }
+        }
         persistSupplier.setFullName(supplier.getFullName());
         persistSupplier.setWareHouseList(supplier.getWareHouseList());
         persistSupplier.setCustomer(supplier.getCustomer());
@@ -102,7 +108,12 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public boolean identifierExists(String identifier) {
         logger.info("Check for exiting identifier {}", identifier);
-        return supplierRepository.findByIdentifier(identifier)
-                                 .isPresent();
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return supplierRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
+                                 .size() != 0;
     }
+
+
 }

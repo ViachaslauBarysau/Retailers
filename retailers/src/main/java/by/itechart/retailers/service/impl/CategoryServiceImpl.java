@@ -4,6 +4,7 @@ import by.itechart.retailers.converter.CategoryConverter;
 import by.itechart.retailers.dto.CategoryDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Category;
+import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.CategoryRepository;
 import by.itechart.retailers.service.interfaces.CategoryService;
 import by.itechart.retailers.service.interfaces.UserService;
@@ -24,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryConverter categoryConverter;
     private final UserService userService;
     Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
+
     @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryConverter categoryConverter, UserService userService) {
         this.categoryRepository = categoryRepository;
@@ -33,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findById(long categoryId) {
-        logger.info("Find by id {}",categoryId);
+        logger.info("Find by id {}", categoryId);
         Category persistCategory = categoryRepository.findById(categoryId)
                                                      .orElse(new Category());
         return categoryConverter.entityToDto(persistCategory);
@@ -52,6 +54,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
         logger.info("Create");
+        if (nameExists(categoryDto.getName())) {
+            logger.error("Not unique name {}", categoryDto.getName());
+            throw new BusinessException("Name should be unique");
+        }
         Category category = categoryConverter.dtoToEntity(categoryDto);
         Category persistCategory = categoryRepository.save(category);
         return categoryConverter.entityToDto(persistCategory);
@@ -63,6 +69,12 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryConverter.dtoToEntity(categoryDto);
         Category persistCategory = categoryRepository.findById(category.getId())
                                                      .orElse(new Category());
+        if(!category.getName().equals(persistCategory.getName())) {
+            if (nameExists(categoryDto.getName())) {
+                logger.error("Not unique name {}", categoryDto.getName());
+                throw new BusinessException("Name should be unique");
+            }
+        }
 
         persistCategory.setName(category.getName());
         persistCategory.setCategoryTax(category.getCategoryTax());
@@ -70,4 +82,16 @@ public class CategoryServiceImpl implements CategoryService {
 
         return categoryConverter.entityToDto(persistCategory);
     }
+
+    @Override
+    public boolean nameExists(String name) {
+        logger.info("Check for unique name {}",name);
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return categoryRepository.findAllByNameAndCustomer_Id(name, customerId)
+                                 .size() != 0;
+    }
+
+
 }

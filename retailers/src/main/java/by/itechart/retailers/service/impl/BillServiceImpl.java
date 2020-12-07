@@ -1,12 +1,10 @@
 package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.BillConverter;
+import by.itechart.retailers.converter.UserConverter;
 import by.itechart.retailers.dto.BillDto;
 import by.itechart.retailers.dto.UserDto;
-import by.itechart.retailers.entity.Bill;
-import by.itechart.retailers.entity.BillRecord;
-import by.itechart.retailers.entity.Location;
-import by.itechart.retailers.entity.LocationProduct;
+import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.BillRepository;
 import by.itechart.retailers.repository.LocationProductRepository;
@@ -32,16 +30,19 @@ public class BillServiceImpl implements BillService {
     private final LocationProductRepository locationProductRepository;
     private final UserService userService;
     private final LocationRepository locationRepository;
+    private final UserConverter userConverter;
     Logger logger = LoggerFactory.getLogger(BillServiceImpl.class);
 
     @Autowired
-    public BillServiceImpl(BillRepository billRepository, BillConverter billConverter, LocationProductRepository locationProductRepository, UserService userService, LocationRepository locationRepository) {
+    public BillServiceImpl(BillRepository billRepository, BillConverter billConverter, LocationProductRepository locationProductRepository, UserService userService, LocationRepository locationRepository, UserConverter userConverter) {
         this.billRepository = billRepository;
         this.billConverter = billConverter;
         this.locationProductRepository = locationProductRepository;
         this.userService = userService;
         this.locationRepository = locationRepository;
+        this.userConverter = userConverter;
     }
+
 
     @Override
     public BillDto findById(long billId) {
@@ -80,10 +81,9 @@ public class BillServiceImpl implements BillService {
 
             if (billRecord.getProductAmount() > locationProduct.getAmount()) {
                 logger.error("Not enough product {} in location", locationProduct.getProduct()
-                                                                                  .getId());
+                                                                                 .getId());
                 throw new BusinessException("Not enough amount of " + locationProduct.getProduct()
-                                                                                     .getLabel() + " in location " + locationProduct.getLocation()
-                                                                                                                                    .getIdentifier());
+                                                                                     .getLabel() + " in location ");
             }
             Integer availableCapacity = location.getAvailableCapacity();
             location.setAvailableCapacity(availableCapacity - billRecord.getProduct()
@@ -96,8 +96,10 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public boolean billNumberExists(Integer billNumber) {
-        logger.info("Check for existing number {}",billNumber);
-        return billRepository.findByBillNumber(billNumber)
-                             .isPresent();
+        logger.info("Check for existing number {}", billNumber);
+        UserDto userDto = userService.getUser();
+        Long customerId=userDto.getCustomer().getId();
+        return billRepository.findAllByBillNumberAndCustomer_Id(billNumber, customerId)
+                             .size() != 0;
     }
 }

@@ -15,7 +15,7 @@ public interface UserService {
 
     Page<UserDto> findAll(Pageable pageable);
 
-    List<UserDto> findAllByCustomerId(Pageable pageable);
+    //List<UserDto> findAllByCustomerId(Pageable pageable);
 
     UserDto create(UserDto userDto) throws BusinessException;
 
@@ -40,5 +40,4 @@ public interface UserService {
     boolean emailExists(String email);
 
     boolean loginExists(String login);
-
 }

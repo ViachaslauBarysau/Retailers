@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface WriteOffActRepository extends JpaRepository<WriteOffAct, Long> {
-    Optional<WriteOffAct> findByWriteOffActNumber(Integer writeOffActNumber);
+   List<WriteOffAct> findAllByWriteOffActNumberAndCustomer_Id(Integer writeOffActNumber, Long customerId);
 
     Page<WriteOffAct> findAllByLocationIn(Pageable pageable, List<Location> locations);
 }

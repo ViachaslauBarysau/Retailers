@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> updateStatus(List<Long> userIds) {
         logger.info("Update status {}", userIds.toString());
         List<User> users = userRepository.findAllById(userIds);
+        List<User> undeletedUsers = new ArrayList<>(users);
         for (User user : users) {
             if (user.getLocation()
                     .getStatus() != DeletedStatus.DELETED) {
@@ -64,9 +66,11 @@ public class UserServiceImpl implements UserService {
                     user.setUserStatus(Status.ACTIVE);
                 }
                 userRepository.save(user);
+            } else {
+                undeletedUsers.remove(user);
             }
         }
-        return userConverter.entityToDto(users);
+        return userConverter.entityToDto(undeletedUsers);
     }
 
     @Override
@@ -83,6 +87,20 @@ public class UserServiceImpl implements UserService {
         logger.info("Find by role {}", role.toString());
         List<User> users = userRepository.findAllByUserRoleAndUserStatus(role, Status.ACTIVE);
         return userConverter.entityToDto(users);
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        logger.info("Check for existing email {}", email);
+        return userRepository.findAllByEmail(email)
+                             .size() != 0;
+    }
+
+    @Override
+    public boolean loginExists(String login) {
+        logger.info("Check for existing login {}", login);
+        return userRepository.findAllByLogin(login)
+                             .size() != 0;
     }
 
     @Override
@@ -139,13 +157,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = getUser();
-        Page<User> userPage = userRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
-                                                                                   .getId());
+        UserDto userDto = getUser();//доставать всех кроме админов
+        Page<User> userPage = userRepository.findAllByCustomer_IdAndUserRoleIsNotContaining(pageable, userDto.getCustomer()
+                                                                                                             .getId(), Role.ADMIN);
         List<UserDto> userDtos = userConverter.entityToDto(userPage.getContent());
         return new PageImpl<>(userDtos, pageable, userPage.getTotalElements());
 
     }
+/*
 
     @Override
     public List<UserDto> findAllByCustomerId(Pageable pageable) {
@@ -155,6 +174,7 @@ public class UserServiceImpl implements UserService {
                                                                                                 .getId());
         return userConverter.entityToDto(customerEmployeesPage.toList());
     }
+*/
 
     @Override
     public UserDto create(UserDto userDto) throws BusinessException {
@@ -184,7 +204,6 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(customerDto.getName());
         user.setLastName(customerDto.getName());
         user.setEmail(customerDto.getEmail());
-        user.setLogin(customerDto.getEmail());
         user.setCustomer(customer);
         String password = generatePassword();
         user.setPassword(password);
@@ -200,9 +219,23 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) {
         logger.info("Update");
         User user = userConverter.dtoToEntity(userDto);
+
         User persistUser = userRepository.findById(user.getId())
                                          .orElse(new User());
-
+        if (!user.getEmail()
+                 .equals(persistUser.getEmail())) {
+            if (emailExists(user.getEmail())) {
+                logger.error("Not unique email {}", user.getEmail());
+                throw new BusinessException("Email should be unique");
+            }
+        }
+        if (!user.getLogin()
+                 .equals(persistUser.getLogin())) {
+            if (loginExists(user.getLogin())) {
+                logger.error("Not unique login {}", user.getLogin());
+                throw new BusinessException("Login should be unique");
+            }
+        }
         persistUser.setAddress(user.getAddress());
         persistUser.setBirthday(user.getBirthday());
         persistUser.setEmail(user.getEmail());
@@ -220,18 +253,5 @@ public class UserServiceImpl implements UserService {
         return userConverter.entityToDto(persistUser);
     }
 
-    @Override
-    public boolean emailExists(String email) {
-        logger.info("Check for existing email {}", email);
-        return userRepository.findUserByEmail(email)
-                             .isPresent();
-    }
-
-    @Override
-    public boolean loginExists(String login) {
-        logger.info("Check for existing login {}", login);
-        return userRepository.findUserByLogin(login)
-                             .isPresent();
-    }
 
 }

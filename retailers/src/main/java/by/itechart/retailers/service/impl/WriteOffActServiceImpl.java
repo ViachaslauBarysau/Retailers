@@ -86,8 +86,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
                                                                                  .getId());
 
                 throw new BusinessException("Not enough amount of " + locationProduct.getProduct()
-                                                                                     .getLabel() + " in location " + locationProduct.getLocation()
-                                                                                                                                     .getIdentifier());
+                                                                                     .getLabel() + " in location ");
             }
             Integer availableCapacity = location.getAvailableCapacity();
             location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount() * writeOffActRecord.getProduct()
@@ -102,8 +101,10 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Override
     public boolean writeOffActNumberExists(Integer writeOffActNumber) {
         logger.info("Check for existing number {}", writeOffActNumber);
-        return writeOffActRepository.findByWriteOffActNumber(writeOffActNumber)
-                                    .isPresent();
+        UserDto userDto = userService.getUser();
+        Long customerId=userDto.getCustomer().getId();
+        return writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffActNumber, customerId)
+                             .size() != 0;
     }
 
 }

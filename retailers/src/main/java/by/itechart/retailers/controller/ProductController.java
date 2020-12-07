@@ -4,6 +4,8 @@ import by.itechart.retailers.dto.ProductDto;
 import by.itechart.retailers.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = "label", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(productService.findAll(pageable), HttpStatus.OK);
     }
 
@@ -42,7 +44,7 @@ public class ProductController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestBody List<ProductDto> productDtos) {
-        return new ResponseEntity<>(productService.delete(productDtos), HttpStatus.OK);
+    public ResponseEntity delete(@RequestBody List<Long> productIds) {
+        return new ResponseEntity<>(productService.delete(productIds), HttpStatus.OK);
     }
 }

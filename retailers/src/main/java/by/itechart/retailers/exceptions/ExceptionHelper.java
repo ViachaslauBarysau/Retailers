@@ -14,7 +14,7 @@ public class ExceptionHelper {
 
     @ExceptionHandler(value = {BusinessException.class})
     public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
 
     }
 }

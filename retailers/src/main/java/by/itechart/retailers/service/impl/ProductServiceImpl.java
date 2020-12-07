@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -70,8 +71,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto create(ProductDto productDto) throws BusinessException {
         logger.info("Create");
         Product product = productConverter.dtoToEntity(productDto);
-        if (upcExists(product.getUpc(), product.getCustomer()
-                                               .getId(), DeletedStatus.ACTIVE)) {
+        if (upcExists(product.getUpc())) {
             logger.error("Not unique upc {}", product.getUpc());
             throw new BusinessException("Upc should be unique");
         }
@@ -86,9 +86,15 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto update(ProductDto productDto) {
         logger.info("Update");
         Product product = productConverter.dtoToEntity(productDto);
+
         Product persistProduct = productRepository.findById(product.getId())
                                                   .orElse(new Product());
-
+        if(!product.getUpc().equals(persistProduct.getUpc())) {
+            if (upcExists(product.getUpc())) {
+                logger.error("Not unique upc {}", product.getUpc());
+                throw new BusinessException("Upc should be unique");
+            }
+        }
         Category category = findCategory(product);
         persistProduct.setCategory(category);
         persistProduct.setLabel(product.getLabel());
@@ -104,7 +110,8 @@ public class ProductServiceImpl implements ProductService {
         logger.info("Find category");
         Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
                                                                                .getName(), product.getCustomer()
-                                                                                                  .getId());
+                                                                                                  .getId())
+                                              .get();
         if (category == null) {
             category = new Category();
             category.setCustomer(product.getCustomer());
@@ -116,14 +123,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> delete(List<ProductDto> productDtos) {
+    public List<ProductDto> delete(List<Long> productIds) {
         logger.info("Delete");
-        List<Product> products = productConverter.dtoToEntity(productDtos);
-        Iterator<Product> productIterator = products.iterator();
-        while (productIterator.hasNext()) {
-            Product product = productIterator.next();
-            Product persistProduct = productRepository.findById(product.getId())
-                                                      .get();
+        List<Product> products=productRepository.findAllById(productIds);
+        List<Product> undeletedProducts=new ArrayList<>(products);
+        for(Product product:products){
             List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
             List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
             List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
@@ -152,20 +156,26 @@ public class ProductServiceImpl implements ProductService {
                 continue;
             }
 
-            persistProduct.setStatus(DeletedStatus.DELETED);
-            productRepository.save(persistProduct);
-            products.remove(product);
+            product.setStatus(DeletedStatus.DELETED);
+            productRepository.save(product);
+            undeletedProducts.remove(product);
+           // products.remove(product);
 
         }
-        return productConverter.entityToDto(products);
+        return productConverter.entityToDto(undeletedProducts);
     }
 
     @Override
-    public boolean upcExists(Integer upc, Long customerId, DeletedStatus status) {
+    public boolean upcExists(Long upc) {
         logger.info("Check for existing upc {}", upc);
-        return productRepository.findByUpcAndCustomer_IdAndStatus(upc, customerId, status)
-                                .isPresent();
+        UserDto userDto = userService.getUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        return productRepository.findAllByUpcAndCustomer_IdAndStatus(upc, customerId, DeletedStatus.ACTIVE)
+                                .size() != 0;
     }
+
+
 }
 
 

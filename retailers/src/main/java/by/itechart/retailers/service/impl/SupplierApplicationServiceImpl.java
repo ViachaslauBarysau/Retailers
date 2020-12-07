@@ -144,8 +144,9 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public boolean applicationNumberExists(Integer applicationNumber) {
-        logger.info("Check for existing number {}", applicationNumber);
-        return supplierApplicationRepository.findByApplicationNumber(applicationNumber)
-                                            .isPresent();
+        UserDto userDto = userService.getUser();
+        User user = userConverter.dtoToEntity(userDto);
+        return supplierApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)
+                                         .size() != 0;
     }
 }

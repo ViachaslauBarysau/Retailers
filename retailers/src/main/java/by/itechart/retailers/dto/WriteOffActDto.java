@@ -1,11 +1,15 @@
 package by.itechart.retailers.dto;
 
+import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Location;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Past;
@@ -37,4 +41,7 @@ public class WriteOffActDto {
 
     @Valid
     private LocationDto location;
+
+
+    private CustomerDto customer;
 }

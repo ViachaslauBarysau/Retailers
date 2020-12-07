@@ -4,6 +4,8 @@ import by.itechart.retailers.dto.LocationDto;
 import by.itechart.retailers.service.interfaces.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class LocationController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = "identifier", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(locationService.findAll(pageable), HttpStatus.OK);
     }
 
@@ -52,7 +54,7 @@ public class LocationController {
     }
 
     @DeleteMapping
-    public ResponseEntity delete(@RequestBody List<LocationDto> locationDtos) {
-        return new ResponseEntity<>(locationService.delete(locationDtos), HttpStatus.OK);
+    public ResponseEntity delete(@RequestBody List<Long> locationIds) {
+        return new ResponseEntity<>(locationService.delete(locationIds), HttpStatus.OK);
     }
 }
