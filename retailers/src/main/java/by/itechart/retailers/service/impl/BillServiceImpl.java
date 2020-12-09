@@ -4,7 +4,10 @@ import by.itechart.retailers.converter.BillConverter;
 import by.itechart.retailers.converter.UserConverter;
 import by.itechart.retailers.dto.BillDto;
 import by.itechart.retailers.dto.UserDto;
-import by.itechart.retailers.entity.*;
+import by.itechart.retailers.entity.Bill;
+import by.itechart.retailers.entity.BillRecord;
+import by.itechart.retailers.entity.Location;
+import by.itechart.retailers.entity.LocationProduct;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.BillRepository;
 import by.itechart.retailers.repository.LocationProductRepository;
@@ -88,6 +91,10 @@ public class BillServiceImpl implements BillService {
             Integer availableCapacity = location.getAvailableCapacity();
             location.setAvailableCapacity(availableCapacity - billRecord.getProduct()
                                                                         .getVolume() * billRecord.getProductAmount());
+            Integer amount = locationProduct.getAmount();
+            locationProduct.setAmount(amount - billRecord.getProductAmount());
+            locationProductRepository.save(locationProduct);
+
             bill.setLocation(location);
         }
         Bill persistBill = billRepository.save(bill);
@@ -98,7 +105,8 @@ public class BillServiceImpl implements BillService {
     public boolean billNumberExists(Integer billNumber) {
         logger.info("Check for existing number {}", billNumber);
         UserDto userDto = userService.getUser();
-        Long customerId=userDto.getCustomer().getId();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
         return billRepository.findAllByBillNumberAndCustomer_Id(billNumber, customerId)
                              .size() != 0;
     }

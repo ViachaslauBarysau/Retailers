@@ -111,7 +111,7 @@ public class SupplierServiceImpl implements SupplierService {
         UserDto userDto = userService.getUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        return supplierRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
+        return supplierRepository.findAllByIdentifierIgnoreCaseAndCustomer_Id(identifier, customerId)
                                  .size() != 0;
     }
 

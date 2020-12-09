@@ -19,7 +19,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     List<Location> findAllByCustomer_IdAndLocationTypeAndStatus(Long customer_id, LocationType locationType, DeletedStatus status);
 
-    List<Location>  findAllByIdentifierAndCustomer_Id(String identifier, Long customerId);
+    List<Location>  findAllByIdentifierIgnoreCaseAndCustomer_Id(String identifier, Long customerId);
 
     List<Location> findAllByCustomer_Id(Long customerId);
 

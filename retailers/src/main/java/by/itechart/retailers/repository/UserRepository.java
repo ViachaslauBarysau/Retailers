@@ -19,9 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByLocation_IdAndUserStatus(Long locationId, Status status);
 
-    List<User> findAllByEmail(String email);
+    List<User> findAllByEmailIgnoreCase(String email);
 
-    List<User> findAllByLogin(String login);
+    List<User> findAllByLoginIgnoreCase(String login);
 
     List<User> findAllByBirthdayAndUserStatus(LocalDate date, Status status);
 

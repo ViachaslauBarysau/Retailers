@@ -89,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
         UserDto userDto = userService.getUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        return categoryRepository.findAllByNameAndCustomer_Id(name, customerId)
+        return categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(name, customerId)
                                  .size() != 0;
     }
 
