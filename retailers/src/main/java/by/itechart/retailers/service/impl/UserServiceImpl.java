@@ -57,16 +57,13 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAllById(userIds);
         List<User> undeletedUsers = new ArrayList<>(users);
         for (User user : users) {
-            if (user.getLocation()
-                    .getStatus() != DeletedStatus.DELETED) {
-                if (user.getUserStatus()
-                        .equals(Status.ACTIVE)) {
+            if (user.getLocation().getStatus() != DeletedStatus.DELETED) {
+                if (user.getUserStatus().equals(Status.ACTIVE)) {
                     user.setUserStatus(Status.DISABLED);
                 } else {
                     user.setUserStatus(Status.ACTIVE);
                 }
                 userRepository.save(user);
-            } else {
                 undeletedUsers.remove(user);
             }
         }
@@ -92,14 +89,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean emailExists(String email) {
         logger.info("Check for existing email {}", email);
-        return userRepository.findAllByEmail(email)
+        return userRepository.findAllByEmailIgnoreCase(email)
                              .size() != 0;
     }
 
     @Override
     public boolean loginExists(String login) {
         logger.info("Check for existing login {}", login);
-        return userRepository.findAllByLogin(login)
+        return userRepository.findAllByLoginIgnoreCase(login)
                              .size() != 0;
     }
 
@@ -157,24 +154,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = getUser();//доставать всех кроме админов
+        UserDto userDto = getUser();
         Page<User> userPage = userRepository.findAllByCustomer_IdAndUserRoleIsNotContaining(pageable, userDto.getCustomer()
                                                                                                              .getId(), Role.ADMIN);
         List<UserDto> userDtos = userConverter.entityToDto(userPage.getContent());
         return new PageImpl<>(userDtos, pageable, userPage.getTotalElements());
 
     }
-/*
-
-    @Override
-    public List<UserDto> findAllByCustomerId(Pageable pageable) {
-        logger.info("Find all by customer id");
-        UserDto userDto = getUser();
-        Page<User> customerEmployeesPage = userRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
-                                                                                                .getId());
-        return userConverter.entityToDto(customerEmployeesPage.toList());
-    }
-*/
 
     @Override
     public UserDto create(UserDto userDto) throws BusinessException {

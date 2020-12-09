@@ -87,6 +87,10 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
             Integer availableCapacity = location.getAvailableCapacity();
             location.setAvailableCapacity(availableCapacity - applicationRecord.getAmount() * applicationRecord.getProduct()
                                                                                                                .getVolume());
+            Integer amount=locationProduct.getAmount();
+            locationProduct.setAmount(amount-applicationRecord.getAmount());
+            locationProductRepository.save(locationProduct);
+            //и сохранять locationProduct
             innerApplication.setSourceLocation(location);
         }
         InnerApplication persistInnerApplication = innerApplicationRepository.save(innerApplication);
