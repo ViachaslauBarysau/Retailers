@@ -42,18 +42,20 @@ public class LocationServiceImpl implements LocationService {
 
 
     @Override
-    public LocationDto findById(long locationProductId) {
-        logger.info("Find by id {}", locationProductId);
-        Location location = locationRepository.findById(locationProductId)
+    public LocationDto findById(long locationId) {
+        logger.info("Find by id {}", locationId);
+        UserDto userDto = userService.getCurrentUser();
+        long customerId = userDto.getCustomer()
+                                 .getId();
+        Location location = locationRepository.findByIdAndCustomer_IdAndStatus(locationId, customerId, DeletedStatus.ACTIVE)
                                               .orElse(new Location());
-
         return locationConverter.entityToDto(location);
     }
 
     @Override
     public Page<LocationDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         Page<Location> locationPage = locationRepository.findAllByCustomer_IdAndStatus(pageable, userDto.getCustomer()
                                                                                                         .getId(), DeletedStatus.ACTIVE);
         List<LocationDto> locationDtos = locationConverter.entityToDto(locationPage.getContent());
@@ -63,7 +65,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<LocationDto> findAllWarehouses() {
         logger.info("Find all warehouses");
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         List<Location> warehouses = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(userDto.getCustomer()
                                                                                                            .getId(), LocationType.WAREHOUSE, DeletedStatus.ACTIVE);
         return locationConverter.entityToDto(warehouses);
@@ -72,7 +74,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<LocationDto> findAllShops() {
         logger.info("Find all shops");
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         List<Location> shopList = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(userDto.getCustomer()
                                                                                                          .getId(), LocationType.SHOP, DeletedStatus.ACTIVE);
         return locationConverter.entityToDto(shopList);
@@ -81,6 +83,8 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDto create(LocationDto locationDto) throws BusinessException {
         logger.info("Create");
+        UserDto userDto = userService.getCurrentUser();
+        locationDto.setCustomer(userDto.getCustomer());
         Location location = locationConverter.dtoToEntity(locationDto);
         if (identifierExists(location.getIdentifier())) {
             logger.error("Not unique identifier {}", location.getIdentifier());
@@ -94,9 +98,11 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDto update(LocationDto locationDto) {
         logger.info("Update");
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
         Location location = locationConverter.dtoToEntity(locationDto);
-
-        Location persistLocation = locationRepository.findById(location.getId())
+        Location persistLocation = locationRepository.findByIdAndCustomer_IdAndStatus(location.getId(), customerId, DeletedStatus.ACTIVE)
                                                      .orElse(new Location());
         if (!location.getIdentifier()
                      .equals(persistLocation.getIdentifier())) {
@@ -119,7 +125,10 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<LocationDto> delete(List<Long> locationIds) {
         logger.info("Delete");
-        List<Location> locations=locationRepository.findAllById(locationIds);
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        List<Location> locations = locationRepository.findAllByIdAndCustomer_Id(locationIds, customerId);
         List<Location> undeletedLocations = new ArrayList<>(locations);
         for (Location location : locations) {
             if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE)
@@ -135,12 +144,10 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public boolean identifierExists(String identifier) {
         logger.info("Check for existing identifier {}", identifier);
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
         return locationRepository.findAllByIdentifierIgnoreCaseAndCustomer_Id(identifier, customerId)
                                  .size() != 0;
     }
-
-
 }
