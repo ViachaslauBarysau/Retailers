@@ -18,6 +18,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
     Optional<Supplier> findByIdAndCustomer_Id(Long id, Long customerId);
 
-    List<Supplier> findAllByIdAndCustomer_Id(List<Long> ids, Long customerId);
+    List<Supplier> findAllByIdInAndCustomer_Id(List<Long> ids, Long customerId);
 
 }

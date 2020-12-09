@@ -136,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        List<Product> products = productRepository.findAllByIdAndCustomer_Id(productIds, customerId);
+        List<Product> products = productRepository.findAllByIdInAndCustomer_Id(productIds, customerId);
         List<Product> undeletedProducts = new ArrayList<>(products);
         for (Product product : products) {
             List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);

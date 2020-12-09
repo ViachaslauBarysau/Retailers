@@ -18,5 +18,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findByIdAndCustomer_IdAndStatus(Long id, Long customerId, DeletedStatus status);
 
-    List<Product> findAllByIdAndCustomer_Id(List<Long> ids, Long customerId);
+    List<Product> findAllByIdInAndCustomer_Id(List<Long> ids, Long customerId);
 }

@@ -128,7 +128,7 @@ public class LocationServiceImpl implements LocationService {
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        List<Location> locations = locationRepository.findAllByIdAndCustomer_Id(locationIds, customerId);
+        List<Location> locations = locationRepository.findAllByIdInAndCustomer_Id(locationIds, customerId);
         List<Location> undeletedLocations = new ArrayList<>(locations);
         for (Location location : locations) {
             if (userRepository.findAllByLocation_IdAndUserStatus(location.getId(), Status.ACTIVE)

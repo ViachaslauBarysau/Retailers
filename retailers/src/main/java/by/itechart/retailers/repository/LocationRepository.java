@@ -24,5 +24,5 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     Optional<Location> findByIdAndCustomer_IdAndStatus(Long id, Long customerId, DeletedStatus status);
 
-    List<Location> findAllByIdAndCustomer_Id(List<Long> ids, Long customerId);
+    List<Location> findAllByIdInAndCustomer_Id(List<Long> ids, Long customerId);
 }

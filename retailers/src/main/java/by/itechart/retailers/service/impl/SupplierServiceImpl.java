@@ -102,7 +102,7 @@ public class SupplierServiceImpl implements SupplierService {
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        List<Supplier> suppliers = supplierRepository.findAllByIdAndCustomer_Id(supplierIdsList,customerId);
+        List<Supplier> suppliers = supplierRepository.findAllByIdInAndCustomer_Id(supplierIdsList,customerId);
         for (Supplier supplier : suppliers) {
             if (supplier.getSupplierStatus()
                         .equals(Status.ACTIVE)) {
