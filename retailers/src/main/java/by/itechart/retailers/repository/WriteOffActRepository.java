@@ -15,4 +15,6 @@ public interface WriteOffActRepository extends JpaRepository<WriteOffAct, Long> 
    List<WriteOffAct> findAllByWriteOffActNumberAndCustomer_Id(Integer writeOffActNumber, Long customerId);
 
     Page<WriteOffAct> findAllByLocationIn(Pageable pageable, List<Location> locations);
+
+    Optional<WriteOffAct> findByIdAndCustomer_Id(Long id, Long customerId);
 }

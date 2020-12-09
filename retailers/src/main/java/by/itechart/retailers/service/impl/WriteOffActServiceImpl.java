@@ -46,8 +46,11 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public WriteOffActDto findById(long writeOffActId) {
-        logger.info("Find by id {}",writeOffActId);
-        WriteOffAct writeOffAct = writeOffActRepository.findById(writeOffActId)
+        logger.info("Find by id {}", writeOffActId);
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        WriteOffAct writeOffAct = writeOffActRepository.findByIdAndCustomer_Id(writeOffActId, customerId)
                                                        .orElse(new WriteOffAct());
 
         return writeOffActConverter.entityToDto(writeOffAct);
@@ -56,7 +59,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Override
     public Page<WriteOffActDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
                                                                                   .getId());
         Page<WriteOffAct> writeOffActPage = writeOffActRepository.findAllByLocationIn(pageable, locations);
@@ -69,6 +72,8 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Transactional
     public WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException {
         logger.info("Create");
+        UserDto userDto = userService.getCurrentUser();
+        writeOffActDto.setCustomer(userDto.getCustomer());
         WriteOffAct writeOffAct = writeOffActConverter.dtoToEntity(writeOffActDto);
         if (writeOffActNumberExists(writeOffAct.getWriteOffActNumber())) {
             logger.error("Not unique number {}", writeOffAct.getWriteOffActNumber());
@@ -93,8 +98,8 @@ public class WriteOffActServiceImpl implements WriteOffActService {
                                                                                                                .getVolume());
             writeOffAct.setLocation(location);
 
-            Integer amount=locationProduct.getAmount();
-            locationProduct.setAmount(amount -writeOffActRecord.getAmount());
+            Integer amount = locationProduct.getAmount();
+            locationProduct.setAmount(amount - writeOffActRecord.getAmount());
             locationProductRepository.save(locationProduct);
         }
         WriteOffAct persistWriteOffAct = writeOffActRepository.save(writeOffAct);
@@ -105,10 +110,11 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Override
     public boolean writeOffActNumberExists(Integer writeOffActNumber) {
         logger.info("Check for existing number {}", writeOffActNumber);
-        UserDto userDto = userService.getUser();
-        Long customerId=userDto.getCustomer().getId();
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
         return writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffActNumber, customerId)
-                             .size() != 0;
+                                    .size() != 0;
     }
 
 }
