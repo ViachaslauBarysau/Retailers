@@ -200,7 +200,7 @@ public class UserServiceImpl implements UserService {
         user.setCustomer(customer);
         String password = generatePassword();
         user.setPassword(password);
-        sendingCredentialsService.send(userConverter.entityToDto(user));
+        new Thread(() -> sendingCredentialsService.send(userConverter.entityToDto(user))).start();
         user.setPassword(encodePassword(password));
         user.setUserStatus(Status.ACTIVE);
         user.setUserRole(Collections.singletonList(Role.ADMIN));
