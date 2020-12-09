@@ -103,7 +103,7 @@ public class CategoryServiceTest {
             add(category);
         }};
         when(userService.getUser()).thenReturn(userDto);
-        when(categoryRepository.findAllByNameAndCustomer_Id(category.getName(), customerId)).thenReturn(categories);
+        when(categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(category.getName(), customerId)).thenReturn(categories);
         //when
         categoryService.create(categoryDto);
         //then
@@ -130,7 +130,7 @@ public class CategoryServiceTest {
 
         when(categoryConverter.dtoToEntity(categoryDto)).thenReturn(category);
         when(userService.getUser()).thenReturn(userDto);
-        when(categoryRepository.findAllByNameAndCustomer_Id(category.getName(), customerId)).thenReturn(new ArrayList<>());
+        when(categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(category.getName(), customerId)).thenReturn(new ArrayList<>());
         //when
         categoryService.create(categoryDto);
         //then
@@ -167,7 +167,7 @@ public class CategoryServiceTest {
         }};
         when(categoryConverter.dtoToEntity(categoryDto)).thenReturn(category);
         when(userService.getUser()).thenReturn(userDto);
-        when(categoryRepository.findAllByNameAndCustomer_Id(category.getName(), customerId)).thenReturn(categories);
+        when(categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(category.getName(), customerId)).thenReturn(categories);
         //when
         categoryService.update(categoryDto);
         //then

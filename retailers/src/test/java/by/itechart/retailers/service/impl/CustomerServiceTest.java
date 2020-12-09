@@ -86,7 +86,7 @@ public class CustomerServiceTest {
         List<Customer> customers = new ArrayList<Customer>() {{
             add(customer);
         }};
-        when(customerRepository.findAllByEmail(customer.getEmail())).thenReturn(customers);
+        when(customerRepository.findAllByEmailIgnoreCase(customer.getEmail())).thenReturn(customers);
         //when
         customerService.create(customerDto);
         //then
@@ -132,7 +132,7 @@ public class CustomerServiceTest {
             add(customer);
         }};
         when(customerConverter.dtoToEntity(customerDto)).thenReturn(customer);
-        when(customerRepository.findAllByEmail(customer.getEmail())).thenReturn(customers);
+        when(customerRepository.findAllByEmailIgnoreCase(customer.getEmail())).thenReturn(customers);
         //when
         customerService.update(customerDto);
         //then

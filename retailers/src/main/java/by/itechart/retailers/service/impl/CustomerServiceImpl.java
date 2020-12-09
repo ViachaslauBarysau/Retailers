@@ -104,7 +104,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public boolean emailExists(String email) {
         logger.info("Check for existing email {}", email);
-        return customerRepository.findAllByEmail(email)
+        return customerRepository.findAllByEmailIgnoreCase(email)
                                  .size() != 0;
     }
 

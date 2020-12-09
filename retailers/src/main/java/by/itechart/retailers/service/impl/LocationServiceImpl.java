@@ -138,7 +138,7 @@ public class LocationServiceImpl implements LocationService {
         UserDto userDto = userService.getUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        return locationRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
+        return locationRepository.findAllByIdentifierIgnoreCaseAndCustomer_Id(identifier, customerId)
                                  .size() != 0;
     }
 
