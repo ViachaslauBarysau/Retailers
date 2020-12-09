@@ -57,8 +57,10 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAllById(userIds);
         List<User> undeletedUsers = new ArrayList<>(users);
         for (User user : users) {
-            if (user.getLocation().getStatus() != DeletedStatus.DELETED) {
-                if (user.getUserStatus().equals(Status.ACTIVE)) {
+            if (user.getLocation()
+                    .getStatus() != DeletedStatus.DELETED) {
+                if (user.getUserStatus()
+                        .equals(Status.ACTIVE)) {
                     user.setUserStatus(Status.DISABLED);
                 } else {
                     user.setUserStatus(Status.ACTIVE);
@@ -102,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto getUser() {
+    public UserDto getCurrentUser() {
         logger.info("Get user");
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
@@ -145,7 +147,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findById(long userId) {
         logger.info("Find by id {}", userId);
-        User user = userRepository.findById(userId)
+        UserDto userDto = getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        User user = userRepository.findByIdAndCustomer_Id(userId, customerId)
                                   .orElse(new User());
 
         return userConverter.entityToDto(user);
@@ -154,7 +159,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = getUser();
+        UserDto userDto = getCurrentUser();
         Page<User> userPage = userRepository.findAllByCustomer_IdAndUserRoleIsNotContaining(pageable, userDto.getCustomer()
                                                                                                              .getId(), Role.ADMIN);
         List<UserDto> userDtos = userConverter.entityToDto(userPage.getContent());
@@ -165,6 +170,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) throws BusinessException {
         logger.info("Create by admin");
+        UserDto currentUserDto = getCurrentUser();
+        userDto.setCustomer(currentUserDto.getCustomer());
         User user = userConverter.dtoToEntity(userDto);
         if (emailExists(user.getEmail())) {
             throw new BusinessException("Email should be unique");
@@ -204,9 +211,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto userDto) {
         logger.info("Update");
+        UserDto currentUserDto = getCurrentUser();
+        userDto.setCustomer(currentUserDto.getCustomer());
+        Long customerId = currentUserDto.getCustomer()
+                                        .getId();
         User user = userConverter.dtoToEntity(userDto);
 
-        User persistUser = userRepository.findById(user.getId())
+        User persistUser = userRepository.findByIdAndCustomer_Id(user.getId(), customerId)
                                          .orElse(new User());
         if (!user.getEmail()
                  .equals(persistUser.getEmail())) {
