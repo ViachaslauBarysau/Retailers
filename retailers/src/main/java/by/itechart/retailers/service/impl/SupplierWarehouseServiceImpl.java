@@ -32,7 +32,7 @@ public class SupplierWarehouseServiceImpl implements SupplierWarehouseService {
     @Override
     public List<SupplierWarehouseDto> findAll() {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
         List<SupplierWarehouse> supplierWarehouses = supplierWarehouseRepository.findAllByCustomer_IdAndStatus(customerId, DeletedStatus.ACTIVE);
@@ -42,7 +42,10 @@ public class SupplierWarehouseServiceImpl implements SupplierWarehouseService {
     @Override
     public SupplierWarehouseDto findById(Long supplierWarehouseId) {
         logger.info("Find by id {}", supplierWarehouseId);
-        SupplierWarehouse supplierWarehouse = supplierWarehouseRepository.findById(supplierWarehouseId)
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        SupplierWarehouse supplierWarehouse = supplierWarehouseRepository.findByIdAndCustomer_Id(supplierWarehouseId,customerId)
                                                                          .orElse(new SupplierWarehouse());
 
         return supplierWarehouseConverter.entityToDto(supplierWarehouse);
