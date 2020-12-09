@@ -46,6 +46,9 @@ public class Bill implements Serializable {
     @Column(name = "total_product_price")
     private BigDecimal totalPrice;
 
+    @Column(name = "total_product_cost")
+    private BigDecimal totalCost;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;

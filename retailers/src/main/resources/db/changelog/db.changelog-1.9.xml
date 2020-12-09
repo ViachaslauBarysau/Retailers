@@ -19,4 +19,12 @@
                     type="BIGINT"/>
         </addColumn>
     </changeSet>
+    <changeSet author="viachaslau.barysau" id="20201207-7">
+        <addColumn catalogName="retailers"
+                   schemaName="public"
+                   tableName="bill">
+            <column name="total_product_cost"
+                    type="numeric(19, 2)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

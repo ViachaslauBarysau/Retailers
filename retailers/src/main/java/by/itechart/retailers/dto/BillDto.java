@@ -38,8 +38,11 @@ public class BillDto {
     @Min(value = 1, message = "Product amount must be greater than 0.")
     private Integer totalProductAmount;
 
-    @Min(value = 1, message = "Unit number must be greater than 0.")
+    @Min(value = 1, message = "Total price must be greater than 0.")
     private BigDecimal totalPrice;
+
+    @Min(value = 1, message = "Total cost must be greater than 0.")
+    private BigDecimal totalCost;
 
     @Valid
     private CustomerDto customer;
