@@ -23,7 +23,7 @@ public interface UserService {
 
     UserDto update(UserDto userDto);
 
-    UserDto getUser();
+    UserDto getCurrentUser();
 
     UserDto findByEmail(String email);
 

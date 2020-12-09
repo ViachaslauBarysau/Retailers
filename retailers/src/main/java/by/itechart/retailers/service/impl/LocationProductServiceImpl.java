@@ -36,7 +36,10 @@ public class LocationProductServiceImpl implements LocationProductService {
     @Override
     public LocationProductDto findById(long locationProductId) {
         logger.info("Find by id {}", locationProductId);
-        LocationProduct locationProduct = locationProductRepository.findById(locationProductId)
+        UserDto userDto = userService.getCurrentUser();
+        Long locationId = userDto.getLocation()
+                                 .getId();
+        LocationProduct locationProduct = locationProductRepository.findByIdAndLocation_IdAndAmountGreaterThan(locationProductId, locationId, 0)
                                                                    .orElse(new LocationProduct());
 
         return locationProductConverter.entityToDto(locationProduct);
@@ -45,9 +48,10 @@ public class LocationProductServiceImpl implements LocationProductService {
     @Override
     public Page<LocationProductDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
-        Page<LocationProduct> locationProductPage = locationProductRepository.findAllByLocation_IdAndAmountGreaterThan(pageable, userDto.getLocation()
-                                                                                                                                        .getId(), 0);
+        UserDto userDto = userService.getCurrentUser();
+        Long locationId = userDto.getLocation()
+                                 .getId();
+        Page<LocationProduct> locationProductPage = locationProductRepository.findAllByLocation_IdAndAmountGreaterThan(pageable, locationId, 0);
         List<LocationProductDto> locationProductDtos = locationProductConverter.entityToDto(locationProductPage.getContent());
         return new PageImpl<>(locationProductDtos, pageable, locationProductPage.getTotalElements());
     }
@@ -55,6 +59,9 @@ public class LocationProductServiceImpl implements LocationProductService {
     @Override
     public LocationProductDto create(LocationProductDto locationProductDto) {
         logger.info("Create");
+        UserDto userDto = userService.getCurrentUser();
+        locationProductDto.setLocation(userDto.getLocation());
+
         LocationProduct locationProduct = locationProductConverter.dtoToEntity(locationProductDto);
         LocationProduct persistLocationProduct = locationProductRepository.save(locationProduct);
 
@@ -64,8 +71,12 @@ public class LocationProductServiceImpl implements LocationProductService {
     @Override
     public LocationProductDto update(LocationProductDto locationProductDto) {
         logger.info("Update");
+        UserDto userDto = userService.getCurrentUser();
+        Long locationId=userDto.getLocation().getId();
+        locationProductDto.setLocation(userDto.getLocation());
+
         LocationProduct locationProduct = locationProductConverter.dtoToEntity(locationProductDto);
-        LocationProduct persistLocationProduct = locationProductRepository.findById(locationProduct.getId())
+        LocationProduct persistLocationProduct = locationProductRepository.findByIdAndLocation_Id(locationProduct.getId(),locationId)
                                                                           .orElse(new LocationProduct());
 
         persistLocationProduct.setCost(locationProduct.getCost());

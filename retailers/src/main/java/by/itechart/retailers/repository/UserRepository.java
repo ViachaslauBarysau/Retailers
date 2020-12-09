@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -26,5 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByBirthdayAndUserStatus(LocalDate date, Status status);
 
     List<User> findAllByUserRoleAndUserStatus(Role role, Status status);
+
+    Optional<User> findByIdAndCustomer_Id(Long id, Long customerId);
 
 }

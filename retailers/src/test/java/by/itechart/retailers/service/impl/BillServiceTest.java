@@ -60,14 +60,14 @@ public class BillServiceTest {
                                  .customer(customerDto)
                                  .build();
 
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(locationRepository.findAllByCustomer_Id(customerId)).thenReturn(locations);
         when(billRepository.findAllByLocationIn(pageable, locations)).thenReturn(billPage);
         when(billConverter.entityToDto(billPage.getContent())).thenReturn(billDtos);
         //when
         billService.findAll(pageable);
         //then
-        verify(userService).getUser();
+        verify(userService).getCurrentUser();
         verify(locationRepository).findAllByCustomer_Id(customerId);
         verify(billRepository).findAllByLocationIn(pageable, locations);
         verify(billConverter).entityToDto(billPage.getContent());
@@ -79,13 +79,20 @@ public class BillServiceTest {
         Bill bill = new Bill();
         BillDto billDto = new BillDto();
         Long billId = 1L;
-
-        when(billRepository.findById(billId)).thenReturn(Optional.of(bill));
+        Long customerId=1L;
+        CustomerDto customerDto = CustomerDto.builder()
+                                             .id(customerId)
+                                             .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customerDto)
+                                 .build();
+        when(userService.getCurrentUser()).thenReturn(userDto);
+        when(billRepository.findByIdAndCustomer_Id(billId,customerId)).thenReturn(Optional.of(bill));
         when(billConverter.entityToDto(bill)).thenReturn(billDto);
         //when
         billService.findById(billId);
         //then
-        verify(billRepository).findById(billId);
+        verify(billRepository).findByIdAndCustomer_Id(billId,customerId);
         verify(billConverter).entityToDto(bill);
     }
 
@@ -113,13 +120,13 @@ public class BillServiceTest {
             add(bill);
         }};
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(bills);
         //when
         billService.create(billDto);
         //than
         verify(billConverter).dtoToEntity(billDto);
-        verify(userService).getUser();
+        verify(userService).getCurrentUser();
         verify(billRepository).findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId);
     }
 
@@ -167,7 +174,7 @@ public class BillServiceTest {
                                                          .build();
 
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(new ArrayList<>());
         when(locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), billRecord.getProduct()
                                                                                                   .getId())).thenReturn(locationProduct);
@@ -226,7 +233,7 @@ public class BillServiceTest {
                                                          .build();
 
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(new ArrayList<>());
         when(locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), billRecord.getProduct()
                                                                                                   .getId())).thenReturn(locationProduct);

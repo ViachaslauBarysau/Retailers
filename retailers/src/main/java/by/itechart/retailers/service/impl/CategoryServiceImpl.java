@@ -36,7 +36,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto findById(long categoryId) {
         logger.info("Find by id {}", categoryId);
-        Category persistCategory = categoryRepository.findById(categoryId)
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        Category persistCategory = categoryRepository.findByIdAndCustomer_Id(categoryId, customerId)
                                                      .orElse(new Category());
         return categoryConverter.entityToDto(persistCategory);
     }
@@ -44,9 +47,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<CategoryDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
-        Page<Category> categoryPage = categoryRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
-                                                                                               .getId());
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        Page<Category> categoryPage = categoryRepository.findAllByCustomer_Id(pageable, customerId);
         List<CategoryDto> categoryDtos = categoryConverter.entityToDto(categoryPage.getContent());
         return new PageImpl<>(categoryDtos, pageable, categoryPage.getTotalElements());
     }
@@ -54,6 +58,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
         logger.info("Create");
+        UserDto userDto = userService.getCurrentUser();
+        categoryDto.setCustomer(userDto.getCustomer());
         if (nameExists(categoryDto.getName())) {
             logger.error("Not unique name {}", categoryDto.getName());
             throw new BusinessException("Name should be unique");
@@ -66,10 +72,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto update(CategoryDto categoryDto) {
         logger.info("Update");
+
+        UserDto userDto = userService.getCurrentUser();
+        categoryDto.setCustomer(userDto.getCustomer());
+
         Category category = categoryConverter.dtoToEntity(categoryDto);
-        Category persistCategory = categoryRepository.findById(category.getId())
-                                                     .orElse(new Category());
-        if(!category.getName().equals(persistCategory.getName())) {
+        Category persistCategory = categoryRepository.findByIdAndCustomer_Id(categoryDto.getId(),
+                userDto.getCustomer().getId()).orElse(new Category());
+        if (!category.getName()
+                     .equals(persistCategory.getName())) {
             if (nameExists(categoryDto.getName())) {
                 logger.error("Not unique name {}", categoryDto.getName());
                 throw new BusinessException("Name should be unique");
@@ -85,8 +96,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean nameExists(String name) {
-        logger.info("Check for unique name {}",name);
-        UserDto userDto = userService.getUser();
+        logger.info("Check for unique name {}", name);
+        UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
         return categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(name, customerId)

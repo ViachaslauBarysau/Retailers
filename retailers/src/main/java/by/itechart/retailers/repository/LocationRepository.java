@@ -3,7 +3,6 @@ package by.itechart.retailers.repository;
 import by.itechart.retailers.entity.DeletedStatus;
 import by.itechart.retailers.entity.Location;
 import by.itechart.retailers.entity.LocationType;
-import by.itechart.retailers.entity.DeletedStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,8 +18,11 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     List<Location> findAllByCustomer_IdAndLocationTypeAndStatus(Long customer_id, LocationType locationType, DeletedStatus status);
 
-    List<Location>  findAllByIdentifierIgnoreCaseAndCustomer_Id(String identifier, Long customerId);
+    List<Location> findAllByIdentifierIgnoreCaseAndCustomer_Id(String identifier, Long customerId);
 
     List<Location> findAllByCustomer_Id(Long customerId);
 
+    Optional<Location> findByIdAndCustomer_IdAndStatus(Long id, long customerId, DeletedStatus status);
+
+    List<Location> findAllByIdAndCustomer_Id(List<Long> ids, Long customerId);
 }

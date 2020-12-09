@@ -55,7 +55,7 @@ public class CategoryServiceTest {
         UserDto userDto = UserDto.builder()
                                  .customer(customerDto)
                                  .build();
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(categoryRepository.findAllByCustomer_Id(pageable, customerId)).thenReturn(categoryPage);
         when(categoryConverter.entityToDto(categories)).thenReturn(categoryDtos);
         //when
@@ -68,16 +68,23 @@ public class CategoryServiceTest {
     @Test
     public void findByIdTest() {
         //given
+        Long customerId = 1L;
+        CustomerDto customer = CustomerDto.builder()
+                                          .id(customerId)
+                                          .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customer)
+                                 .build();
         Category category = new Category();
         CategoryDto categoryDto = new CategoryDto();
         Long categoryId = 1L;
-
-        when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+        when(userService.getCurrentUser()).thenReturn(userDto);
+        when(categoryRepository.findByIdAndCustomer_Id(categoryId, customerId)).thenReturn(Optional.of(category));
         when(categoryConverter.entityToDto(category)).thenReturn(categoryDto);
         //when
         categoryService.findById(categoryId);
         //then
-        verify(categoryRepository).findById(categoryId);
+        verify(categoryRepository).findByIdAndCustomer_Id(categoryId, customerId);
         verify(categoryConverter).entityToDto(category);
     }
 
@@ -102,7 +109,7 @@ public class CategoryServiceTest {
         List<Category> categories = new ArrayList<Category>() {{
             add(category);
         }};
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(category.getName(), customerId)).thenReturn(categories);
         //when
         categoryService.create(categoryDto);
@@ -129,7 +136,7 @@ public class CategoryServiceTest {
                                  .build();
 
         when(categoryConverter.dtoToEntity(categoryDto)).thenReturn(category);
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(category.getName(), customerId)).thenReturn(new ArrayList<>());
         //when
         categoryService.create(categoryDto);
@@ -166,7 +173,7 @@ public class CategoryServiceTest {
             add(category);
         }};
         when(categoryConverter.dtoToEntity(categoryDto)).thenReturn(category);
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(category.getName(), customerId)).thenReturn(categories);
         //when
         categoryService.update(categoryDto);
@@ -177,6 +184,7 @@ public class CategoryServiceTest {
     @Test
     public void updateTest() {
         Long customerId = 1L;
+        Long categoryId=1L;
         CustomerDto customerDto = CustomerDto.builder()
                                              .id(customerId)
                                              .build();
@@ -184,26 +192,26 @@ public class CategoryServiceTest {
                                     .id(customerId)
                                     .build();
         CategoryDto categoryDto = CategoryDto.builder()
-                                             .id(1L)
+                                             .id(categoryId)
                                              .name("name")
                                              .customer(customerDto)
                                              .build();
         Category category = Category.builder()
-                                    .id(1L)
+                                    .id(categoryId)
                                     .name("name")
                                     .customer(customer)
                                     .build();
         UserDto userDto = UserDto.builder()
                                  .customer(customerDto)
                                  .build();
-
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(categoryConverter.dtoToEntity(categoryDto)).thenReturn(category);
-        when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
+        when(categoryRepository.findByIdAndCustomer_Id(categoryId,customerId)).thenReturn(Optional.of(category));
         //when
         categoryService.update(categoryDto);
         //then
         verify(categoryConverter).dtoToEntity(categoryDto);
-        verify(categoryRepository).findById(category.getId());
+        verify(categoryRepository).findByIdAndCustomer_Id(categoryId,customerId);
         verify(categoryRepository).save(category);
 
     }

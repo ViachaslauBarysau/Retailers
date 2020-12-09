@@ -1,7 +1,6 @@
 package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.BillConverter;
-import by.itechart.retailers.converter.UserConverter;
 import by.itechart.retailers.dto.BillDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Bill;
@@ -33,24 +32,29 @@ public class BillServiceImpl implements BillService {
     private final LocationProductRepository locationProductRepository;
     private final UserService userService;
     private final LocationRepository locationRepository;
-    private final UserConverter userConverter;
     Logger logger = LoggerFactory.getLogger(BillServiceImpl.class);
 
     @Autowired
-    public BillServiceImpl(BillRepository billRepository, BillConverter billConverter, LocationProductRepository locationProductRepository, UserService userService, LocationRepository locationRepository, UserConverter userConverter) {
+    public BillServiceImpl(BillRepository billRepository,
+                           BillConverter billConverter,
+                           LocationProductRepository locationProductRepository,
+                           UserService userService,
+                           LocationRepository locationRepository) {
         this.billRepository = billRepository;
         this.billConverter = billConverter;
         this.locationProductRepository = locationProductRepository;
         this.userService = userService;
         this.locationRepository = locationRepository;
-        this.userConverter = userConverter;
     }
 
 
     @Override
     public BillDto findById(long billId) {
         logger.info("Find by id: {}", billId);
-        Bill bill = billRepository.findById(billId)
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        Bill bill = billRepository.findByIdAndCustomer_Id(billId, customerId)
                                   .orElse(new Bill());
 
         return billConverter.entityToDto(bill);
@@ -59,9 +63,10 @@ public class BillServiceImpl implements BillService {
     @Override
     public Page<BillDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
-        List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
-                                                                                  .getId());
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        List<Location> locations = locationRepository.findAllByCustomer_Id(customerId);
         Page<Bill> billPage = billRepository.findAllByLocationIn(pageable, locations);
         List<BillDto> billDtos = billConverter.entityToDto(billPage.getContent());
         return new PageImpl<>(billDtos, pageable, billPage.getTotalElements());
@@ -70,7 +75,12 @@ public class BillServiceImpl implements BillService {
     @Override
     @Transactional
     public BillDto create(BillDto billDto) throws BusinessException {
+        UserDto userDto = userService.getCurrentUser();
         logger.info("Create");
+        billDto.setCustomer(userDto.getCustomer());
+        billDto.setLocation(userDto.getLocation());
+        billDto.setShopManager(userDto);
+
         Bill bill = billConverter.dtoToEntity(billDto);
         if (billNumberExists(bill.getBillNumber())) {
             throw new BusinessException("Bill number should be unique");
@@ -104,7 +114,7 @@ public class BillServiceImpl implements BillService {
     @Override
     public boolean billNumberExists(Integer billNumber) {
         logger.info("Check for existing number {}", billNumber);
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
         return billRepository.findAllByBillNumberAndCustomer_Id(billNumber, customerId)
