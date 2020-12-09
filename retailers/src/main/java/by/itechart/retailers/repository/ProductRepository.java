@@ -15,4 +15,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByUpcAndCustomer_IdAndStatus(Long upc,Long customerId, DeletedStatus status);
 
     Page<Product> findAllByCustomer_IdAndStatus(Pageable pageable, Long customerId, DeletedStatus status);
+
+    Optional<Product> findByIdAndCustomer_IdAndStatus(Long id, Long customerId, DeletedStatus status);
+
+    List<Product> findAllByIdAndCustomer_Id(List<Long> ids, Long customerId);
 }

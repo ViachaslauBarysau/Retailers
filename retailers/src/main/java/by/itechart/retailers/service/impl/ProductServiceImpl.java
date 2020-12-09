@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -50,7 +49,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto findById(long productId) {
         logger.info("Find by id {}", productId);
-        Product product = productRepository.findById(productId)
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        Product product = productRepository.findByIdAndCustomer_IdAndStatus(productId, customerId, DeletedStatus.ACTIVE)
                                            .orElse(new Product());
 
         return productConverter.entityToDto(product);
@@ -59,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         Page<Product> productPage = productRepository.findAllByCustomer_IdAndStatus(pageable, userDto.getCustomer()
                                                                                                      .getId(), DeletedStatus.ACTIVE);
         List<ProductDto> productDtos = productConverter.entityToDto(productPage.getContent());
@@ -70,6 +72,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto create(ProductDto productDto) throws BusinessException {
         logger.info("Create");
+        UserDto userDto = userService.getCurrentUser();
+        productDto.setCustomer(userDto.getCustomer());
         Product product = productConverter.dtoToEntity(productDto);
         if (upcExists(product.getUpc())) {
             logger.error("Not unique upc {}", product.getUpc());
@@ -85,11 +89,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto update(ProductDto productDto) {
         logger.info("Update");
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        productDto.setCustomer(userDto.getCustomer());
         Product product = productConverter.dtoToEntity(productDto);
-
-        Product persistProduct = productRepository.findById(product.getId())
+        Product persistProduct = productRepository.findByIdAndCustomer_IdAndStatus(product.getId(), customerId, DeletedStatus.ACTIVE)
                                                   .orElse(new Product());
-        if(!product.getUpc().equals(persistProduct.getUpc())) {
+        if (!product.getUpc()
+                    .equals(persistProduct.getUpc())) {
             if (upcExists(product.getUpc())) {
                 logger.error("Not unique upc {}", product.getUpc());
                 throw new BusinessException("Upc should be unique");
@@ -111,8 +119,8 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
                                                                                .getName(), product.getCustomer()
                                                                                                   .getId())
-                                              .get();
-        if (category == null) {
+                                              .orElse(new Category());
+        if (category.getId() == null) {
             category = new Category();
             category.setCustomer(product.getCustomer());
             category.setName(product.getCategory()
@@ -125,9 +133,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> delete(List<Long> productIds) {
         logger.info("Delete");
-        List<Product> products=productRepository.findAllById(productIds);
-        List<Product> undeletedProducts=new ArrayList<>(products);
-        for(Product product:products){
+        UserDto userDto = userService.getCurrentUser();
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        List<Product> products = productRepository.findAllByIdAndCustomer_Id(productIds, customerId);
+        List<Product> undeletedProducts = new ArrayList<>(products);
+        for (Product product : products) {
             List<ApplicationRecord> applicationRecords = applicationRecordRepository.findAllByProduct(product);
             List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
             List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
@@ -159,8 +170,6 @@ public class ProductServiceImpl implements ProductService {
             product.setStatus(DeletedStatus.DELETED);
             productRepository.save(product);
             undeletedProducts.remove(product);
-           // products.remove(product);
-
         }
         return productConverter.entityToDto(undeletedProducts);
     }
@@ -168,7 +177,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public boolean upcExists(Long upc) {
         logger.info("Check for existing upc {}", upc);
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
         return productRepository.findAllByUpcAndCustomer_IdAndStatus(upc, customerId, DeletedStatus.ACTIVE)
