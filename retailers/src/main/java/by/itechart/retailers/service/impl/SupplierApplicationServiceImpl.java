@@ -42,7 +42,10 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     @Override
     public SupplierApplicationDto findById(long supplierApplicationId) {
         logger.info("Find by id {}", supplierApplicationId);
-        SupplierApplication supplierApplication = supplierApplicationRepository.findById(supplierApplicationId)
+        UserDto userDto = userService.getCurrentUser();
+        Long destinationLocationId = userDto.getLocation()
+                                            .getId();
+        SupplierApplication supplierApplication = supplierApplicationRepository.findByIdAndDestinationLocation_Id(supplierApplicationId, destinationLocationId)
                                                                                .orElse(new SupplierApplication());
 
         return supplierApplicationConverter.entityToDto(supplierApplication);
@@ -51,7 +54,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     @Override
     public Page<SupplierApplicationDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
                                                                                                                                            .getId());
 
@@ -64,6 +67,9 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     @Override
     public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) throws BusinessException {
         logger.info("Create");
+        UserDto userDto=userService.getCurrentUser();
+        supplierApplicationDto.setCreator(userDto);
+        supplierApplicationDto.setDestinationLocation(userDto.getLocation());
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
         if (applicationNumberExists(supplierApplication.getApplicationNumber())) {
             logger.error("Not unique number {}", supplierApplication.getApplicationNumber());
@@ -77,6 +83,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     @Override
     public SupplierApplicationDto update(SupplierApplicationDto supplierApplicationDto) {
         logger.info("Update");
+        UserDto userDto=userService.getCurrentUser();
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
         SupplierApplication persistSupplierApplication = supplierApplicationRepository
                 .findById(supplierApplication.getId())
@@ -91,14 +98,15 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     @Override
     public SupplierApplicationDto updateStatus(Long supplierApplicationId) throws BusinessException {
         logger.info("Update status");
-        UserDto userDto = userService.getUser();
-        SupplierApplication supplierApplication = supplierApplicationRepository.findById(supplierApplicationId)
-                                                                               .get();
+        UserDto userDto = userService.getCurrentUser();
+        Long destinationLocation=userDto.getLocation().getId();
+        SupplierApplication supplierApplication = supplierApplicationRepository.findByIdAndDestinationLocation_Id(supplierApplicationId,destinationLocation)
+                                                                               .orElse(new SupplierApplication());
 
         Location location = supplierApplication.getDestinationLocation();
         Integer totalUnitAmount = supplierApplication.getTotalUnitNumber();
         if (totalUnitAmount > location.getAvailableCapacity()) {
-            logger.error("Not enough space in location {}",location.getId());
+            logger.error("Not enough space in location {}", location.getId());
             throw new BusinessException("Not enough space in destination location");
         }
 
@@ -144,9 +152,9 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public boolean applicationNumberExists(Integer applicationNumber) {
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         User user = userConverter.dtoToEntity(userDto);
         return supplierApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)
-                                         .size() != 0;
+                                            .size() != 0;
     }
 }
