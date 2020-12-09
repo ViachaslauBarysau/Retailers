@@ -16,13 +16,13 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     Page<Location> findAllByCustomer_IdAndStatus(Pageable pageable, Long customerId, DeletedStatus status);
 
-    List<Location> findAllByCustomer_IdAndLocationTypeAndStatus(Long customer_id, LocationType locationType, DeletedStatus status);
+    List<Location> findAllByCustomer_IdAndLocationTypeAndStatus(Long customerId, LocationType locationType, DeletedStatus status);
 
     List<Location> findAllByIdentifierIgnoreCaseAndCustomer_Id(String identifier, Long customerId);
 
     List<Location> findAllByCustomer_Id(Long customerId);
 
-    Optional<Location> findByIdAndCustomer_IdAndStatus(Long id, long customerId, DeletedStatus status);
+    Optional<Location> findByIdAndCustomer_IdAndStatus(Long id, Long customerId, DeletedStatus status);
 
     List<Location> findAllByIdAndCustomer_Id(List<Long> ids, Long customerId);
 }

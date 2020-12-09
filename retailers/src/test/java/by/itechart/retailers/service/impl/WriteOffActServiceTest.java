@@ -60,14 +60,14 @@ public class WriteOffActServiceTest {
                                  .customer(customerDto)
                                  .build();
 
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(locationRepository.findAllByCustomer_Id(customerId)).thenReturn(locations);
         when(writeOffActRepository.findAllByLocationIn(pageable, locations)).thenReturn(writeOffActPage);
         when(writeOffActConverter.entityToDto(writeOffActPage.getContent())).thenReturn(writeOffActDtos);
         //when
         writeOffActService.findAll(pageable);
         //then
-        verify(userService).getUser();
+        verify(userService).getCurrentUser();
         verify(locationRepository).findAllByCustomer_Id(customerId);
         verify(writeOffActRepository).findAllByLocationIn(pageable, locations);
         verify(writeOffActConverter).entityToDto(writeOffActPage.getContent());
@@ -79,13 +79,20 @@ public class WriteOffActServiceTest {
         WriteOffAct writeOffAct = new WriteOffAct();
         WriteOffActDto writeOffActDto = new WriteOffActDto();
         Long writeOffActId = 1L;
-
-        when(writeOffActRepository.findById(writeOffActId)).thenReturn(Optional.of(writeOffAct));
+        Long customerId = 1L;
+        CustomerDto customer = CustomerDto.builder()
+                                          .id(customerId)
+                                          .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customer)
+                                 .build();
+        when(userService.getCurrentUser()).thenReturn(userDto);
+        when(writeOffActRepository.findByIdAndCustomer_Id(writeOffActId,customerId)).thenReturn(Optional.of(writeOffAct));
         when(writeOffActConverter.entityToDto(writeOffAct)).thenReturn(writeOffActDto);
         //when
         writeOffActService.findById(writeOffActId);
         //then
-        verify(writeOffActRepository).findById(writeOffActId);
+        verify(writeOffActRepository).findByIdAndCustomer_Id(writeOffActId, customerId);
         verify(writeOffActConverter).entityToDto(writeOffAct);
     }
 
@@ -109,17 +116,17 @@ public class WriteOffActServiceTest {
                                              .writeOffActNumber(1)
                                              .writeOffActRecords(writeOffActRecords)
                                              .build();
-        List<WriteOffAct> writeOffActs=new ArrayList<WriteOffAct>(){{
+        List<WriteOffAct> writeOffActs = new ArrayList<WriteOffAct>() {{
             add(writeOffAct);
         }};
         when(writeOffActConverter.dtoToEntity(writeOffActDto)).thenReturn(writeOffAct);
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId)).thenReturn(writeOffActs);
         //when
         writeOffActService.create(writeOffActDto);
         //than
         verify(writeOffActConverter).dtoToEntity(writeOffActDto);
-        verify(userService).getUser();
+        verify(userService).getCurrentUser();
         verify(writeOffActRepository).findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId);
 
     }
@@ -168,7 +175,7 @@ public class WriteOffActServiceTest {
                                                          .build();
 
         when(writeOffActConverter.dtoToEntity(writeOffActDto)).thenReturn(writeOffAct);
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId)).thenReturn(new ArrayList<>());
         when(locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), writeOffActRecord.getProduct()
                                                                                                          .getId())).thenReturn(locationProduct);
@@ -227,7 +234,7 @@ public class WriteOffActServiceTest {
                                                          .build();
 
         when(writeOffActConverter.dtoToEntity(writeOffActDto)).thenReturn(writeOffAct);
-        when(userService.getUser()).thenReturn(userDto);
+        when(userService.getCurrentUser()).thenReturn(userDto);
         when(writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId)).thenReturn(new ArrayList<>());
         when(locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), writeOffActRecord.getProduct()
                                                                                                          .getId())).thenReturn(locationProduct);

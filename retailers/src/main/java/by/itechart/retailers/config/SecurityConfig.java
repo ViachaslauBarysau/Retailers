@@ -13,25 +13,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.web.cors.CorsConfiguration;
 
+import static by.itechart.retailers.constant.UrlConstants.*;
+
 @Configuration
 @EnableWebSecurity
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final String LOGIN_ENDPOINT = "/api/login";
-    private static final String LOGOUT_ENDPOINT = "/api/logout";
-    private static final String BILLS = "/api/bills/**";
-    private static final String CATEGORIES = "/api/categories/**";
-    private static final String CUSTOMERS = "/api/customers/**";
-    private static final String INNER_APPLICATIONS = "/api/inner_applications/**";
-    private static final String LOCATIONS = "/api/locations/**";
-    private static final String LOCATION_PRODUCTS = "/api/location_products/**";
-    private static final String PRODUCTS = "/api/products/**";
-    private static final String STATES = "/api/states/**";
-    private static final String SUPPLIER_APPLICATIONS = "/api/supplier_applications/**";
-    private static final String SUPPLIERS = "/api/suppliers/**";
-    private static final String SUPPLIER_WAREHOUSES = "/api/supplier_warehouses/**";
-    private static final String USERS = "/api/users/**";
-    private static final String WRITE_OFF_ACTS = "/api/write_of_acts/**";
+
     private final JwtTokenProvider jwtTokenProvider;
 
 
@@ -60,39 +48,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(LOGIN_ENDPOINT)
+                .antMatchers(URL_LOGIN_ENDPOINT)
                 .permitAll()
-                .antMatchers(LOGOUT_ENDPOINT)
+                .antMatchers(URL_LOGOUT_ENDPOINT)
                 .hasAnyAuthority("SYSTEM_ADMIN", "DIRECTOR", "WAREHOUSE_MANAGER", "SHOP_MANAGER", "DISPATCHER", "ADMIN")
-                .antMatchers(BILLS)
+                .antMatchers(URL_BILLS)
                 .hasAnyAuthority("DIRECTOR", "SHOP_MANAGER")
-                .antMatchers(CATEGORIES)
+                .antMatchers(URL_CATEGORIES)
                 .hasAuthority("DIRECTOR")
-                .antMatchers(HttpMethod.GET, CATEGORIES)
+                .antMatchers(HttpMethod.GET, URL_CATEGORIES)
                 .hasAuthority("DISPATCHER")
-                .antMatchers(CUSTOMERS)
+                .antMatchers(URL_CUSTOMERS)
                 .hasAuthority("SYSTEM_ADMIN")
-                .antMatchers(INNER_APPLICATIONS)
+                .antMatchers(URL_INNER_APPLICATIONS)
                 .hasAnyAuthority("WAREHOUSE_MANAGER", "SHOP_MANAGER")
-                .antMatchers(LOCATIONS)
+                .antMatchers(URL_LOCATIONS)
                 .hasAnyAuthority("DIRECTOR", "WAREHOUSE_MANAGER", "SHOP_MANAGER", "DISPATCHER", "ADMIN")
-                .antMatchers(LOCATION_PRODUCTS)
+                .antMatchers(URL_LOCATION_PRODUCTS)
                 .hasAnyAuthority("DISPATCHER", "WAREHOUSE_MANAGER", "SHOP_MANAGER")
-                .antMatchers(PRODUCTS)
+                .antMatchers(URL_PRODUCTS)
                 .hasAuthority("DISPATCHER")
-                .antMatchers(STATES)
+                .antMatchers(URL_STATES)
                 .hasAnyAuthority("SYSTEM_ADMIN", "DIRECTOR", "WAREHOUSE_MANAGER", "SHOP_MANAGER", "DISPATCHER")
-                .antMatchers(SUPPLIER_APPLICATIONS)
+                .antMatchers(URL_SUPPLIER_APPLICATIONS)
                 .hasAuthority("DISPATCHER")
-                .antMatchers(SUPPLIERS)
+                .antMatchers(URL_SUPPLIERS)
                 .hasAnyAuthority("DISPATCHER", "ADMIN")
-                .antMatchers(SUPPLIER_WAREHOUSES)
+                .antMatchers(URL_SUPPLIER_WAREHOUSES)
                 .hasAnyAuthority("DISPATCHER", "DIRECTOR")
-                .antMatchers(USERS)
+                .antMatchers(URL_USERS)
                 .hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.PUT, USERS)
+                .antMatchers(HttpMethod.PUT, URL_USERS)
                 .hasAnyAuthority("SYSTEM_ADMIN", "DIRECTOR", "WAREHOUSE_MANAGER", "SHOP_MANAGER", "DISPATCHER")
-                .antMatchers(WRITE_OFF_ACTS)
+                .antMatchers(URL_WRITE_OFF_ACTS)
                 .hasAnyAuthority("DIRECTOR", "WAREHOUSE_MANAGER", "SHOP_MANAGER", "DISPATCHER")
                 .anyRequest()
                 .authenticated()
