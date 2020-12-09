@@ -45,7 +45,7 @@ public class LocationServiceImpl implements LocationService {
     public LocationDto findById(long locationId) {
         logger.info("Find by id {}", locationId);
         UserDto userDto = userService.getCurrentUser();
-        long customerId = userDto.getCustomer()
+        Long customerId = userDto.getCustomer()
                                  .getId();
         Location location = locationRepository.findByIdAndCustomer_IdAndStatus(locationId, customerId, DeletedStatus.ACTIVE)
                                               .orElse(new Location());
