@@ -19,4 +19,6 @@ public interface InnerApplicationRepository extends JpaRepository<InnerApplicati
     List<InnerApplication> findAllByApplicationNumberAndCreator(Integer applicationNumber, User creator);
 
     Page<InnerApplication> findAllByDestinationLocation_Id(Pageable pageable, Long locationId);
+
+    Optional<InnerApplication> findByIdAndDestinationLocation_Id(Long id, Long destinationLocationId);
 }

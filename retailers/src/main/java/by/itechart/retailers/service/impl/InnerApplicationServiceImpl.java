@@ -45,7 +45,10 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Override
     public InnerApplicationDto findById(long innerApplicationId) {
         logger.info("Find by id {}", innerApplicationId);
-        InnerApplication innerApplication = innerApplicationRepository.findById(innerApplicationId)
+        UserDto userDto = userService.getCurrentUser();
+        Long destinationLocationId = userDto.getLocation()
+                                            .getId();
+        InnerApplication innerApplication = innerApplicationRepository.findByIdAndDestinationLocation_Id(innerApplicationId, destinationLocationId)
                                                                       .orElse(new InnerApplication());
 
         return innerApplicationConverter.entityToDto(innerApplication);
@@ -54,7 +57,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Override
     public Page<InnerApplicationDto> findAll(Pageable pageable) {
         logger.info("Find all");
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         Page<InnerApplication> innerApplicationPage = innerApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
                                                                                                                                   .getId());
         List<InnerApplicationDto> innerApplicationDtos = innerApplicationConverter.entityToDto(innerApplicationPage.getContent());
@@ -66,6 +69,9 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Transactional
     public InnerApplicationDto create(InnerApplicationDto innerApplicationDto) throws BusinessException {
         logger.info("Create");
+        UserDto userDto = userService.getCurrentUser();
+        innerApplicationDto.setCreator(userDto);
+
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         Location location = innerApplication.getSourceLocation();
         if (applicationNumberExists(innerApplication.getApplicationNumber())) {
@@ -87,10 +93,9 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
             Integer availableCapacity = location.getAvailableCapacity();
             location.setAvailableCapacity(availableCapacity - applicationRecord.getAmount() * applicationRecord.getProduct()
                                                                                                                .getVolume());
-            Integer amount=locationProduct.getAmount();
-            locationProduct.setAmount(amount-applicationRecord.getAmount());
+            Integer amount = locationProduct.getAmount();
+            locationProduct.setAmount(amount - applicationRecord.getAmount());
             locationProductRepository.save(locationProduct);
-            //и сохранять locationProduct
             innerApplication.setSourceLocation(location);
         }
         InnerApplication persistInnerApplication = innerApplicationRepository.save(innerApplication);
@@ -101,8 +106,14 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Override
     public InnerApplicationDto update(InnerApplicationDto innerApplicationDto) {
         logger.info("Update");
+        UserDto userDto = userService.getCurrentUser();
+        Long destinationLocationId = userDto.getLocation()
+                                            .getId();
+        innerApplicationDto.setUpdater(userDto);
+
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
-        InnerApplication persistInnerApplication = innerApplicationRepository.findById(innerApplication.getId())
+
+        InnerApplication persistInnerApplication = innerApplicationRepository.findByIdAndDestinationLocation_Id(innerApplicationDto.getId(), destinationLocationId)
                                                                              .orElse(new InnerApplication());
 
         persistInnerApplication.setDestinationLocation(innerApplication.getDestinationLocation());
@@ -114,9 +125,12 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     @Override
     public InnerApplicationDto updateStatus(Long innerApplicationId) throws BusinessException {
         logger.info("Update status {}", innerApplicationId);
-        UserDto userDto = userService.getUser();
-        InnerApplication innerApplication = innerApplicationRepository.findById(innerApplicationId)
-                                                                      .get();
+        UserDto userDto = userService.getCurrentUser();
+        Long destinationLocationId = userDto.getLocation()
+                                            .getId();
+
+        InnerApplication innerApplication = innerApplicationRepository.findByIdAndDestinationLocation_Id(innerApplicationId, destinationLocationId)
+                                                                      .orElse(new InnerApplication());
 
         Location location = innerApplication.getDestinationLocation();
         Integer totalUnitAmount = innerApplication.getTotalUnitNumber();
@@ -166,7 +180,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
 
     @Override
     public boolean applicationNumberExists(Integer applicationNumber) {
-        UserDto userDto = userService.getUser();
+        UserDto userDto = userService.getCurrentUser();
         User user = userConverter.dtoToEntity(userDto);
         return innerApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)
                                          .size() != 0;
