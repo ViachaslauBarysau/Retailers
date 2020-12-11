@@ -27,7 +27,7 @@ public interface SendingService {
             message.setFrom(new InternetAddress(properties.get("mail.smtps.user")
                                                           .toString()));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            message.setSubject("Retailers Credentials");
+            message.setSubject("Retailers");
             message.setText(mail.toString());
 
             Transport tr = session.getTransport();

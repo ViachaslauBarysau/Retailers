@@ -40,4 +40,6 @@ public interface UserService {
     boolean emailExists(String email);
 
     boolean loginExists(String login);
+
+    List<UserDto> findAllById(List<Long> ids);
 }
