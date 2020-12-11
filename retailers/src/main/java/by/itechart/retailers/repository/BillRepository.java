@@ -19,27 +19,24 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     Optional<Bill> findByIdAndCustomer_Id(Long billId, Long customerId);
 
-    @Query(value = "WITH s AS " +
-            "         ( " +
-            "             SELECT " +
-            "                    manager_id, " +
-            "                    ROW_NUMBER() " +
-            "                    OVER (PARTITION BY customer_id ORDER BY profit DESC) as rn " +
-            "             FROM ( " +
-            "                      SELECT bill.customer_id, " +
-            "                             manager_id, " +
-            "                             SUM(total_product_price - total_product_cost) as profit " +
-            "                      FROM bill " +
-            "                               join customer c on bill.customer_id = c.id " +
-            "                               join users u on bill.manager_id = u.id " +
-            "                      where registration_date_time between (select date_trunc('month', now())) and (select (date_trunc('month', now()) + interval '1 month - 1 second')) " +
-            "                        and customer_status = 'ACTIVE' " +
-            "                        and user_status = 'ACTIVE' " +
-            "                      GROUP BY bill.customer_id, manager_id " +
-            "                  ) AS s2 " +
-            "         ) " +
-            "SELECT  manager_id " +
-            "FROM s " +
+    @Query(value = "SELECT manager_id " +
+            "FROM ( " +
+            "         SELECT manager_id, " +
+            "                ROW_NUMBER() " +
+            "                OVER (PARTITION BY customer_id ORDER BY profit DESC) as rn " +
+            "         FROM ( " +
+            "                  SELECT bill.customer_id, " +
+            "                         manager_id, " +
+            "                         SUM(total_product_price - total_product_cost) as profit " +
+            "                  FROM bill " +
+            "                           join customer c on bill.customer_id = c.id " +
+            "                           join users u on bill.manager_id = u.id " +
+            "                  where registration_date_time between (select date_trunc('month', now())) and (select (date_trunc('month', now()) + interval '1 month - 1 second')) " +
+            "                    and customer_status = 'ACTIVE' " +
+            "                    and user_status = 'ACTIVE' " +
+            "                  GROUP BY bill.customer_id, manager_id " +
+            "              ) AS tb1 " +
+            "     ) as tb2 " +
             "WHERE rn <= 5",
     nativeQuery = true)
     List<Long> findAllBestEmployeeIds();
