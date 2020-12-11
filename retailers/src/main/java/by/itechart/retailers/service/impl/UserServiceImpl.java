@@ -104,6 +104,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public List<UserDto> findAllById(List<Long> ids) {
+        logger.info("Find all by id ");
+        List<User> users=userRepository.findAllById(ids);
+        return userConverter.entityToDto(users);
+    }
+
+    @Override
+    @Transactional
     public UserDto getCurrentUser() {
         logger.info("Get user");
         Authentication authentication = SecurityContextHolder.getContext()

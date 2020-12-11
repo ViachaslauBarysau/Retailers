@@ -41,7 +41,7 @@ public class SendingCongratulationsServiceImpl implements SendingCongratulations
     @Override
     @Retryable(
             value = {RuntimeException.class},
-            maxAttempts = 1,
+            maxAttempts = 5,
             backoff = @Backoff(delay = 3600000))
     @Scheduled(cron = "0 0 9 ? * MON-FRI")
     public void sendCongratulations() {
