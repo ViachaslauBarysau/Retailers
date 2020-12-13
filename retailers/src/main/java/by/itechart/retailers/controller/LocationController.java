@@ -29,13 +29,13 @@ public class LocationController {
     }
 
     @GetMapping(value = "/warehouses")
-    public ResponseEntity findAllWarehouses() {
-        return new ResponseEntity<>(locationService.findAllWarehouses(), HttpStatus.OK);
+    public ResponseEntity findAllWarehouses(Pageable pageable) {
+        return new ResponseEntity<>(locationService.findAllWarehouses(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/shops")
-    public ResponseEntity findAllShops() {
-        return new ResponseEntity<>(locationService.findAllShops(), HttpStatus.OK);
+    public ResponseEntity findAllShops(Pageable pageable) {
+        return new ResponseEntity<>(locationService.findAllShops(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{locationId}")

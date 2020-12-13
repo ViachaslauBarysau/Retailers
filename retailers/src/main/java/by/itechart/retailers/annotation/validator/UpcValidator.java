@@ -26,7 +26,6 @@ public class UpcValidator implements ConstraintValidator<Upc, Long> {
             }
             int calcCheckDigit = (10 - ((evenSum + 3 * oddSum) % 10)) % 10;
             return calcCheckDigit == codeValues[11];
-
         } else {
             return false;
         }

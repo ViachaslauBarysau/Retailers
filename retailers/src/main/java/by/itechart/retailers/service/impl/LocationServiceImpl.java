@@ -63,21 +63,23 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<LocationDto> findAllWarehouses() {
+    public Page<LocationDto> findAllWarehouses(Pageable pageable) {
         logger.info("Find all warehouses");
         UserDto userDto = userService.getCurrentUser();
-        List<Location> warehouses = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(userDto.getCustomer()
+        Page<Location> warehousePage = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(pageable,userDto.getCustomer()
                                                                                                            .getId(), LocationType.WAREHOUSE, DeletedStatus.ACTIVE);
-        return locationConverter.entityToDto(warehouses);
+        List<LocationDto> locationDtos = locationConverter.entityToDto(warehousePage.getContent());
+        return new PageImpl<>(locationDtos, pageable, warehousePage.getTotalElements());
     }
 
     @Override
-    public List<LocationDto> findAllShops() {
+    public Page<LocationDto> findAllShops(Pageable pageable) {
         logger.info("Find all shops");
         UserDto userDto = userService.getCurrentUser();
-        List<Location> shopList = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(userDto.getCustomer()
+        Page<Location> shopPage = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(pageable,userDto.getCustomer()
                                                                                                          .getId(), LocationType.SHOP, DeletedStatus.ACTIVE);
-        return locationConverter.entityToDto(shopList);
+        List<LocationDto> locationDtos = locationConverter.entityToDto(shopPage.getContent());
+        return new PageImpl<>(locationDtos, pageable, shopPage.getTotalElements());
     }
 
     @Override
@@ -112,6 +114,7 @@ public class LocationServiceImpl implements LocationService {
             }
         }
         persistLocation.setAddress(location.getAddress());
+        persistLocation.setLocationTax(location.getLocationTax());
         persistLocation.setAvailableCapacity(location.getAvailableCapacity());
         persistLocation.setCustomer(location.getCustomer());
         persistLocation.setIdentifier(location.getIdentifier());

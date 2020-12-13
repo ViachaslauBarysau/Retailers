@@ -116,9 +116,9 @@ public class ProductServiceImpl implements ProductService {
 
     private Category findCategory(Product product) {
         logger.info("Find category");
-        Category category = categoryRepository.findByNameAndCustomer_Id(product.getCategory()
-                                                                               .getName(), product.getCustomer()
-                                                                                                  .getId())
+        Category category = categoryRepository.findByNameIgnoreCaseAndCustomer_Id(product.getCategory()
+                                                                                         .getName(), product.getCustomer()
+                                                                                                            .getId())
                                               .orElse(new Category());
         if (category.getId() == null) {
             category = new Category();
@@ -144,26 +144,9 @@ public class ProductServiceImpl implements ProductService {
             List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
             List<InnerApplication> innerApplications = innerApplicationRepository.findAllByRecordsListIn(applicationRecords);
 
-            long locationProductCount = locationProducts.stream()
-                                                        .filter(locationProduct -> (locationProduct.getAmount() != 0))
-                                                        .count();
-            if (locationProductCount > 0) {
-                continue;
-            }
-
-            long supplierApplicationCount = supplierApplications.stream()
-                                                                .filter(supplierApplication -> (supplierApplication.getApplicationStatus()
-                                                                                                                   .equals(ApplicationStatus.OPEN)))
-                                                                .count();
-            if (supplierApplicationCount > 0) {
-                continue;
-            }
-
-            long innerApplicationCount = innerApplications.stream()
-                                                          .filter(innerApplication -> (innerApplication.getApplicationStatus()
-                                                                                                       .equals(ApplicationStatus.OPEN)))
-                                                          .count();
-            if (innerApplicationCount > 0) {
+            if (checkInLocationProducts(locationProducts)
+                    || checkInSupplierApplications(supplierApplications)
+                    || checkInInnerApplications(innerApplications)) {
                 continue;
             }
 
@@ -172,6 +155,23 @@ public class ProductServiceImpl implements ProductService {
             undeletedProducts.remove(product);
         }
         return productConverter.entityToDto(undeletedProducts);
+    }
+
+    private boolean checkInLocationProducts(List<LocationProduct> locationProducts) {
+        return locationProducts.stream()
+                               .anyMatch(locationProduct -> (locationProduct.getAmount() != 0));
+    }
+
+    private boolean checkInSupplierApplications(List<SupplierApplication> supplierApplications) {
+        return supplierApplications.stream()
+                                   .anyMatch(supplierApplication -> (supplierApplication.getApplicationStatus()
+                                                                                        .equals(ApplicationStatus.OPEN)));
+    }
+
+    private boolean checkInInnerApplications(List<InnerApplication> innerApplications) {
+        return innerApplications.stream()
+                                .anyMatch(supplierApplication -> (supplierApplication.getApplicationStatus()
+                                                                                     .equals(ApplicationStatus.OPEN)));
     }
 
     @Override

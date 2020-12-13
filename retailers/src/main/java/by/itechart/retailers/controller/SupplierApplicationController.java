@@ -22,7 +22,7 @@ public class SupplierApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = "registrationDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = {"registrationDateTime","applicationStatus"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(supplierApplicationService.findAll(pageable), HttpStatus.OK);
     }
 

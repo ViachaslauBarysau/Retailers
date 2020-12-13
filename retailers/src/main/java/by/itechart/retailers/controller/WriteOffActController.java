@@ -22,7 +22,7 @@ public class WriteOffActController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = "writeOffActNumber", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = "actDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(writeOffActService.findAll(pageable), HttpStatus.OK);
     }
 

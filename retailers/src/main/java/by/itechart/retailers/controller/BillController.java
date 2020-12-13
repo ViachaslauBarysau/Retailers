@@ -22,7 +22,7 @@ public class BillController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = "billNumber", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = "registrationDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(billService.findAll(pageable), HttpStatus.OK);
     }
 

@@ -12,9 +12,9 @@ public interface LocationService {
 
     Page<LocationDto> findAll(Pageable pageable);
 
-    List<LocationDto> findAllWarehouses();
+    Page<LocationDto> findAllWarehouses(Pageable pageable);
 
-    List<LocationDto> findAllShops();
+    Page<LocationDto> findAllShops(Pageable pageable);
 
     LocationDto create(LocationDto locationDto) throws BusinessException;
 

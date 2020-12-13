@@ -16,7 +16,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     Page<Location> findAllByCustomer_IdAndStatus(Pageable pageable, Long customerId, DeletedStatus status);
 
-    List<Location> findAllByCustomer_IdAndLocationTypeAndStatus(Long customerId, LocationType locationType, DeletedStatus status);
+    Page<Location> findAllByCustomer_IdAndLocationTypeAndStatus(Pageable pageable, Long customerId, LocationType locationType, DeletedStatus status);
 
     List<Location> findAllByIdentifierIgnoreCaseAndCustomer_Id(String identifier, Long customerId);
 

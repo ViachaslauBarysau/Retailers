@@ -21,5 +21,4 @@ public interface ProductService {
 
     boolean upcExists(Long upc);
 
-
 }
