@@ -10,55 +10,57 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "supplier_applications")
+@Table(name = SUPPLIER_APPLICATION_TABLE)
 public class SupplierApplication implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "application_number")
+    @Column(name = SUPPLIER_APPLICATION_NUMBER)
     private Integer applicationNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id")
+    @JoinColumn(name = SUPPLIER_APPLICATION_SUPPLIER)
     private Supplier supplier;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "destination_location_id")
+    @JoinColumn(name = SUPPLIER_APPLICATION_DESTINATION_LOCATION)
     private Location destinationLocation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "creator_id")
+    @JoinColumn(name = SUPPLIER_APPLICATION_CREATOR)
     private User creator;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "updater_id")
+    @JoinColumn(name = SUPPLIER_APPLICATION_UPDATER)
     private User updater;
 
-    @Column(name = "registration_date_time")
+    @Column(name = SUPPLIER_APPLICATION_REGISTRATION_DATE_TIME)
     private LocalDateTime registrationDateTime;
 
-    @Column(name = "updating_date_time")
+    @Column(name = SUPPLIER_APPLICATION_UPDATING_DATE_TIME)
     private LocalDateTime updatingDateTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "application_status")
+    @Column(name = SUPPLIER_APPLICATION_APPLICATION_STATUS)
     private ApplicationStatus applicationStatus;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "supplier_application_record",
-            joinColumns = @JoinColumn(name = "supplier_application_id"),
-            inverseJoinColumns = {@JoinColumn(name = "application_record_id")})
+    @JoinTable(name = SUPPLIER_APPLICATION_JOIN_TABLE_NAME,
+            joinColumns = @JoinColumn(name = SUPPLIER_APPLICATION_JOIN_TABLE_JOIN_COLUMNS),
+            inverseJoinColumns = {@JoinColumn(name = SUPPLIER_APPLICATION_JOIN_TABLE_INVERSEJOIN_COLUMNS)})
     private List<ApplicationRecord> recordsList;
 
-    @Column(name = "total_product_amount")
+    @Column(name = SUPPLIER_APPLICATION_TOTAL_PRODUCT_AMOUNT)
     private Integer totalProductAmount;
 
-    @Column(name = "total_unit_number")
+    @Column(name = SUPPLIER_APPLICATION_TOTAL_UNIT_NUMBER)
     private Integer totalUnitNumber;
 }

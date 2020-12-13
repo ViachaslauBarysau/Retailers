@@ -9,24 +9,26 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "bill_record")
+@Table(name = BILL_RECORD_TABLE)
 public class BillRecord implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = BILL_RECORD_PRODUCT)
     private Product product;
 
-    @Column(name = "product_amount")
+    @Column(name = BILL_RECORD_PRODUCT_AMOUNT)
     private Integer productAmount;
 
-    @Column(name = "product_price")
+    @Column(name = BILL_RECORD_PRODUCT_PRICE)
     private BigDecimal productPrice;
 }

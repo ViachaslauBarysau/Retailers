@@ -8,35 +8,37 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "product")
+@Table(name = PRODUCT_TABLE)
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "upc")
+    @Column(name = PRODUCT_UPC)
     private Long upc;
 
-    @Column(name = "label")
+    @Column(name = PRODUCT_LABEL)
     private String label;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = PRODUCT_CATEGORY)
     private Category category;
 
-    @Column(name = "volume")
+    @Column(name = PRODUCT_VOLUME)
     private Integer volume;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = PRODUCT_CUSTOMER)
     private Customer customer;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "deleted_status")
+    @Column(name = PRODUCT_STATUS)
     private DeletedStatus status;
 }

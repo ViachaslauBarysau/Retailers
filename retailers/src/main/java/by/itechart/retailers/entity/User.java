@@ -11,53 +11,55 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "users")
+@Table(name = USER_TABLE)
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = USER_FIRST_NAME)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = USER_LAST_NAME)
     private String lastName;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = USER_ADDRESS)
     private Address address;
 
-    @Column(name = "birthday")
+    @Column(name = USER_BIRTHDAY)
     private LocalDate birthday;
 
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-    @ElementCollection(targetClass = Role.class,fetch = FetchType.EAGER)
+    @CollectionTable(name = USER_COLLECTION_TABLE_NAME, joinColumns = @JoinColumn(name = USER_COLLECTION_TABLE_JOIN_COLUMNS))
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private List<Role> userRole=new ArrayList<>();
+    private List<Role> userRole = new ArrayList<>();
 
-    @Column(name = "email")
+    @Column(name = USER_EMAIL)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = USER_PASSWORD)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_status")
+    @Column(name = USER_STATUS)
     private Status userStatus;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = USER_LOCATION)
     private Location location;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = USER_CUSTOMER)
     private Customer customer;
 
-    @Column(name = "login")
+    @Column(name = USER_LOGIN)
     private String login;
 }

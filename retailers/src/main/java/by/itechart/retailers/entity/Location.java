@@ -8,44 +8,45 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
+
+import static by.itechart.retailers.constant.TableConstants.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "location")
+@Table(name = LOCATION_TABLE)
 public class Location implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "identifier")
+    @Column(name = LOCATION_IDENTIFIER)
     private String identifier;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = LOCATION_CUSTOMER)
     private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = LOCATION_ADDRESS)
     private Address address;
 
-    @Column(name = "total_capacity")
+    @Column(name = LOCATION_TOTAL_CAPACITY)
     private Integer totalCapacity;
 
-    @Column(name = "available_capacity")
+    @Column(name = LOCATION_AVAILABLE_CAPACITY)
     private Integer availableCapacity;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "location_type")
+    @Column(name = LOCATION_LOCATION_TYPE)
     private LocationType locationType;
 
-    @Column(name = "location_tax")
+    @Column(name = LOCATION_LOCATION_TAX)
     private BigDecimal locationTax;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "deleted_status")
+    @Column(name = LOCATION_STATUS)
     private DeletedStatus status;
 }

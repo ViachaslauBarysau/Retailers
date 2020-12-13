@@ -11,45 +11,47 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "bill")
+@Table(name = BILL_TABLE)
 public class Bill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "bill_number")
+    @Column(name = BILL_BILL_NUMBER)
     private Integer billNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = BILL_LOCATION)
     private Location location;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = BILL_SHOP_MANAGER)
     private User shopManager;
 
-    @Column(name = "registration_date_time")
+    @Column(name = BILL_REGISTRATION_DATE_TIME)
     private LocalDateTime registrationDateTime;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "bill_id")
+    @JoinColumn(name = BILL_RECORD_LIST)
     private List<BillRecord> recordList;
 
-    @Column(name = "total_product_amount")
+    @Column(name = BILL_TOTAL_PRODUCT_AMOUNT)
     private Integer totalProductAmount;
 
-    @Column(name = "total_product_price")
+    @Column(name = BILL_TOTAL_PRODUCT_PRICE)
     private BigDecimal totalPrice;
 
-    @Column(name = "total_product_cost")
+    @Column(name = BILL_TOTAL_PRODUCT_COST)
     private BigDecimal totalCost;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = BILL_CUSTOMER)
     private Customer customer;
 }

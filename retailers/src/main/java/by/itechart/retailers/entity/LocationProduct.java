@@ -9,29 +9,31 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "location_product")
+@Table(name = LOCATION_PRODUCT_TABLE)
 public class LocationProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cost")
+    @Column(name = LOCATION_PRODUCT_COST)
     private BigDecimal cost;
 
-    @Column(name = "amount")
+    @Column(name = LOCATION_PRODUCT_AMOUNT)
     private Integer amount;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = LOCATION_PRODUCT_PRODUCT)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = LOCATION_PRODUCT_LOCATION)
     private Location location;
 
 

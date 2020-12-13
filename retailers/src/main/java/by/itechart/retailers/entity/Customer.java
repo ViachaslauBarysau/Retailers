@@ -9,28 +9,30 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "customer")
+@Table(name = CUSTOMER_TABLE)
 public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = CUSTOMER_NAME)
     private String name;
 
-    @Column(name = "email")
+    @Column(name = CUSTOMER_EMAIL)
     private String email;
 
-    @Column(name = "registration_date")
+    @Column(name = CUSTOMER_REGISTRATION_DATE)
     private LocalDate registrationDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "customer_status")
+    @Column(name = CUSTOMER_CUSTOMER_STATUS)
     private Status customerStatus;
 
 }

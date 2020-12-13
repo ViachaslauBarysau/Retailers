@@ -9,32 +9,34 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "supplier")
+@Table(name = SUPPLIER_TABLE)
 public class Supplier implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "full_name")
+    @Column(name = SUPPLIER_FULL_NAME)
     private String fullName;
 
-    @Column(name = "identifier")
+    @Column(name = SUPPLIER_IDENTIFIER)
     private String identifier;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id")
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinColumn(name = SUPPLIER_WARE_HOUSE_LIST)
     private List<SupplierWarehouse> wareHouseList;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = SUPPLIER_CUSTOMER)
     private Customer customer;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "supplier_status")
+    @Column(name = SUPPLIER_SUPPLIER_STATUS)
     private Status supplierStatus;
 }

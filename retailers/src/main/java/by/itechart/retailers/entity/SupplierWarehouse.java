@@ -8,30 +8,32 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static by.itechart.retailers.constant.TableConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "supplier_warehouse")
+@Table(name = SUPPLIER_WAREHOUSE_TABLE)
 public class SupplierWarehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = SUPPLIER_WAREHOUSE_NAME)
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = SUPPLIER_WAREHOUSE_CUSTOMER)
     private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = SUPPLIER_WAREHOUSE_ADDRESS)
     private Address address;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "deleted_status")
+    @Column(name = SUPPLIER_WAREHOUSE_STATUS)
     private DeletedStatus status;
 
 }
