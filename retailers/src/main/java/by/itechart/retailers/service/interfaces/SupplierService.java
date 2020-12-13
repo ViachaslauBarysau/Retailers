@@ -14,7 +14,7 @@ public interface SupplierService {
 
     SupplierDto create(SupplierDto supplierDto) throws BusinessException;
 
-    SupplierDto update(SupplierDto supplierDto);
+    SupplierDto update(SupplierDto supplierDto) throws BusinessException;
 
     List<SupplierDto> updateStatus(List<Long> supplierIdsList);
 

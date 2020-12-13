@@ -87,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto update(ProductDto productDto) {
+    public ProductDto update(ProductDto productDto) throws BusinessException {
         logger.info("Update");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()

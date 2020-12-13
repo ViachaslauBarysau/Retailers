@@ -56,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto create(CategoryDto categoryDto) {
+    public CategoryDto create(CategoryDto categoryDto) throws BusinessException {
         logger.info("Create");
         UserDto userDto = userService.getCurrentUser();
         categoryDto.setCustomer(userDto.getCustomer());
@@ -70,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto update(CategoryDto categoryDto) {
+    public CategoryDto update(CategoryDto categoryDto) throws BusinessException {
         logger.info("Update");
 
         UserDto userDto = userService.getCurrentUser();

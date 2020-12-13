@@ -98,7 +98,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public LocationDto update(LocationDto locationDto) {
+    public LocationDto update(LocationDto locationDto) throws BusinessException {
         logger.info("Update");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()

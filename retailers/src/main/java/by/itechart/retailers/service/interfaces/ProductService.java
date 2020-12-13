@@ -15,7 +15,7 @@ public interface ProductService {
 
     ProductDto create(ProductDto productDto) throws BusinessException;
 
-    ProductDto update(ProductDto productDto);
+    ProductDto update(ProductDto productDto) throws BusinessException;
 
     List<ProductDto> delete(List<Long> productIds);
 

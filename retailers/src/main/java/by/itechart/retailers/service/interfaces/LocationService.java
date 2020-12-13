@@ -18,7 +18,7 @@ public interface LocationService {
 
     LocationDto create(LocationDto locationDto) throws BusinessException;
 
-    LocationDto update(LocationDto locationDto);
+    LocationDto update(LocationDto locationDto) throws BusinessException;
 
     List<LocationDto> delete(List<Long> locationIds);
 

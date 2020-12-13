@@ -15,13 +15,11 @@ public interface UserService {
 
     Page<UserDto> findAll(Pageable pageable);
 
-    //List<UserDto> findAllByCustomerId(Pageable pageable);
-
     UserDto create(UserDto userDto) throws BusinessException;
 
     UserDto create(CustomerDto customerDto) throws BusinessException;
 
-    UserDto update(UserDto userDto);
+    UserDto update(UserDto userDto) throws BusinessException;
 
     UserDto getCurrentUser();
 

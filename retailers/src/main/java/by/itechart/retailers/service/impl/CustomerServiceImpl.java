@@ -66,7 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto update(CustomerDto customerDto) {
+    public CustomerDto update(CustomerDto customerDto) throws BusinessException {
         logger.info("Update");
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistCustomer = customerRepository.findById(customer.getId())

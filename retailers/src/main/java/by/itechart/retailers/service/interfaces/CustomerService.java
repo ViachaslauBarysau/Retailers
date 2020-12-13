@@ -14,7 +14,7 @@ public interface CustomerService {
 
     CustomerDto create(CustomerDto customerDto) throws BusinessException;
 
-    CustomerDto update(CustomerDto customerDto);
+    CustomerDto update(CustomerDto customerDto) throws BusinessException;
 
     List<CustomerDto> updateStatus(List<Long> customerIds);
 

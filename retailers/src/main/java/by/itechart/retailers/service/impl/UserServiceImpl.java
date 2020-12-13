@@ -217,7 +217,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(UserDto userDto) {
+    public UserDto update(UserDto userDto) throws BusinessException {
         logger.info("Update");
         UserDto currentUserDto = getCurrentUser();
         userDto.setCustomer(currentUserDto.getCustomer());

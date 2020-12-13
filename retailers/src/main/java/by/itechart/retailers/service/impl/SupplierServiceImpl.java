@@ -73,7 +73,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public SupplierDto update(SupplierDto supplierDto) {
+    public SupplierDto update(SupplierDto supplierDto) throws BusinessException {
         logger.info("Update");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()

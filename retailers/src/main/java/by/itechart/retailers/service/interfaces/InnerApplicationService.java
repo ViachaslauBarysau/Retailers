@@ -12,7 +12,7 @@ public interface InnerApplicationService {
 
     InnerApplicationDto create(InnerApplicationDto innerApplicationDto) throws BusinessException;
 
-    InnerApplicationDto update(InnerApplicationDto innerApplicationDto);
+    InnerApplicationDto update(InnerApplicationDto innerApplicationDto) ;
 
     InnerApplicationDto updateStatus(Long innerApplicationId) throws BusinessException;
 
