@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_SUPPLIER_WAREHOUSES;
+
 @RestController
-@RequestMapping("/api/supplier_warehouses")
+@RequestMapping(URL_API + URL_SUPPLIER_WAREHOUSES)
 public class SupplierWarehouseController {
 
     private final SupplierWarehouseService supplierWarehouseService;

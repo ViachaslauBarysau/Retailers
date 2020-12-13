@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_LOCATIONS;
+
 @RestController
-@RequestMapping("/api/locations")
+@RequestMapping(URL_API + URL_LOCATIONS)
 public class LocationController {
 
     private final LocationService locationService;

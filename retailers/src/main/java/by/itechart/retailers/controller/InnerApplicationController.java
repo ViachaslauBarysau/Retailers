@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_INNER_APPLICATIONS;
+
 @RestController
-@RequestMapping("/api/inner_applications")
+@RequestMapping(URL_API + URL_INNER_APPLICATIONS)
 public class InnerApplicationController {
 
     private final InnerApplicationService innerApplicationService;
@@ -22,7 +25,7 @@ public class InnerApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = {"registrationDateTime","applicationStatus"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = {"registrationDateTime", "applicationStatus"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(innerApplicationService.findAll(pageable), HttpStatus.OK);
     }
 

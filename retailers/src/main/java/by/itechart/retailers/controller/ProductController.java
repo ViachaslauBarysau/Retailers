@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_PRODUCTS;
+
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping(URL_API + URL_PRODUCTS)
 public class ProductController {
 
     private final ProductService productService;

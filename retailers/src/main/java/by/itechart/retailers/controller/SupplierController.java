@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_SUPPLIERS;
+
 @RestController
-@RequestMapping("/api/suppliers")
+@RequestMapping(URL_API + URL_SUPPLIERS)
 public class SupplierController {
 
     private final SupplierService supplierService;
@@ -24,7 +27,7 @@ public class SupplierController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = "fullName", direction = Sort.Direction.ASC)Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = "fullName", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(supplierService.findAll(pageable), HttpStatus.OK);
     }
 
@@ -42,6 +45,7 @@ public class SupplierController {
     public ResponseEntity update(@RequestBody SupplierDto supplierDto) {
         return new ResponseEntity<>(supplierService.update(supplierDto), HttpStatus.OK);
     }
+
     @DeleteMapping
     public ResponseEntity updateStatus(@RequestBody List<Long> supplierIdsList) {
         return new ResponseEntity<>(supplierService.updateStatus(supplierIdsList), HttpStatus.OK);

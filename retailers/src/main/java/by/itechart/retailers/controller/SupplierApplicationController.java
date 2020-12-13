@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_SUPPLIER_APPLICATIONS;
+
 @RestController
-@RequestMapping("/api/supplier_applications")
+@RequestMapping(URL_API + URL_SUPPLIER_APPLICATIONS)
 public class SupplierApplicationController {
 
     private final SupplierApplicationService supplierApplicationService;
@@ -22,7 +25,7 @@ public class SupplierApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = {"registrationDateTime","applicationStatus"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = {"registrationDateTime", "applicationStatus"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(supplierApplicationService.findAll(pageable), HttpStatus.OK);
     }
 

@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_USERS;
+
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(URL_API + URL_USERS)
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 

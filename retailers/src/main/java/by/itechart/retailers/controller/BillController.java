@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_BILLS;
+
 @RestController
-@RequestMapping("/api/bills")
+@RequestMapping(URL_API + URL_BILLS)
 public class BillController {
 
     private final BillService billService;

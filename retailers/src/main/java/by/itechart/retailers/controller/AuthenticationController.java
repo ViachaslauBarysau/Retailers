@@ -23,8 +23,10 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
+import static by.itechart.retailers.constant.UrlConstants.*;
+
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = URL_ALL)
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -38,7 +40,7 @@ public class AuthenticationController {
         this.userService = userService;
     }
 
-    @PostMapping("/login")
+    @PostMapping(URL_LOGIN_ENDPOINT)
     public ResponseEntity login(@RequestBody @Valid AuthenticationRequestDto requestDto) {
         try {
             String username = requestDto.getEmail();
@@ -60,7 +62,7 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/logout")
+    @PostMapping(URL_LOGOUT_ENDPOINT)
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);

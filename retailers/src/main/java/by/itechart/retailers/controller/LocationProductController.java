@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_LOCATION_PRODUCTS;
+
 @RestController
-@RequestMapping("/api/location_products")
+@RequestMapping(URL_API + URL_LOCATION_PRODUCTS)
 public class LocationProductController {
 
     private final LocationProductService locationProductService;

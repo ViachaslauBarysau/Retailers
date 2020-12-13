@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_CATEGORIES;
+
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping(URL_API + URL_CATEGORIES)
 public class CategoryController {
 
     private final CategoryService categoryService;

@@ -10,8 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static by.itechart.retailers.constant.UrlConstants.URL_API;
+import static by.itechart.retailers.constant.UrlConstants.URL_WRITE_OFF_ACTS;
+
 @RestController
-@RequestMapping("/api/write_off_acts")
+@RequestMapping(URL_API + URL_WRITE_OFF_ACTS)
 public class WriteOffActController {
 
     private final WriteOffActService writeOffActService;
