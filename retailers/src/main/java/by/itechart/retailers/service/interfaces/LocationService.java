@@ -23,7 +23,4 @@ public interface LocationService {
     List<LocationDto> delete(List<Long> locationIds);
 
     boolean identifierExists(String identifier);
-
-
-
 }

@@ -30,10 +30,13 @@ public class CategoryServiceTest {
 
     @Mock
     CategoryRepository categoryRepository;
+
     @Mock
     CategoryConverter categoryConverter;
+
     @Mock
     UserServiceImpl userService;
+
     @InjectMocks
     CategoryServiceImpl categoryService;
 
@@ -95,7 +98,6 @@ public class CategoryServiceTest {
         CategoryDto categoryDto = CategoryDto.builder()
                                              .name("name")
                                              .build();
-
         Category category = Category.builder()
                                     .name("name")
                                     .build();
@@ -115,7 +117,6 @@ public class CategoryServiceTest {
         categoryService.create(categoryDto);
         //then
         verify(categoryConverter).dtoToEntity(categoryDto);
-
     }
 
     @Test
@@ -134,7 +135,6 @@ public class CategoryServiceTest {
         UserDto userDto = UserDto.builder()
                                  .customer(customer)
                                  .build();
-
         when(categoryConverter.dtoToEntity(categoryDto)).thenReturn(category);
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(categoryRepository.findAllByNameIgnoreCaseAndCustomer_Id(category.getName(), customerId)).thenReturn(new ArrayList<>());
@@ -143,9 +143,7 @@ public class CategoryServiceTest {
         //then
         verify(categoryConverter).dtoToEntity(categoryDto);
         verify(categoryRepository).save(category);
-
     }
-
 
     @Test(expected = BusinessException.class)
     public void updateTestBusinessExceptionName() {
@@ -213,8 +211,6 @@ public class CategoryServiceTest {
         verify(categoryConverter).dtoToEntity(categoryDto);
         verify(categoryRepository).findByIdAndCustomer_Id(categoryId,customerId);
         verify(categoryRepository).save(category);
-
     }
-
 }
 

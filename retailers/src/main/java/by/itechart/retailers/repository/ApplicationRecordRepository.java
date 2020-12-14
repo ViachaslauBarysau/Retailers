@@ -12,5 +12,4 @@ public interface ApplicationRecordRepository extends JpaRepository<ApplicationRe
     List<ApplicationRecord> findAllByProduct(Product product);
 
     ApplicationRecord findApplicationRecordByProduct(Product product);
-
 }

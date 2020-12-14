@@ -33,14 +33,19 @@ public class WriteOffActServiceTest {
 
     @Mock
     WriteOffActConverter writeOffActConverter;
+
     @Mock
     WriteOffActRepository writeOffActRepository;
+
     @Mock
     UserServiceImpl userService;
+
     @Mock
     LocationProductRepository locationProductRepository;
+
     @Mock
     LocationRepository locationRepository;
+
     @InjectMocks
     WriteOffActServiceImpl writeOffActService;
 
@@ -59,7 +64,6 @@ public class WriteOffActServiceTest {
         UserDto userDto = UserDto.builder()
                                  .customer(customerDto)
                                  .build();
-
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(locationRepository.findAllByCustomer_Id(customerId)).thenReturn(locations);
         when(writeOffActRepository.findAllByLocationIn(pageable, locations)).thenReturn(writeOffActPage);
@@ -128,7 +132,6 @@ public class WriteOffActServiceTest {
         verify(writeOffActConverter).dtoToEntity(writeOffActDto);
         verify(userService).getCurrentUser();
         verify(writeOffActRepository).findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId);
-
     }
 
     @Test(expected = BusinessException.class)
@@ -150,20 +153,16 @@ public class WriteOffActServiceTest {
                                                       .writeOffActNumber(1)
                                                       .writeOffActRecords(writeOffActRecordDtos)
                                                       .build();
-
         Location location = Location.builder()
                                     .id(1L)
                                     .build();
-
         WriteOffActRecord writeOffActRecord = WriteOffActRecord.builder()
                                                                .amount(1)
                                                                .product(product)
                                                                .build();
-
         List<WriteOffActRecord> writeOffActRecords = new ArrayList<WriteOffActRecord>() {{
             add(writeOffActRecord);
         }};
-
         WriteOffAct writeOffAct = WriteOffAct.builder()
                                              .writeOffActNumber(1)
                                              .writeOffActRecords(writeOffActRecords)
@@ -173,7 +172,6 @@ public class WriteOffActServiceTest {
                                                          .amount(0)
                                                          .product(product)
                                                          .build();
-
         when(writeOffActConverter.dtoToEntity(writeOffActDto)).thenReturn(writeOffAct);
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId)).thenReturn(new ArrayList<>());
@@ -198,7 +196,6 @@ public class WriteOffActServiceTest {
         UserDto userDto = UserDto.builder()
                                  .customer(customer)
                                  .build();
-
         Location location = Location.builder()
                                     .availableCapacity(1)
                                     .id(1L)
@@ -209,12 +206,10 @@ public class WriteOffActServiceTest {
                                  .label("label")
                                  .volume(1)
                                  .build();
-
         WriteOffActRecord writeOffActRecord = WriteOffActRecord.builder()
                                                                .amount(0)
                                                                .product(product)
                                                                .build();
-
         List<WriteOffActRecord> writeOffActRecords = new ArrayList<WriteOffActRecord>() {{
             add(writeOffActRecord);
         }};
@@ -227,12 +222,10 @@ public class WriteOffActServiceTest {
                                              .writeOffActRecords(writeOffActRecords)
                                              .location(location)
                                              .build();
-
         LocationProduct locationProduct = LocationProduct.builder()
                                                          .amount(0)
                                                          .product(product)
                                                          .build();
-
         when(writeOffActConverter.dtoToEntity(writeOffActDto)).thenReturn(writeOffAct);
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffAct.getWriteOffActNumber(), customerId)).thenReturn(new ArrayList<>());

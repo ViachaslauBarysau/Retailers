@@ -19,7 +19,4 @@ public interface CustomerService {
     List<CustomerDto> updateStatus(List<Long> customerIds);
 
     boolean emailExists(String email);
-
-
-
 }

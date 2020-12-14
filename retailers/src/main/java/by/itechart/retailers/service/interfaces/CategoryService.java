@@ -15,6 +15,4 @@ public interface CategoryService {
     CategoryDto update(CategoryDto categoryDto) throws BusinessException;
 
     boolean nameExists(String name);
-
-
 }

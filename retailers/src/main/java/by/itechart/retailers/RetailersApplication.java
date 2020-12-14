@@ -9,10 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableRetry
 @EnableScheduling
 public class RetailersApplication {
-
     public static void main(String[] args) {
-
         SpringApplication.run(RetailersApplication.class, args);
     }
-
 }

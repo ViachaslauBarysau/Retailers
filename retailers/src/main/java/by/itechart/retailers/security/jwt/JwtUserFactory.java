@@ -14,7 +14,6 @@ public final class JwtUserFactory {
     }
 
     public static JwtUser create(UserDto userDto) {
-
         return new JwtUser(
                 userDto.getId(),
                 userDto.getFirstName(),
@@ -40,5 +39,4 @@ public final class JwtUserFactory {
             return userDto.getCustomer() .getCustomerStatus();
         }
     }
-
 }

@@ -26,12 +26,16 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LocationProductServiceTest {
+
     @Mock
     LocationProductRepository locationProductRepository;
+
     @Mock
     LocationProductConverter locationProductConverter;
+
     @Mock
     UserServiceImpl userService;
+
     @InjectMocks
     LocationProductServiceImpl locationProductService;
 
@@ -45,8 +49,6 @@ public class LocationProductServiceTest {
         UserDto userDto = UserDto.builder()
                                  .location(location)
                                  .build();
-
-
         List<LocationProduct> locationProducts = new ArrayList<LocationProduct>() {{
             add(new LocationProduct());
         }};
@@ -89,7 +91,6 @@ public class LocationProductServiceTest {
         verify(locationProductConverter).entityToDto(locationProduct);
     }
 
-
     @Test
     public void createTest() {
         //given
@@ -118,9 +119,7 @@ public class LocationProductServiceTest {
         //then
         verify(locationProductConverter).dtoToEntity(locationProductDto);
         verify(locationProductRepository).save(locationProduct);
-
     }
-
 
     @Test
     public void updateTest() {
@@ -153,9 +152,6 @@ public class LocationProductServiceTest {
         verify(locationProductConverter).dtoToEntity(locationProductDto);
         verify(locationProductRepository).findByIdAndLocation_Id(locationId,locationProductId);
         verify(locationProductRepository).save(locationProduct);
-
     }
-
-
 }
 

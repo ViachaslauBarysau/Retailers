@@ -4,6 +4,8 @@ import by.itechart.retailers.dto.AuthenticationRequestDto;
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.security.jwt.JwtTokenProvider;
 import by.itechart.retailers.service.interfaces.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
@@ -55,6 +58,7 @@ public class AuthenticationController {
             response.put("user", user);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
+            logger.error(e.getMessage());
             return new ResponseEntity<>("Invalid username or password", HttpStatus.FORBIDDEN);
         }
     }

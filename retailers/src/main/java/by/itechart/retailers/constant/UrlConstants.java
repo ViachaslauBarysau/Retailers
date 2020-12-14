@@ -18,5 +18,4 @@ public class UrlConstants {
     public static final String URL_USERS = "/users/**";
     public static final String URL_WRITE_OFF_ACTS = "/write_of_acts";
     public static final String URL_ALL = "/**";
-
 }

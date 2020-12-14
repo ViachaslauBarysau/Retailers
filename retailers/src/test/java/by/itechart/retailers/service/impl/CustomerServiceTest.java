@@ -26,12 +26,16 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest {
+
     @Mock
     CustomerConverter customerConverter;
+
     @Mock
     CustomerRepository customerRepository;
+
     @Mock
     UserServiceImpl userService;
+
     @InjectMocks
     CustomerServiceImpl customerService;
 
@@ -46,7 +50,6 @@ public class CustomerServiceTest {
         }};
         PageRequest pageable = PageRequest.of(0, 1);
         Page<Customer> customerPage = new PageImpl<>(customers, pageable, 1);
-
         when(customerRepository.findAll(pageable)).thenReturn(customerPage);
         when(customerConverter.entityToDto(customers)).thenReturn(customerDtos);
         //when
@@ -62,7 +65,6 @@ public class CustomerServiceTest {
         Customer customer = new Customer();
         CustomerDto customerDto = new CustomerDto();
         Long customerId = 1L;
-
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customer));
         when(customerConverter.entityToDto(customer)).thenReturn(customerDto);
         //when
@@ -78,11 +80,9 @@ public class CustomerServiceTest {
         CustomerDto customerDto = CustomerDto.builder()
                                              .email("string")
                                              .build();
-
         Customer customer = Customer.builder()
                                     .email("string")
                                     .build();
-
         List<Customer> customers = new ArrayList<Customer>() {{
             add(customer);
         }};
@@ -127,7 +127,6 @@ public class CustomerServiceTest {
         Customer customer = Customer.builder()
                                     .email("string")
                                     .build();
-
         List<Customer> customers = new ArrayList<Customer>() {{
             add(customer);
         }};
@@ -160,7 +159,6 @@ public class CustomerServiceTest {
         verify(customerConverter).dtoToEntity(customerDto);
         verify(customerRepository).findById(customer.getId());
         verify(customerRepository).save(customer);
-
     }
 
     @Test
@@ -176,7 +174,6 @@ public class CustomerServiceTest {
         Customer customer2 = Customer.builder()
                                      .customerStatus(Status.DISABLED)
                                      .build();
-
         List<Customer> customers = new ArrayList<Customer>() {{
             add(customer1);
             add(customer2);
@@ -187,7 +184,6 @@ public class CustomerServiceTest {
         //then
         verify(customerRepository).findAllById(customerIds);
         verify(customerRepository).save(customer1);
-
     }
 }
 

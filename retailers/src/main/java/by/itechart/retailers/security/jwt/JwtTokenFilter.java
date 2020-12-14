@@ -31,7 +31,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 response.addHeader(chave, valor);
             }
         }
-
         response.setStatus(responseEntity.getStatusCodeValue());
         response.getWriter()
                 .write(String.valueOf(responseEntity.getBody()));
@@ -44,14 +43,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 Authentication auth = jwtTokenProvider.getAuthentication(token);
-
                 if (auth != null) {
                     SecurityContextHolder.getContext()
                                          .setAuthentication(auth);
                 }
             }
         } catch (JwtAuthenticationException e) {
-            responseEntityToHttpServletResponse(new ResponseEntity<Object>(e.getMessage(), HttpStatus.UNAUTHORIZED), response);
+            logger.error(e.getMessage());
+            responseEntityToHttpServletResponse(new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED), response);
             return;
         }
         filterChain.doFilter(request, response);

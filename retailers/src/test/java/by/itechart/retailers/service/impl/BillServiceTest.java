@@ -33,14 +33,19 @@ public class BillServiceTest {
 
     @Mock
     BillConverter billConverter;
+
     @Mock
     BillRepository billRepository;
+
     @Mock
     UserServiceImpl userService;
+
     @Mock
     LocationProductRepository locationProductRepository;
+
     @Mock
     LocationRepository locationRepository;
+
     @InjectMocks
     BillServiceImpl billService;
 
@@ -162,7 +167,6 @@ public class BillServiceTest {
         List<BillRecord> billRecords = new ArrayList<BillRecord>() {{
             add(billRecord);
         }};
-
         Bill bill = Bill.builder()
                         .billNumber(1)
                         .recordList(billRecords)
@@ -172,7 +176,6 @@ public class BillServiceTest {
                                                          .amount(0)
                                                          .product(product)
                                                          .build();
-
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(new ArrayList<>());
@@ -208,12 +211,10 @@ public class BillServiceTest {
                                  .label("label")
                                  .volume(1)
                                  .build();
-
         BillRecord billRecord = BillRecord.builder()
                                           .productAmount(0)
                                           .product(product)
                                           .build();
-
         List<BillRecord> billRecords = new ArrayList<BillRecord>() {{
             add(billRecord);
         }};
@@ -226,12 +227,10 @@ public class BillServiceTest {
                         .recordList(billRecords)
                         .location(location)
                         .build();
-
         LocationProduct locationProduct = LocationProduct.builder()
                                                          .amount(0)
                                                          .product(product)
                                                          .build();
-
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(new ArrayList<>());
@@ -244,6 +243,4 @@ public class BillServiceTest {
         //than
         verify(billConverter).dtoToEntity(billDto);
     }
-
-
 }

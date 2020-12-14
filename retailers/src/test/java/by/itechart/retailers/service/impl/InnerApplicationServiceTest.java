@@ -33,14 +33,19 @@ public class InnerApplicationServiceTest {
 
     @Mock
     BillConverter billConverter;
+
     @Mock
     BillRepository billRepository;
+
     @Mock
     UserServiceImpl userService;
+
     @Mock
     LocationProductRepository locationProductRepository;
+
     @Mock
     LocationRepository locationRepository;
+
     @InjectMocks
     BillServiceImpl billService;
 
@@ -59,7 +64,6 @@ public class InnerApplicationServiceTest {
         UserDto userDto = UserDto.builder()
                                  .customer(customerDto)
                                  .build();
-
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(locationRepository.findAllByCustomer_Id(customerId)).thenReturn(locations);
         when(billRepository.findAllByLocationIn(pageable, locations)).thenReturn(billPage);
@@ -149,20 +153,16 @@ public class InnerApplicationServiceTest {
                                  .billNumber(1)
                                  .recordList(billRecordDtos)
                                  .build();
-
         Location location = Location.builder()
                                     .id(1L)
                                     .build();
-
         BillRecord billRecord = BillRecord.builder()
                                           .productAmount(1)
                                           .product(product)
                                           .build();
-
         List<BillRecord> billRecords = new ArrayList<BillRecord>() {{
             add(billRecord);
         }};
-
         Bill bill = Bill.builder()
                         .billNumber(1)
                         .recordList(billRecords)
@@ -172,7 +172,6 @@ public class InnerApplicationServiceTest {
                                                          .amount(0)
                                                          .product(product)
                                                          .build();
-
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(new ArrayList<>());
@@ -190,7 +189,6 @@ public class InnerApplicationServiceTest {
     public void createTest() {
         //given
         List<BillRecordDto> billRecordDtos = new ArrayList<>();
-
         Long customerId = 1L;
         CustomerDto customer = CustomerDto.builder()
                                           .id(customerId)
@@ -213,7 +211,6 @@ public class InnerApplicationServiceTest {
                                           .productAmount(0)
                                           .product(product)
                                           .build();
-
         List<BillRecord> billRecords = new ArrayList<BillRecord>() {{
             add(billRecord);
         }};
@@ -226,12 +223,10 @@ public class InnerApplicationServiceTest {
                         .recordList(billRecords)
                         .location(location)
                         .build();
-
         LocationProduct locationProduct = LocationProduct.builder()
                                                          .amount(0)
                                                          .product(product)
                                                          .build();
-
         when(billConverter.dtoToEntity(billDto)).thenReturn(bill);
         when(userService.getCurrentUser()).thenReturn(userDto);
         when(billRepository.findAllByBillNumberAndCustomer_Id(bill.getBillNumber(), customerId)).thenReturn(new ArrayList<>());
@@ -244,6 +239,4 @@ public class InnerApplicationServiceTest {
         //than
         verify(billConverter).dtoToEntity(billDto);
     }
-
-
 }

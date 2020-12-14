@@ -31,7 +31,6 @@ public class ExceptionHelper extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {BusinessException.class})
     public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
-
     }
 
     @Override
@@ -46,6 +45,5 @@ public class ExceptionHelper extends ResponseEntityExceptionHandler {
           .forEach(error -> errors.add(error.getObjectName() + ": " + error.getDefaultMessage()));
         ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST, errors);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-
     }
 }
