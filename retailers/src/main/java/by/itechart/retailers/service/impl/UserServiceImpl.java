@@ -7,7 +7,7 @@ import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.UserRepository;
-import by.itechart.retailers.service.interfaces.SendingCredentialsService;
+import by.itechart.retailers.service.interfaces.CredentialsService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,27 +28,29 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import static by.itechart.retailers.constant.PasswordConstants.*;
+
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final static String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private final static String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
-    private final static String specialCharacters = "!@#$";
-    private final static String numbers = "1234567890";
     private final UserRepository userRepository;
     private final UserConverter userConverter;
     private final CustomerConverter customerConverter;
     private final BCryptPasswordEncoder encoder;
-    private final SendingCredentialsService sendingCredentialsService;
+    private final CredentialsService credentialsService;
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter, CustomerConverter customerConverter, @Lazy BCryptPasswordEncoder encoder, SendingCredentialsService sendingCredentialsService) {
+    public UserServiceImpl(UserRepository userRepository,
+                           UserConverter userConverter,
+                           CustomerConverter customerConverter,
+                           @Lazy BCryptPasswordEncoder encoder,
+                           CredentialsService credentialsService) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.customerConverter = customerConverter;
         this.encoder = encoder;
-        this.sendingCredentialsService = sendingCredentialsService;
+        this.credentialsService = credentialsService;
     }
 
     @Override
@@ -106,8 +108,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<UserDto> findAllById(List<Long> ids) {
         logger.info("Find all by id ");
-        List<User> users=userRepository.findAllById(ids);
+        List<User> users = userRepository.findAllById(ids);
         return userConverter.entityToDto(users);
+    }
+
+    @Override
+    public UserDto updatePassword(UserDto userDto) {
+        logger.info("Update user password");
+        UserDto currentUserDto = getCurrentUser();
+        userDto.setCustomer(currentUserDto.getCustomer());
+        Long customerId = currentUserDto.getCustomer()
+                                        .getId();
+        User user = userConverter.dtoToEntity(userDto);
+        User persistUser = userRepository.findByIdAndCustomer_Id(user.getId(), customerId)
+                                         .orElse(new User());
+        persistUser.setPassword(encodePassword(user.getPassword()));
+        persistUser = userRepository.save(persistUser);
+        return userConverter.entityToDto(persistUser);
     }
 
     @Override
@@ -134,12 +151,10 @@ public class UserServiceImpl implements UserService {
         String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
         Random random = new Random();
         char[] charPassword = new char[8];
-
         charPassword[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
         charPassword[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
         charPassword[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
         charPassword[3] = numbers.charAt(random.nextInt(numbers.length()));
-
         for (int i = 4; i < 8; i++) {
             charPassword[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
         }
@@ -160,7 +175,6 @@ public class UserServiceImpl implements UserService {
                                  .getId();
         User user = userRepository.findByIdAndCustomer_Id(userId, customerId)
                                   .orElse(new User());
-
         return userConverter.entityToDto(user);
     }
 
@@ -172,7 +186,6 @@ public class UserServiceImpl implements UserService {
                                                                                                              .getId(), Role.ADMIN);
         List<UserDto> userDtos = userConverter.entityToDto(userPage.getContent());
         return new PageImpl<>(userDtos, pageable, userPage.getTotalElements());
-
     }
 
     @Override
@@ -189,7 +202,7 @@ public class UserServiceImpl implements UserService {
         User persistUser = userRepository.save(user);
         persistUser.setPassword(password);
         userDto = userConverter.entityToDto(persistUser);
-        sendingCredentialsService.send(userDto);
+        credentialsService.sendCredentials(userDto);
         return userDto;
     }
 
@@ -208,7 +221,7 @@ public class UserServiceImpl implements UserService {
         user.setCustomer(customer);
         String password = generatePassword();
         user.setPassword(password);
-        new Thread(() -> sendingCredentialsService.send(userConverter.entityToDto(user))).start();
+        new Thread(() -> credentialsService.sendCredentials(userConverter.entityToDto(user))).start();
         user.setPassword(encodePassword(password));
         user.setUserStatus(Status.ACTIVE);
         user.setUserRole(Collections.singletonList(Role.ADMIN));
@@ -224,7 +237,6 @@ public class UserServiceImpl implements UserService {
         Long customerId = currentUserDto.getCustomer()
                                         .getId();
         User user = userConverter.dtoToEntity(userDto);
-
         User persistUser = userRepository.findByIdAndCustomer_Id(user.getId(), customerId)
                                          .orElse(new User());
         if (!user.getEmail()
@@ -247,16 +259,12 @@ public class UserServiceImpl implements UserService {
         persistUser.setLogin(user.getLogin());
         persistUser.setFirstName(user.getFirstName());
         persistUser.setLastName(user.getLastName());
-        persistUser.setPassword(user.getPassword());
         persistUser.setUserRole(user.getUserRole());
         persistUser.setUserStatus(user.getUserStatus());
         persistUser.setCustomer(user.getCustomer());
         persistUser.setLocation(user.getLocation());
         persistUser.setLogin(user.getLogin());
         persistUser = userRepository.save(persistUser);
-
         return userConverter.entityToDto(persistUser);
     }
-
-
 }

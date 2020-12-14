@@ -40,4 +40,6 @@ public interface UserService {
     boolean loginExists(String login);
 
     List<UserDto> findAllById(List<Long> ids);
+
+    UserDto updatePassword(UserDto userDto);
 }
