@@ -25,7 +25,7 @@ public class InnerApplicationController {
     }
 
     @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = {"registrationDateTime", "applicationStatus"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity findAll(@PageableDefault(sort = {"applicationStatus", "registrationDateTime"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(innerApplicationService.findAll(pageable), HttpStatus.OK);
     }
 
