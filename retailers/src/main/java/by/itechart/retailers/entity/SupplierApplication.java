@@ -27,8 +27,8 @@ public class SupplierApplication implements Serializable {
     private Integer applicationNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = SUPPLIER_APPLICATION_SUPPLIER)
-    private Supplier supplier;
+    @JoinColumn(name = SUPPLIER_APPLICATION_SUPPLIER_WAREHOUSE)
+    private SupplierWarehouse supplierWarehouse;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = SUPPLIER_APPLICATION_DESTINATION_LOCATION)

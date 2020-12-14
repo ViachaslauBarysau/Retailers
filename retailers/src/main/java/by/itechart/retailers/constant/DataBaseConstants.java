@@ -92,7 +92,7 @@ public class DataBaseConstants {
 
     public static final String SUPPLIER_APPLICATION_TABLE = "supplier_applications";
     public static final String SUPPLIER_APPLICATION_NUMBER = "application_number";
-    public static final String SUPPLIER_APPLICATION_SUPPLIER = "supplier_id";
+    public static final String SUPPLIER_APPLICATION_SUPPLIER_WAREHOUSE = "supplier_warehouse_id";
     public static final String SUPPLIER_APPLICATION_DESTINATION_LOCATION = "destination_location_id";
     public static final String SUPPLIER_APPLICATION_CREATOR = "creator_id";
     public static final String SUPPLIER_APPLICATION_UPDATER = "updater_id";

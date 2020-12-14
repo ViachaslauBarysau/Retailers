@@ -25,7 +25,7 @@ public class SupplierApplicationDto {
     private Integer applicationNumber;
 
     @Valid
-    private SupplierDto supplier;
+    private SupplierWarehouseDto supplierWarehouse;
 
     @Valid
     private LocationDto destinationLocation;
