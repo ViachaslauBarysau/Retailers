@@ -116,11 +116,9 @@ public class UserServiceImpl implements UserService {
     public UserDto updatePassword(UserDto userDto) {
         logger.info("Update user password");
         UserDto currentUserDto = getCurrentUser();
-        userDto.setCustomer(currentUserDto.getCustomer());
-        Long customerId = currentUserDto.getCustomer()
-                                        .getId();
+        String email = currentUserDto.getEmail();
         User user = userConverter.dtoToEntity(userDto);
-        User persistUser = userRepository.findByIdAndCustomer_Id(user.getId(), customerId)
+        User persistUser = userRepository.findByIdAndEmail(user.getId(), email)
                                          .orElse(new User());
         persistUser.setPassword(encodePassword(user.getPassword()));
         persistUser = userRepository.save(persistUser);
@@ -233,11 +231,9 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) throws BusinessException {
         logger.info("Update user");
         UserDto currentUserDto = getCurrentUser();
-        userDto.setCustomer(currentUserDto.getCustomer());
-        Long customerId = currentUserDto.getCustomer()
-                                        .getId();
+        String email = currentUserDto.getEmail();
         User user = userConverter.dtoToEntity(userDto);
-        User persistUser = userRepository.findByIdAndCustomer_Id(user.getId(), customerId)
+        User persistUser = userRepository.findByIdAndEmail(user.getId(), email)
                                          .orElse(new User());
         if (!user.getEmail()
                  .equals(persistUser.getEmail())) {
