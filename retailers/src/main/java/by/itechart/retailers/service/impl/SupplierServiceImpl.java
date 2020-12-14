@@ -55,7 +55,6 @@ public class SupplierServiceImpl implements SupplierService {
                                                                                                .getId());
         List<SupplierDto> supplierDtos = supplierConverter.entityToDto(supplierPage.getContent());
         return new PageImpl<>(supplierDtos, pageable, supplierPage.getTotalElements());
-
     }
 
     @Override

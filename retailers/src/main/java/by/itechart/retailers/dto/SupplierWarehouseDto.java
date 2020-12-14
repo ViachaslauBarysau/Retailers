@@ -23,7 +23,7 @@ public class SupplierWarehouseDto {
     @Size(min = 1, max = 20, message = "Name can be from 1 to 20 symbols.")
     private String name;
 
-    private Address address;
+    private AddressDto address;
 
     private DeletedStatus status;
 }
