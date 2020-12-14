@@ -50,6 +50,7 @@ public class AuthenticationController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             UserDto user = userService.findByEmail(username);
             if (user == null) {
+                logger.error("User with username: " + username + " not found");
                 throw new UsernameNotFoundException("User with username: " + username + " not found");
             }
             String token = jwtTokenProvider.createToken(username, user.getUserRole());
