@@ -32,12 +32,12 @@ public class LocationController {
     }
 
     @GetMapping(value = "/warehouses")
-    public ResponseEntity findAllWarehouses(Pageable pageable) {
+    public ResponseEntity findAllWarehouses(@PageableDefault(sort = "identifier", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(locationService.findAllWarehouses(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = "/shops")
-    public ResponseEntity findAllShops(Pageable pageable) {
+    public ResponseEntity findAllShops(@PageableDefault(sort = "identifier", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(locationService.findAllShops(pageable), HttpStatus.OK);
     }
 
