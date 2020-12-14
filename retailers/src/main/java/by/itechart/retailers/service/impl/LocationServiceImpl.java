@@ -69,8 +69,11 @@ public class LocationServiceImpl implements LocationService {
     public Page<LocationDto> findAllWarehouses(Pageable pageable) {
         logger.info("Find all warehouses");
         UserDto userDto = userService.getCurrentUser();
-        Page<Location> warehousePage = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(pageable,userDto.getCustomer()
-                                                                                                           .getId(), LocationType.WAREHOUSE, DeletedStatus.ACTIVE);
+        Page<Location> warehousePage = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(pageable,
+                userDto.getCustomer()
+                       .getId(),
+                LocationType.WAREHOUSE,
+                DeletedStatus.ACTIVE);
         List<LocationDto> locationDtos = locationConverter.entityToDto(warehousePage.getContent());
         return new PageImpl<>(locationDtos, pageable, warehousePage.getTotalElements());
     }
@@ -79,8 +82,11 @@ public class LocationServiceImpl implements LocationService {
     public Page<LocationDto> findAllShops(Pageable pageable) {
         logger.info("Find all shops");
         UserDto userDto = userService.getCurrentUser();
-        Page<Location> shopPage = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(pageable,userDto.getCustomer()
-                                                                                                         .getId(), LocationType.SHOP, DeletedStatus.ACTIVE);
+        Page<Location> shopPage = locationRepository.findAllByCustomer_IdAndLocationTypeAndStatus(pageable,
+                userDto.getCustomer()
+                       .getId(),
+                LocationType.SHOP,
+                DeletedStatus.ACTIVE);
         List<LocationDto> locationDtos = locationConverter.entityToDto(shopPage.getContent());
         return new PageImpl<>(locationDtos, pageable, shopPage.getTotalElements());
     }

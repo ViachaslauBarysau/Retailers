@@ -101,7 +101,7 @@ public class DataBaseConstants {
     public static final String SUPPLIER_APPLICATION_APPLICATION_STATUS = "application_status";
     public static final String SUPPLIER_APPLICATION_JOIN_TABLE_NAME = "supplier_application_record";
     public static final String SUPPLIER_APPLICATION_JOIN_TABLE_JOIN_COLUMNS = "supplier_application_id";
-    public static final String SUPPLIER_APPLICATION_JOIN_TABLE_INVERSEJOIN_COLUMNS = "application_record_id";
+    public static final String SUPPLIER_APPLICATION_JOIN_TABLE_INVERSE_JOIN_COLUMNS = "application_record_id";
     public static final String SUPPLIER_APPLICATION_TOTAL_PRODUCT_AMOUNT = "total_product_amount";
     public static final String SUPPLIER_APPLICATION_TOTAL_UNIT_NUMBER = "total_unit_number";
 
