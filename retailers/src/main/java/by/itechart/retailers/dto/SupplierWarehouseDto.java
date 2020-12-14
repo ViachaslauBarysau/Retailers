@@ -2,7 +2,6 @@ package by.itechart.retailers.dto;
 
 
 import by.itechart.retailers.entity.Address;
-import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.DeletedStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,10 +23,7 @@ public class SupplierWarehouseDto {
     @Size(min = 1, max = 20, message = "Name can be from 1 to 20 symbols.")
     private String name;
 
-    private Customer customer;
-
     private Address address;
 
     private DeletedStatus status;
-
 }

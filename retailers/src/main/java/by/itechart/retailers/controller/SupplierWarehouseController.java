@@ -1,3 +1,4 @@
+/*
 package by.itechart.retailers.controller;
 
 import by.itechart.retailers.service.interfaces.SupplierWarehouseService;
@@ -33,3 +34,4 @@ public class SupplierWarehouseController {
         return new ResponseEntity<>(supplierWarehouseService.findById(supplierWarehouseId), HttpStatus.OK);
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.SupplierWarehouseConverter;
@@ -58,3 +59,4 @@ public class SupplierWarehouseServiceImpl implements SupplierWarehouseService {
         return false;
     }
 }
+*/

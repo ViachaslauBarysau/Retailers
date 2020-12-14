@@ -1,3 +1,4 @@
+/*
 package by.itechart.retailers.repository;
 
 import by.itechart.retailers.entity.DeletedStatus;
@@ -11,7 +12,8 @@ import java.util.Optional;
 @Repository
 public interface SupplierWarehouseRepository extends JpaRepository<SupplierWarehouse, Long> {
 
-    List<SupplierWarehouse> findAllByCustomer_IdAndStatus(Long customerId, DeletedStatus status);
+  //  List<SupplierWarehouse> findAllByCustomer_IdAndStatus(Long customerId, DeletedStatus status);
 
-    Optional<SupplierWarehouse> findByIdAndCustomer_Id(Long id, Long customerId);
+   // Optional<SupplierWarehouse> findByIdAndCustomer_Id(Long id, Long customerId);
 }
+*/

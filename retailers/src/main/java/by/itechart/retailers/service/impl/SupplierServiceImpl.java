@@ -115,12 +115,12 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public boolean identifierExists(String identifier) {
+    public boolean identifierExists(Integer identifier) {
         logger.info("Check for exiting supplier identifier {}", identifier);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        return supplierRepository.findAllByIdentifierIgnoreCaseAndCustomer_Id(identifier, customerId)
+        return supplierRepository.findAllByIdentifierAndCustomer_Id(identifier, customerId)
                                  .size() != 0;
     }
 }

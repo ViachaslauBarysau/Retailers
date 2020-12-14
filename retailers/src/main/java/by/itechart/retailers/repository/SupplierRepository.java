@@ -14,7 +14,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
     Page<Supplier> findAllByCustomer_Id(Pageable pageable, Long id);
 
-    List<Supplier> findAllByIdentifierIgnoreCaseAndCustomer_Id(String identifier, Long customerId);
+    List<Supplier> findAllByIdentifierAndCustomer_Id(Integer identifier, Long customerId);
 
     Optional<Supplier> findByIdAndCustomer_Id(Long id, Long customerId);
 

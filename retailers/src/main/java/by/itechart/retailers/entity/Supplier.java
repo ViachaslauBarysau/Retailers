@@ -26,7 +26,7 @@ public class Supplier implements Serializable {
     private String fullName;
 
     @Column(name = SUPPLIER_IDENTIFIER)
-    private String identifier;
+    private Integer identifier;
 
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = SUPPLIER_WARE_HOUSE_LIST)

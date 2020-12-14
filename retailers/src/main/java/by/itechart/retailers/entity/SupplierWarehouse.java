@@ -24,10 +24,6 @@ public class SupplierWarehouse {
     @Column(name = SUPPLIER_WAREHOUSE_NAME)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = SUPPLIER_WAREHOUSE_CUSTOMER)
-    private Customer customer;
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = SUPPLIER_WAREHOUSE_ADDRESS)
     private Address address;
@@ -35,5 +31,4 @@ public class SupplierWarehouse {
     @Enumerated(EnumType.STRING)
     @Column(name = SUPPLIER_WAREHOUSE_STATUS)
     private DeletedStatus status;
-
 }
