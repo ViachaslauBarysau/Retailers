@@ -216,6 +216,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(customerDto.getName());
         user.setLastName(customerDto.getName());
         user.setEmail(customerDto.getEmail());
+        user.setBirthday(LocalDate.parse("2000-01-01"));
         user.setCustomer(customer);
         String password = generatePassword();
         user.setPassword(password);
