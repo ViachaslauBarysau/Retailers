@@ -232,9 +232,10 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) throws BusinessException {
         logger.info("Update user");
         UserDto currentUserDto = getCurrentUser();
-        String email = currentUserDto.getEmail();
+        Long customerId = currentUserDto.getCustomer()
+                                 .getId();
         User user = userConverter.dtoToEntity(userDto);
-        User persistUser = userRepository.findByIdAndEmail(user.getId(), email)
+        User persistUser = userRepository.findByIdAndCustomer_Id(user.getId(), customerId)
                                          .orElse(new User());
         if (!user.getEmail()
                  .equals(persistUser.getEmail())) {
