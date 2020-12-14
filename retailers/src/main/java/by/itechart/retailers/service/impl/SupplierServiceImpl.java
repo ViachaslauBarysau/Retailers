@@ -80,8 +80,8 @@ public class SupplierServiceImpl implements SupplierService {
         Supplier supplier = supplierConverter.dtoToEntity(supplierDto);
         Supplier persistSupplier = supplierRepository.findByIdAndCustomer_Id(supplier.getId(), customerId)
                                                      .orElse(new Supplier());
-        if (!supplier.getIdentifier().toString()
-                     .equals(persistSupplier.getIdentifier().toString())) {
+        if (!supplier.getIdentifier()
+                     .equals(persistSupplier.getIdentifier())) {
             if (identifierExists(supplier.getIdentifier())) {
                 logger.error("Not unique identifier {}", supplier.getIdentifier());
                 throw new BusinessException("Identifier should be unique");
@@ -101,7 +101,7 @@ public class SupplierServiceImpl implements SupplierService {
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        List<Supplier> suppliers = supplierRepository.findAllByIdInAndCustomer_Id(supplierIdsList,customerId);
+        List<Supplier> suppliers = supplierRepository.findAllByIdInAndCustomer_Id(supplierIdsList, customerId);
         for (Supplier supplier : suppliers) {
             if (supplier.getSupplierStatus()
                         .equals(Status.ACTIVE)) {
