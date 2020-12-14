@@ -13,13 +13,11 @@ public class InnerApplicationConverter {
     public InnerApplicationDto entityToDto(InnerApplication innerApplication) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(innerApplication, InnerApplicationDto.class);
-
     }
 
     public InnerApplication dtoToEntity(InnerApplicationDto innerApplicationDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(innerApplicationDto, InnerApplication.class);
-
     }
 
     public List<InnerApplicationDto> entityToDto(List<InnerApplication> innerApplications) {

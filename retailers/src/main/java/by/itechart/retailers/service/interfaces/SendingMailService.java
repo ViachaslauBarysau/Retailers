@@ -1,19 +1,9 @@
 package by.itechart.retailers.service.interfaces;
 
-import by.itechart.retailers.service.impl.SendingCredentialsServiceImpl;
 import org.antlr.stringtemplate.StringTemplate;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.util.Properties;
-
-public interface SendingService {
-    static void send(StringTemplate mail, String email) {
+public interface SendingMailService {
+    /*static void send(StringTemplate mail, String email) {
         try {
             Properties properties = new Properties();
 
@@ -39,5 +29,7 @@ public interface SendingService {
         } catch (IOException | MessagingException e) {
             e.printStackTrace();
         }
-    }
+    }*/
+
+    void sendMail(StringTemplate mail, String emailAddress);
 }

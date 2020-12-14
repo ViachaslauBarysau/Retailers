@@ -13,13 +13,11 @@ public class WriteOffActRecordConverter {
     public WriteOffActRecordDto entityToDto(WriteOffActRecord writeOffActRecord) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(writeOffActRecord, WriteOffActRecordDto.class);
-
     }
 
     public WriteOffActRecord dtoToEntity(WriteOffActRecordDto writeOffActRecordDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(writeOffActRecordDto, WriteOffActRecord.class);
-
     }
 
     public List<WriteOffActRecordDto> entityToDto(List<WriteOffActRecord> writeOffActRecords) {

@@ -2,8 +2,8 @@ package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.repository.BillRepository;
-import by.itechart.retailers.service.interfaces.SendingService;
-import by.itechart.retailers.service.interfaces.SendingThankLetterService;
+import by.itechart.retailers.service.interfaces.SendingMailService;
+import by.itechart.retailers.service.interfaces.ThankLetterService;
 import by.itechart.retailers.service.interfaces.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.stringtemplate.StringTemplate;
@@ -20,18 +20,22 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class SendingThankLetterServiceImpl implements SendingThankLetterService {
+public class ThankLetterServiceImpl implements ThankLetterService {
+
     private final BillRepository billRepository;
     private final UserService userService;
-    Logger logger = LoggerFactory.getLogger(SendingThankLetterServiceImpl.class);
+    private final SendingMailService sendingMailService;
+    Logger logger = LoggerFactory.getLogger(ThankLetterServiceImpl.class);
 
     @Autowired
-    public SendingThankLetterServiceImpl(BillRepository billRepository,
-                                         UserService userService) {
+    public ThankLetterServiceImpl(BillRepository billRepository, UserService userService, SendingMailService sendingMailService) {
         this.billRepository = billRepository;
         this.userService = userService;
+        this.sendingMailService = sendingMailService;
     }
 
+
+    @Override
     @Scheduled(cron = "0 0 17 28-31 * ?")
     public void monthEndSchedule() {
         logger.info("Check for the end of month");
@@ -41,7 +45,8 @@ public class SendingThankLetterServiceImpl implements SendingThankLetterService 
         }
     }
 
-    private void sendThankLetter() {
+    @Override
+    public void sendThankLetter() {
         logger.info("Send thank letters");
         List<Long> userIds = billRepository.findAllBestEmployeeIds();
         System.out.println(userIds);
@@ -52,7 +57,7 @@ public class SendingThankLetterServiceImpl implements SendingThankLetterService 
                 StringTemplate mail = group.getInstanceOf("ThankLetter");
                 mail.setAttribute("firstName", userDto.getFirstName());
                 mail.setAttribute("lastName", userDto.getLastName());
-                SendingService.send(mail, userDto.getEmail());
+                sendingMailService.sendMail(mail, userDto.getEmail());
             }
         }
     }

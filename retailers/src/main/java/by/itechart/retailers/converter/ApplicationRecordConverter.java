@@ -13,13 +13,11 @@ public class ApplicationRecordConverter {
     public ApplicationRecordDto entityToDto(ApplicationRecord applicationRecord) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(applicationRecord, ApplicationRecordDto.class);
-
     }
 
     public ApplicationRecord dtoToEntity(ApplicationRecordDto applicationRecordDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(applicationRecordDto, ApplicationRecord.class);
-
     }
 
     public List<ApplicationRecordDto> entityToDto(List<ApplicationRecord> applicationRecords) {

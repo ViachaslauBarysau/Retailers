@@ -13,13 +13,11 @@ public class SupplierApplicationConverter {
     public SupplierApplicationDto entityToDto(SupplierApplication supplierApplication) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(supplierApplication, SupplierApplicationDto.class);
-
     }
 
     public SupplierApplication dtoToEntity(SupplierApplicationDto supplierApplicationDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(supplierApplicationDto, SupplierApplication.class);
-
     }
 
     public List<SupplierApplicationDto> entityToDto(List<SupplierApplication> suppliers) {

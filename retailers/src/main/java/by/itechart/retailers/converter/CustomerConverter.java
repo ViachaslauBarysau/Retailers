@@ -14,13 +14,11 @@ public class CustomerConverter {
     public CustomerDto entityToDto(Customer customer) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(customer, CustomerDto.class);
-
     }
 
     public Customer dtoToEntity(CustomerDto customerDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(customerDto, Customer.class);
-
     }
 
     public List<CustomerDto> entityToDto(List<Customer> customers) {

@@ -35,14 +35,17 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     Logger logger = LoggerFactory.getLogger(WriteOffActServiceImpl.class);
 
     @Autowired
-    public WriteOffActServiceImpl(WriteOffActRepository writeOffActRepository, WriteOffActConverter converter, LocationProductRepository locationProductRepository, UserService userService, LocationRepository locationRepository) {
+    public WriteOffActServiceImpl(WriteOffActRepository writeOffActRepository,
+                                  WriteOffActConverter converter,
+                                  LocationProductRepository locationProductRepository,
+                                  UserService userService,
+                                  LocationRepository locationRepository) {
         this.writeOffActRepository = writeOffActRepository;
         this.writeOffActConverter = converter;
         this.locationProductRepository = locationProductRepository;
         this.userService = userService;
         this.locationRepository = locationRepository;
     }
-
 
     @Override
     public WriteOffActDto findById(long writeOffActId) {
@@ -52,7 +55,6 @@ public class WriteOffActServiceImpl implements WriteOffActService {
                                  .getId();
         WriteOffAct writeOffAct = writeOffActRepository.findByIdAndCustomer_Id(writeOffActId, customerId)
                                                        .orElse(new WriteOffAct());
-
         return writeOffActConverter.entityToDto(writeOffAct);
     }
 
@@ -85,11 +87,9 @@ public class WriteOffActServiceImpl implements WriteOffActService {
             Long productId = writeOffActRecord.getProduct()
                                               .getId();
             LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
-
             if (writeOffActRecord.getAmount() > locationProduct.getAmount()) {
                 logger.error("Not enough product {} in location", locationProduct.getProduct()
                                                                                  .getId());
-
                 throw new BusinessException("Not enough amount of " + locationProduct.getProduct()
                                                                                      .getLabel() + " in location ");
             }
@@ -97,13 +97,11 @@ public class WriteOffActServiceImpl implements WriteOffActService {
             location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount() * writeOffActRecord.getProduct()
                                                                                                                .getVolume());
             writeOffAct.setLocation(location);
-
             Integer amount = locationProduct.getAmount();
             locationProduct.setAmount(amount - writeOffActRecord.getAmount());
             locationProductRepository.save(locationProduct);
         }
         WriteOffAct persistWriteOffAct = writeOffActRepository.save(writeOffAct);
-
         return writeOffActConverter.entityToDto(persistWriteOffAct);
     }
 
@@ -116,5 +114,4 @@ public class WriteOffActServiceImpl implements WriteOffActService {
         return writeOffActRepository.findAllByWriteOffActNumberAndCustomer_Id(writeOffActNumber, customerId)
                                     .size() != 0;
     }
-
 }

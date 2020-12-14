@@ -21,6 +21,7 @@ public class StateServiceImpl implements StateService {
     private final StateRepository stateRepository;
     private final StateConverter stateConverter;
     Logger logger = LoggerFactory.getLogger(StateServiceImpl.class);
+
     @Autowired
     public StateServiceImpl(StateRepository stateRepository, StateConverter stateConverter) {
         this.stateRepository = stateRepository;
@@ -29,10 +30,9 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public StateDto findById(long stateId) {
-        logger.info("Find by id {}",stateId);
+        logger.info("Find by id {}", stateId);
         State state = stateRepository.findById(stateId)
                                      .orElse(new State());
-
         return stateConverter.entityToDto(state);
     }
 
@@ -42,7 +42,6 @@ public class StateServiceImpl implements StateService {
         Page<State> statePage = stateRepository.findAll(pageable);
         List<StateDto> stateDtos = stateConverter.entityToDto(statePage.getContent());
         return new PageImpl<>(stateDtos, pageable, statePage.getTotalElements());
-
     }
 
     @Override
@@ -50,7 +49,6 @@ public class StateServiceImpl implements StateService {
         logger.info("Create");
         State state = stateConverter.dtoToEntity(stateDto);
         State persistState = stateRepository.save(state);
-
         return stateConverter.entityToDto(persistState);
     }
 
@@ -60,11 +58,9 @@ public class StateServiceImpl implements StateService {
         State state = stateConverter.dtoToEntity(stateDto);
         State persistState = stateRepository.findById(state.getId())
                                             .orElse(new State());
-
         persistState.setName(state.getName());
         persistState.setStateTax(state.getStateTax());
         persistState = stateRepository.save(persistState);
-
         return stateConverter.entityToDto(persistState);
     }
 }

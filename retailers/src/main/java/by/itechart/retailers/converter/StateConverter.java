@@ -13,13 +13,11 @@ public class StateConverter {
     public StateDto entityToDto(State state) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(state, StateDto.class);
-
     }
 
     public State dtoToEntity(StateDto stateDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(stateDto, State.class);
-
     }
 
     public List<StateDto> entityToDto(List<State> states) {

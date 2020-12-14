@@ -33,7 +33,10 @@ public class LocationServiceImpl implements LocationService {
     Logger logger = LoggerFactory.getLogger(LocationServiceImpl.class);
 
     @Autowired
-    public LocationServiceImpl(UserService userService, LocationRepository locationRepository, LocationConverter locationConverter, UserRepository userRepository) {
+    public LocationServiceImpl(UserService userService,
+                               LocationRepository locationRepository,
+                               LocationConverter locationConverter,
+                               UserRepository userRepository) {
         this.userService = userService;
         this.locationRepository = locationRepository;
         this.locationConverter = locationConverter;
@@ -93,7 +96,6 @@ public class LocationServiceImpl implements LocationService {
             throw new BusinessException("Identifier should be unique");
         }
         Location persistLocation = locationRepository.save(location);
-
         return locationConverter.entityToDto(persistLocation);
     }
 
@@ -121,7 +123,6 @@ public class LocationServiceImpl implements LocationService {
         persistLocation.setLocationType(location.getLocationType());
         persistLocation.setTotalCapacity(location.getTotalCapacity());
         persistLocation = locationRepository.save(persistLocation);
-
         return locationConverter.entityToDto(persistLocation);
     }
 

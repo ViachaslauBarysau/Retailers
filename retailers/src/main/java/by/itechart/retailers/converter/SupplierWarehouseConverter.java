@@ -13,13 +13,11 @@ public class SupplierWarehouseConverter {
     public SupplierWarehouseDto entityToDto(SupplierWarehouse warehouse) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(warehouse, SupplierWarehouseDto.class);
-
     }
 
     public SupplierWarehouse dtoToEntity(SupplierWarehouseDto warehouseDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(warehouseDto, SupplierWarehouse.class);
-
     }
 
     public List<SupplierWarehouseDto> entityToDto(List<SupplierWarehouse> warehouse) {

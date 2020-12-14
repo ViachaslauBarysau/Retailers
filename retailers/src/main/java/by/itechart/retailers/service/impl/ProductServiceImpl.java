@@ -34,7 +34,14 @@ public class ProductServiceImpl implements ProductService {
     Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter, ApplicationRecordRepository applicationRecordRepository, LocationProductRepository locationProductRepository, InnerApplicationRepository innerApplicationRepository, SupplierApplicationRepository supplierApplicationRepository, UserService userService, CategoryRepository categoryRepository) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              ProductConverter productConverter,
+                              ApplicationRecordRepository applicationRecordRepository,
+                              LocationProductRepository locationProductRepository,
+                              InnerApplicationRepository innerApplicationRepository,
+                              SupplierApplicationRepository supplierApplicationRepository,
+                              UserService userService,
+                              CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productConverter = productConverter;
         this.applicationRecordRepository = applicationRecordRepository;
@@ -54,7 +61,6 @@ public class ProductServiceImpl implements ProductService {
                                  .getId();
         Product product = productRepository.findByIdAndCustomer_IdAndStatus(productId, customerId, DeletedStatus.ACTIVE)
                                            .orElse(new Product());
-
         return productConverter.entityToDto(product);
     }
 
@@ -66,7 +72,6 @@ public class ProductServiceImpl implements ProductService {
                                                                                                      .getId(), DeletedStatus.ACTIVE);
         List<ProductDto> productDtos = productConverter.entityToDto(productPage.getContent());
         return new PageImpl<>(productDtos, pageable, productPage.getTotalElements());
-
     }
 
     @Override
@@ -82,7 +87,6 @@ public class ProductServiceImpl implements ProductService {
         Category category = findCategory(product);
         product.setCategory(category);
         Product persistProduct = productRepository.save(product);
-
         return productConverter.entityToDto(persistProduct);
     }
 
@@ -110,15 +114,16 @@ public class ProductServiceImpl implements ProductService {
         persistProduct.setVolume(product.getVolume());
         persistProduct.setCustomer(product.getCustomer());
         persistProduct = productRepository.save(persistProduct);
-
         return productConverter.entityToDto(persistProduct);
     }
 
     private Category findCategory(Product product) {
         logger.info("Find category");
-        Category category = categoryRepository.findByNameIgnoreCaseAndCustomer_Id(product.getCategory()
-                                                                                         .getName(), product.getCustomer()
-                                                                                                            .getId())
+        Category category = categoryRepository.findByNameIgnoreCaseAndCustomer_Id(
+                product.getCategory()
+                       .getName(),
+                product.getCustomer()
+                       .getId())
                                               .orElse(new Category());
         if (category.getId() == null) {
             category = new Category();
@@ -143,13 +148,11 @@ public class ProductServiceImpl implements ProductService {
             List<LocationProduct> locationProducts = locationProductRepository.findAllByProduct(product);
             List<SupplierApplication> supplierApplications = supplierApplicationRepository.findAllByRecordsListIn(applicationRecords);
             List<InnerApplication> innerApplications = innerApplicationRepository.findAllByRecordsListIn(applicationRecords);
-
             if (checkInLocationProducts(locationProducts)
                     || checkInSupplierApplications(supplierApplications)
                     || checkInInnerApplications(innerApplications)) {
                 continue;
             }
-
             product.setStatus(DeletedStatus.DELETED);
             productRepository.save(product);
             undeletedProducts.remove(product);
@@ -183,8 +186,6 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllByUpcAndCustomer_IdAndStatus(upc, customerId, DeletedStatus.ACTIVE)
                                 .size() != 0;
     }
-
-
 }
 
 

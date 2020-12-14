@@ -13,13 +13,11 @@ public class LocationProductConverter {
     public LocationProductDto entityToDto(LocationProduct locationProduct) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(locationProduct, LocationProductDto.class);
-
     }
 
     public LocationProduct dtoToEntity(LocationProductDto locationProductDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(locationProductDto, LocationProduct.class);
-
     }
 
     public List<LocationProductDto> entityToDto(List<LocationProduct> locations) {

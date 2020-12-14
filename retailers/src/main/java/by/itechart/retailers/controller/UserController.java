@@ -17,7 +17,6 @@ import static by.itechart.retailers.constant.UrlConstants.URL_USERS;
 
 @RestController
 @RequestMapping(URL_API + URL_USERS)
-@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
     private final UserService userService;
@@ -47,6 +46,10 @@ public class UserController {
         return new ResponseEntity<>(userService.update(userDto), HttpStatus.OK);
     }
 
+    @PutMapping(value = "/updatePassword")
+    public ResponseEntity updatePassword(@RequestBody UserDto userDto) {
+        return new ResponseEntity<>(userService.updatePassword(userDto), HttpStatus.OK);
+    }
     @DeleteMapping
     public ResponseEntity updateStatus(@RequestBody List<Long> userIds) {
         return new ResponseEntity<>(userService.updateStatus(userIds), HttpStatus.OK);

@@ -12,6 +12,7 @@ import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,12 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     private final UserService userService;
     Logger logger = LoggerFactory.getLogger(SupplierApplicationServiceImpl.class);
 
-    public SupplierApplicationServiceImpl(SupplierApplicationRepository supplierApplicationRepository, LocationProductRepository locationProductRepository, SupplierApplicationConverter supplierApplicationConverter, UserConverter userConverter, UserService userService) {
+    @Autowired
+    public SupplierApplicationServiceImpl(SupplierApplicationRepository supplierApplicationRepository,
+                                          LocationProductRepository locationProductRepository,
+                                          SupplierApplicationConverter supplierApplicationConverter,
+                                          UserConverter userConverter,
+                                          UserService userService) {
         this.supplierApplicationRepository = supplierApplicationRepository;
         this.locationProductRepository = locationProductRepository;
         this.supplierApplicationConverter = supplierApplicationConverter;
@@ -47,7 +53,6 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
                                             .getId();
         SupplierApplication supplierApplication = supplierApplicationRepository.findByIdAndDestinationLocation_Id(supplierApplicationId, destinationLocationId)
                                                                                .orElse(new SupplierApplication());
-
         return supplierApplicationConverter.entityToDto(supplierApplication);
     }
 
@@ -57,17 +62,14 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
         UserDto userDto = userService.getCurrentUser();
         Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
                                                                                                                                            .getId());
-
         List<SupplierApplicationDto> supplierApplicationDtos = supplierApplicationConverter.entityToDto(supplierApplicationPage.getContent());
-
         return new PageImpl<>(supplierApplicationDtos, pageable, supplierApplicationPage.getTotalElements());
-
     }
 
     @Override
     public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) throws BusinessException {
         logger.info("Create");
-        UserDto userDto=userService.getCurrentUser();
+        UserDto userDto = userService.getCurrentUser();
         supplierApplicationDto.setCreator(userDto);
         supplierApplicationDto.setDestinationLocation(userDto.getLocation());
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
@@ -76,22 +78,19 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
             throw new BusinessException("Application number should be unique");
         }
         SupplierApplication persistSupplierApplication = supplierApplicationRepository.save(supplierApplication);
-
         return supplierApplicationConverter.entityToDto(persistSupplierApplication);
     }
 
     @Override
     public SupplierApplicationDto update(SupplierApplicationDto supplierApplicationDto) {
         logger.info("Update");
-        UserDto userDto=userService.getCurrentUser();
+        UserDto userDto = userService.getCurrentUser();
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
         SupplierApplication persistSupplierApplication = supplierApplicationRepository
                 .findById(supplierApplication.getId())
                 .orElse(new SupplierApplication());
-
         persistSupplierApplication.setDestinationLocation(supplierApplication.getDestinationLocation());
         persistSupplierApplication = supplierApplicationRepository.save(persistSupplierApplication);
-
         return supplierApplicationConverter.entityToDto(persistSupplierApplication);
     }
 
@@ -99,28 +98,24 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
     public SupplierApplicationDto updateStatus(Long supplierApplicationId) throws BusinessException {
         logger.info("Update status");
         UserDto userDto = userService.getCurrentUser();
-        Long destinationLocation=userDto.getLocation().getId();
-        SupplierApplication supplierApplication = supplierApplicationRepository.findByIdAndDestinationLocation_Id(supplierApplicationId,destinationLocation)
+        Long destinationLocation = userDto.getLocation()
+                                          .getId();
+        SupplierApplication supplierApplication = supplierApplicationRepository.findByIdAndDestinationLocation_Id(supplierApplicationId, destinationLocation)
                                                                                .orElse(new SupplierApplication());
-
         Location location = supplierApplication.getDestinationLocation();
         Integer totalUnitAmount = supplierApplication.getTotalUnitNumber();
         if (totalUnitAmount > location.getAvailableCapacity()) {
             logger.error("Not enough space in location {}", location.getId());
             throw new BusinessException("Not enough space in destination location");
         }
-
         List<ApplicationRecord> applicationRecords = supplierApplication.getRecordsList();
         for (ApplicationRecord applicationRecord : applicationRecords) {
-
-            LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), applicationRecord.getProduct()
-                                                                                                                                          .getId());
+            LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), applicationRecord.getProduct().getId());
             if (locationProduct != null) {
                 if (locationProduct.getAmount() == 0) {
                     locationProduct.setCost(applicationRecord.getCost());
                     locationProduct.setAmount(applicationRecord.getAmount());
                     locationProductRepository.save(locationProduct);
-
                 } else {
                     if (locationProduct.getCost()
                                        .compareTo(applicationRecord.getCost()) < 0) {
@@ -138,7 +133,6 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
                 locationProduct.setLocation(location);
                 locationProductRepository.save(locationProduct);
             }
-
         }
         Integer availableCapacity = location.getAvailableCapacity();
         location.setAvailableCapacity(availableCapacity - totalUnitAmount);

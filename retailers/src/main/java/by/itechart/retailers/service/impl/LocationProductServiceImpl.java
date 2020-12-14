@@ -26,7 +26,9 @@ public class LocationProductServiceImpl implements LocationProductService {
     Logger logger = LoggerFactory.getLogger(LocationProductServiceImpl.class);
 
     @Autowired
-    public LocationProductServiceImpl(LocationProductRepository locationProductRepository, LocationProductConverter locationProductConverter, UserService userService) {
+    public LocationProductServiceImpl(LocationProductRepository locationProductRepository,
+                                      LocationProductConverter locationProductConverter,
+                                      UserService userService) {
         this.locationProductRepository = locationProductRepository;
         this.locationProductConverter = locationProductConverter;
         this.userService = userService;
@@ -41,7 +43,6 @@ public class LocationProductServiceImpl implements LocationProductService {
                                  .getId();
         LocationProduct locationProduct = locationProductRepository.findByIdAndLocation_IdAndAmountGreaterThan(locationProductId, locationId, 0)
                                                                    .orElse(new LocationProduct());
-
         return locationProductConverter.entityToDto(locationProduct);
     }
 
@@ -61,10 +62,8 @@ public class LocationProductServiceImpl implements LocationProductService {
         logger.info("Create");
         UserDto userDto = userService.getCurrentUser();
         locationProductDto.setLocation(userDto.getLocation());
-
         LocationProduct locationProduct = locationProductConverter.dtoToEntity(locationProductDto);
         LocationProduct persistLocationProduct = locationProductRepository.save(locationProduct);
-
         return locationProductConverter.entityToDto(persistLocationProduct);
     }
 
@@ -74,15 +73,12 @@ public class LocationProductServiceImpl implements LocationProductService {
         UserDto userDto = userService.getCurrentUser();
         Long locationId=userDto.getLocation().getId();
         locationProductDto.setLocation(userDto.getLocation());
-
         LocationProduct locationProduct = locationProductConverter.dtoToEntity(locationProductDto);
         LocationProduct persistLocationProduct = locationProductRepository.findByIdAndLocation_Id(locationProduct.getId(),locationId)
                                                                           .orElse(new LocationProduct());
-
         persistLocationProduct.setCost(locationProduct.getCost());
         persistLocationProduct.setProduct(locationProduct.getProduct());
         persistLocationProduct = locationProductRepository.save(persistLocationProduct);
-
         return locationProductConverter.entityToDto(persistLocationProduct);
     }
 }

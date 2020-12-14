@@ -13,13 +13,11 @@ public class SupplierConverter {
     public SupplierDto entityToDto(Supplier supplier) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(supplier, SupplierDto.class);
-
     }
 
     public Supplier dtoToEntity(SupplierDto supplierDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(supplierDto, Supplier.class);
-
     }
 
     public List<SupplierDto> entityToDto(List<Supplier> suppliers) {

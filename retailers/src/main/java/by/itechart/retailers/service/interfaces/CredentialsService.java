@@ -2,8 +2,8 @@ package by.itechart.retailers.service.interfaces;
 
 import by.itechart.retailers.dto.UserDto;
 
-public interface SendingCredentialsService {
+public interface CredentialsService {
 
-    void send(UserDto userDto);
+    void sendCredentials(UserDto userDto);
 
 }

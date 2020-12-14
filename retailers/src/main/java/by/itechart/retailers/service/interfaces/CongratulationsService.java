@@ -1,6 +1,6 @@
 package by.itechart.retailers.service.interfaces;
 
-public interface SendingCongratulationsService {
+public interface CongratulationsService {
     void sendCongratulations();
 
     void sendSystemAdminNotification(RuntimeException ex);

@@ -1,22 +1,31 @@
 package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.dto.UserDto;
-import by.itechart.retailers.service.interfaces.SendingCredentialsService;
-import by.itechart.retailers.service.interfaces.SendingService;
+import by.itechart.retailers.service.interfaces.CredentialsService;
+import by.itechart.retailers.service.interfaces.SendingMailService;
 import lombok.extern.slf4j.Slf4j;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 import org.antlr.stringtemplate.language.DefaultTemplateLexer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class SendingCredentialsServiceImpl implements SendingCredentialsService {
-    Logger logger = LoggerFactory.getLogger(SendingCredentialsServiceImpl.class);
+public class CredentialsServiceImpl implements CredentialsService {
+
+    private final SendingMailService sendingMailService;
+    Logger logger = LoggerFactory.getLogger(CredentialsServiceImpl.class);
+
+    @Autowired
+    public CredentialsServiceImpl(SendingMailService sendingMailService) {
+        this.sendingMailService = sendingMailService;
+    }
+
     @Override
-    public void send(UserDto userDto) {
+    public void sendCredentials(UserDto userDto) {
         logger.info("Send");
         StringTemplateGroup group = new StringTemplateGroup("src/main/resources", DefaultTemplateLexer.class);
         StringTemplate mail = group.getInstanceOf("Credentials");
@@ -24,8 +33,6 @@ public class SendingCredentialsServiceImpl implements SendingCredentialsService 
                                          .getName());
         mail.setAttribute("email", userDto.getEmail());
         mail.setAttribute("password", userDto.getPassword());
-
-        SendingService.send(mail, userDto.getEmail());
-
+        sendingMailService.sendMail(mail, userDto.getEmail());
     }
 }

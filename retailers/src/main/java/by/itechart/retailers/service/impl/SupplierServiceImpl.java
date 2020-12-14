@@ -28,7 +28,9 @@ public class SupplierServiceImpl implements SupplierService {
     Logger logger = LoggerFactory.getLogger(SupplierServiceImpl.class);
 
     @Autowired
-    public SupplierServiceImpl(SupplierRepository supplierRepository, SupplierConverter supplierConverter, UserService userService) {
+    public SupplierServiceImpl(SupplierRepository supplierRepository,
+                               SupplierConverter supplierConverter,
+                               UserService userService) {
         this.supplierRepository = supplierRepository;
         this.supplierConverter = supplierConverter;
         this.userService = userService;
@@ -42,7 +44,6 @@ public class SupplierServiceImpl implements SupplierService {
                                  .getId();
         Supplier supplier = supplierRepository.findByIdAndCustomer_Id(supplierId, customerId)
                                               .orElse(new Supplier());
-
         return supplierConverter.entityToDto(supplier);
     }
 
@@ -68,7 +69,6 @@ public class SupplierServiceImpl implements SupplierService {
             throw new BusinessException("Identifier should be unique");
         }
         Supplier persistSupplier = supplierRepository.save(supplier);
-
         return supplierConverter.entityToDto(persistSupplier);
     }
 
@@ -92,7 +92,6 @@ public class SupplierServiceImpl implements SupplierService {
         persistSupplier.setWareHouseList(supplier.getWareHouseList());
         persistSupplier.setSupplierStatus(supplier.getSupplierStatus());
         persistSupplier = supplierRepository.save(persistSupplier);
-
         return supplierConverter.entityToDto(persistSupplier);
     }
 
@@ -124,6 +123,4 @@ public class SupplierServiceImpl implements SupplierService {
         return supplierRepository.findAllByIdentifierIgnoreCaseAndCustomer_Id(identifier, customerId)
                                  .size() != 0;
     }
-
-
 }

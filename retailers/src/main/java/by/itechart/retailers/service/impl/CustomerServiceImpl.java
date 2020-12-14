@@ -28,7 +28,9 @@ public class CustomerServiceImpl implements CustomerService {
     Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter customerConverter, UserService userService) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               CustomerConverter customerConverter,
+                               UserService userService) {
         this.customerRepository = customerRepository;
         this.customerConverter = customerConverter;
         this.userService = userService;
@@ -59,7 +61,6 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BusinessException("Email should be unique");
         }
         Customer customer = customerConverter.dtoToEntity(customerDto);
-
         Customer persistsCustomer = customerRepository.save(customer);
         userService.create(customerConverter.entityToDto(persistsCustomer));
         return customerConverter.entityToDto(persistsCustomer);
@@ -81,7 +82,6 @@ public class CustomerServiceImpl implements CustomerService {
         persistCustomer.setName(customer.getName());
         persistCustomer.setEmail(customer.getEmail());
         persistCustomer = customerRepository.save(persistCustomer);
-
         return customerConverter.entityToDto(persistCustomer);
     }
 
@@ -107,6 +107,4 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAllByEmailIgnoreCase(email)
                                  .size() != 0;
     }
-
-
 }

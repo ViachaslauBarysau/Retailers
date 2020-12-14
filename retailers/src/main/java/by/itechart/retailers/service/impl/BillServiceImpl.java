@@ -50,7 +50,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public BillDto findById(long billId) {
-        logger.info("Find by id: {}", billId);
+        logger.info("Find bill by id: {}", billId);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -62,7 +62,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Page<BillDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all bills");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -76,11 +76,10 @@ public class BillServiceImpl implements BillService {
     @Transactional
     public BillDto create(BillDto billDto) throws BusinessException {
         UserDto userDto = userService.getCurrentUser();
-        logger.info("Create");
+        logger.info("Create bill");
         billDto.setCustomer(userDto.getCustomer());
         billDto.setLocation(userDto.getLocation());
         billDto.setShopManager(userDto);
-
         Bill bill = billConverter.dtoToEntity(billDto);
         if (billNumberExists(bill.getBillNumber())) {
             throw new BusinessException("Bill number should be unique");
@@ -90,7 +89,8 @@ public class BillServiceImpl implements BillService {
         for (BillRecord billRecord : billRecords) {
             Long productId = billRecord.getProduct()
                                        .getId();
-            LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
+            LocationProduct locationProduct = locationProductRepository
+                    .findByLocation_IdAndProduct_Id(location.getId(), productId);
 
             if (billRecord.getProductAmount() > locationProduct.getAmount()) {
                 logger.error("Not enough product {} in location", locationProduct.getProduct()
@@ -104,7 +104,6 @@ public class BillServiceImpl implements BillService {
             Integer amount = locationProduct.getAmount();
             locationProduct.setAmount(amount - billRecord.getProductAmount());
             locationProductRepository.save(locationProduct);
-
             bill.setLocation(location);
         }
         Bill persistBill = billRepository.save(bill);
@@ -113,7 +112,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public boolean billNumberExists(Integer billNumber) {
-        logger.info("Check for existing number {}", billNumber);
+        logger.info("Check for existing bill number {}", billNumber);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();

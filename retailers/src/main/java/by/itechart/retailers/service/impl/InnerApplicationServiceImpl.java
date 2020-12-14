@@ -33,7 +33,11 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     Logger logger = LoggerFactory.getLogger(InnerApplicationServiceImpl.class);
 
     @Autowired
-    public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository, InnerApplicationConverter innerApplicationConverter, UserConverter userConverter, UserService userService, LocationProductRepository locationProductRepository) {
+    public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository,
+                                       InnerApplicationConverter innerApplicationConverter,
+                                       UserConverter userConverter,
+                                       UserService userService,
+                                       LocationProductRepository locationProductRepository) {
         this.innerApplicationRepository = innerApplicationRepository;
         this.innerApplicationConverter = innerApplicationConverter;
         this.userConverter = userConverter;
@@ -50,7 +54,6 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
                                             .getId();
         InnerApplication innerApplication = innerApplicationRepository.findByIdAndDestinationLocation_Id(innerApplicationId, destinationLocationId)
                                                                       .orElse(new InnerApplication());
-
         return innerApplicationConverter.entityToDto(innerApplication);
     }
 
@@ -71,7 +74,6 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         logger.info("Create");
         UserDto userDto = userService.getCurrentUser();
         innerApplicationDto.setCreator(userDto);
-
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
         Location location = innerApplication.getSourceLocation();
         if (applicationNumberExists(innerApplication.getApplicationNumber())) {
@@ -83,7 +85,6 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
             Long productId = applicationRecord.getProduct()
                                               .getId();
             LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), productId);
-
             if (applicationRecord.getAmount() > locationProduct.getAmount()) {
                 logger.error("Not enough product {} in location", locationProduct.getProduct()
                                                                                  .getId());
@@ -99,7 +100,6 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
             innerApplication.setSourceLocation(location);
         }
         InnerApplication persistInnerApplication = innerApplicationRepository.save(innerApplication);
-
         return innerApplicationConverter.entityToDto(persistInnerApplication);
     }
 
@@ -110,15 +110,11 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         Long destinationLocationId = userDto.getLocation()
                                             .getId();
         innerApplicationDto.setUpdater(userDto);
-
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
-
         InnerApplication persistInnerApplication = innerApplicationRepository.findByIdAndDestinationLocation_Id(innerApplicationDto.getId(), destinationLocationId)
                                                                              .orElse(new InnerApplication());
-
         persistInnerApplication.setDestinationLocation(innerApplication.getDestinationLocation());
         persistInnerApplication = innerApplicationRepository.save(persistInnerApplication);
-
         return innerApplicationConverter.entityToDto(persistInnerApplication);
     }
 
@@ -128,27 +124,21 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         UserDto userDto = userService.getCurrentUser();
         Long destinationLocationId = userDto.getLocation()
                                             .getId();
-
         InnerApplication innerApplication = innerApplicationRepository.findByIdAndDestinationLocation_Id(innerApplicationId, destinationLocationId)
                                                                       .orElse(new InnerApplication());
-
         Location location = innerApplication.getDestinationLocation();
         Integer totalUnitAmount = innerApplication.getTotalUnitNumber();
         if (totalUnitAmount > location.getAvailableCapacity()) {
             throw new BusinessException("Not enough space in destination location");
         }
-
         List<ApplicationRecord> applicationRecords = innerApplication.getRecordsList();
         for (ApplicationRecord applicationRecord : applicationRecords) {
-
-            LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), applicationRecord.getProduct()
-                                                                                                                                          .getId());
+            LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), applicationRecord.getProduct().getId());
             if (locationProduct != null) {
                 if (locationProduct.getAmount() == 0) {
                     locationProduct.setCost(applicationRecord.getCost());
                     locationProduct.setAmount(applicationRecord.getAmount());
                     locationProductRepository.save(locationProduct);
-
                 } else {
                     if (locationProduct.getCost()
                                        .compareTo(applicationRecord.getCost()) < 0) {
@@ -166,7 +156,6 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
                 locationProduct.setLocation(location);
                 locationProductRepository.save(locationProduct);
             }
-
         }
         Integer availableCapacity = location.getAvailableCapacity();
         location.setAvailableCapacity(availableCapacity - totalUnitAmount);
@@ -185,5 +174,4 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         return innerApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)
                                          .size() != 0;
     }
-
 }

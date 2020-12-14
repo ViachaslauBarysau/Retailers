@@ -13,13 +13,11 @@ public class CategoryConverter {
     public CategoryDto entityToDto(Category category) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(category, CategoryDto.class);
-
     }
 
     public Category dtoToEntity(CategoryDto categoryDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(categoryDto, Category.class);
-
     }
 
     public List<CategoryDto> entityToDto(List<Category> categories) {

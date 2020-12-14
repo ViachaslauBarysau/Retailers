@@ -2,8 +2,8 @@ package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.Role;
-import by.itechart.retailers.service.interfaces.SendingCongratulationsService;
-import by.itechart.retailers.service.interfaces.SendingService;
+import by.itechart.retailers.service.interfaces.CongratulationsService;
+import by.itechart.retailers.service.interfaces.SendingMailService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
@@ -21,16 +21,20 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class SendingCongratulationsServiceImpl implements SendingCongratulationsService {
+public class CongratulationsServiceImpl implements CongratulationsService {
 
     private final UserService userService;
-    Logger logger = LoggerFactory.getLogger(SendingCongratulationsServiceImpl.class);
+    private final SendingMailService sendingMailService;
+    Logger logger = LoggerFactory.getLogger(CongratulationsServiceImpl.class);
     private List<UserDto> userDtos;
 
-    @Autowired
-    public SendingCongratulationsServiceImpl(UserService userService) {
+    public CongratulationsServiceImpl(UserService userService, SendingMailService sendingMailService) {
         this.userService = userService;
+        this.sendingMailService = sendingMailService;
     }
+
+    @Autowired
+
 
     @Scheduled(cron = "0 59 8 ? * MON-FRI")
     public void findByBirthday() {
@@ -52,7 +56,7 @@ public class SendingCongratulationsServiceImpl implements SendingCongratulations
                 StringTemplate mail = group.getInstanceOf("Birthday");
                 mail.setAttribute("firstName", userDto.getFirstName());
                 mail.setAttribute("lastName", userDto.getLastName());
-                SendingService.send(mail, userDto.getEmail());
+                sendingMailService.sendMail(mail, userDto.getEmail());
             }
         }
     }
@@ -60,7 +64,7 @@ public class SendingCongratulationsServiceImpl implements SendingCongratulations
     @Override
     @Recover
     public void sendSystemAdminNotification(RuntimeException ex) {
-        logger.error("Sending System Admin Notification {}",ex);
+        logger.error("Sending System Admin Notification {}", ex.getMessage());
         List<UserDto> systemAdmins = userService.findAllByRole(Role.SYSTEM_ADMIN);
         if (systemAdmins.size() != 0) {
             for (UserDto userDto : systemAdmins) {
@@ -69,7 +73,7 @@ public class SendingCongratulationsServiceImpl implements SendingCongratulations
                 mail.setAttribute("firstName", userDto.getFirstName());
                 mail.setAttribute("lastName", userDto.getLastName());
                 mail.setAttribute("error", ex.getMessage());
-                SendingService.send(mail, userDto.getEmail());
+                sendingMailService.sendMail(mail, userDto.getEmail());
             }
         }
     }

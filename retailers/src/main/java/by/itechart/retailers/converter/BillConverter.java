@@ -13,13 +13,11 @@ public class BillConverter {
     public BillDto entityToDto(Bill bill) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(bill, BillDto.class);
-
     }
 
     public Bill dtoToEntity(BillDto billDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(billDto, Bill.class);
-
     }
 
     public List<BillDto> entityToDto(List<Bill> bills) {

@@ -17,13 +17,16 @@ import java.util.List;
 
 @Service
 public class SupplierWarehouseServiceImpl implements SupplierWarehouseService {
+
     private final SupplierWarehouseRepository supplierWarehouseRepository;
     private final SupplierWarehouseConverter supplierWarehouseConverter;
     private final UserService userService;
     Logger logger = LoggerFactory.getLogger(SupplierWarehouseServiceImpl.class);
 
     @Autowired
-    public SupplierWarehouseServiceImpl(SupplierWarehouseRepository supplierWarehouseRepository, SupplierWarehouseConverter supplierWarehouseConverter, UserService userService) {
+    public SupplierWarehouseServiceImpl(SupplierWarehouseRepository supplierWarehouseRepository,
+                                        SupplierWarehouseConverter supplierWarehouseConverter,
+                                        UserService userService) {
         this.supplierWarehouseRepository = supplierWarehouseRepository;
         this.supplierWarehouseConverter = supplierWarehouseConverter;
         this.userService = userService;
@@ -45,9 +48,8 @@ public class SupplierWarehouseServiceImpl implements SupplierWarehouseService {
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
-        SupplierWarehouse supplierWarehouse = supplierWarehouseRepository.findByIdAndCustomer_Id(supplierWarehouseId,customerId)
+        SupplierWarehouse supplierWarehouse = supplierWarehouseRepository.findByIdAndCustomer_Id(supplierWarehouseId, customerId)
                                                                          .orElse(new SupplierWarehouse());
-
         return supplierWarehouseConverter.entityToDto(supplierWarehouse);
     }
 
