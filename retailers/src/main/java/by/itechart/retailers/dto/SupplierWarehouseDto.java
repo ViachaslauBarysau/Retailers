@@ -1,7 +1,6 @@
 package by.itechart.retailers.dto;
 
 
-import by.itechart.retailers.entity.Address;
 import by.itechart.retailers.entity.DeletedStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
