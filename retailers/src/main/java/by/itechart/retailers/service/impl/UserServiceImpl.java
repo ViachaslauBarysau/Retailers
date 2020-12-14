@@ -231,11 +231,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto userDto) throws BusinessException {
         logger.info("Update user");
-        UserDto currentUserDto = getCurrentUser();
-        Long customerId = currentUserDto.getCustomer()
-                                 .getId();
         User user = userConverter.dtoToEntity(userDto);
-        User persistUser = userRepository.findByIdAndCustomer_Id(user.getId(), customerId)
+        User persistUser = userRepository.findById(user.getId())
                                          .orElse(new User());
         if (!user.getEmail()
                  .equals(persistUser.getEmail())) {
