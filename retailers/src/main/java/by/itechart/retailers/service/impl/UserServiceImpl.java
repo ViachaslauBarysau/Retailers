@@ -148,13 +148,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public String generatePassword() {
         logger.info("Generate password");
-        String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+        String combinedChars = CAPITAL_CASE_LETTERS + LOWER_CASE_LETTERS + SPECIAL_CHARACTERS + NUMBERS;
         Random random = new Random();
         char[] charPassword = new char[8];
-        charPassword[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
-        charPassword[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
-        charPassword[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
-        charPassword[3] = numbers.charAt(random.nextInt(numbers.length()));
+        charPassword[0] = LOWER_CASE_LETTERS.charAt(random.nextInt(LOWER_CASE_LETTERS.length()));
+        charPassword[1] = CAPITAL_CASE_LETTERS.charAt(random.nextInt(CAPITAL_CASE_LETTERS.length()));
+        charPassword[2] = SPECIAL_CHARACTERS.charAt(random.nextInt(SPECIAL_CHARACTERS.length()));
+        charPassword[3] = NUMBERS.charAt(random.nextInt(NUMBERS.length()));
         for (int i = 4; i < 8; i++) {
             charPassword[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
         }

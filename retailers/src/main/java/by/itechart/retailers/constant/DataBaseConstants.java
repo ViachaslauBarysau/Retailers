@@ -1,6 +1,6 @@
 package by.itechart.retailers.constant;
 
-public class TableConstants {
+public class DataBaseConstants {
 
     public static final String ADDRESS_TABLE = "address";
     public static final String ADDRESS_STATE = "state_id";
@@ -125,4 +125,17 @@ public class TableConstants {
     public static final String USER_CUSTOMER = "customer_id";
     public static final String USER_LOGIN = "login";
 
+    public static final String WRITE_OFF_ACT_TABLE = "write_off_act";
+    public static final String WRITE_OFF_ACT_NUMBER = "act_number";
+    public static final String WRITE_OFF_ACT_RECORDS = "write_off_act_id";
+    public static final String WRITE_OFF_ACT_ACT_DATE_TIME = "act_date_time";
+    public static final String WRITE_OFF_ACT_TOTAL_PRODUCT_AMOUNT = "total_product_amount";
+    public static final String WRITE_OFF_ACT_TOTAL_PRODUCT_SUM = "total_product_sum";
+    public static final String WRITE_OFF_ACT_ACT_LOCATION = "location_id";
+    public static final String WRITE_OFF_ACT_ACT_CUSTOMER = "customer_id";
+
+    public static final String WRITE_OFF_ACT_RECORD_TABLE = "write_off_record";
+    public static final String WRITE_OFF_ACT_RECORD_PRODUCT = "product_id";
+    public static final String WRITE_OFF_ACT_RECORD_AMOUNT = "amount";
+    public static final String WRITE_OFF_ACT_RECORD_REASON = "reason";
 }

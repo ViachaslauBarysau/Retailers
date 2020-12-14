@@ -11,38 +11,40 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static by.itechart.retailers.constant.DataBaseConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "write_off_act")
+@Table(name = WRITE_OFF_ACT_TABLE)
 public class WriteOffAct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "act_number")
+    @Column(name = WRITE_OFF_ACT_NUMBER)
     private Integer writeOffActNumber;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "write_off_act_id")
+    @JoinColumn(name = WRITE_OFF_ACT_RECORDS)
     private List<WriteOffActRecord> writeOffActRecords;
 
-    @Column(name = "act_date_time")
+    @Column(name = WRITE_OFF_ACT_ACT_DATE_TIME)
     private LocalDateTime actDateTime;
 
-    @Column(name = "total_product_amount")
+    @Column(name = WRITE_OFF_ACT_TOTAL_PRODUCT_AMOUNT)
     private Integer totalProductAmount;
 
-    @Column(name = "total_product_sum")
+    @Column(name = WRITE_OFF_ACT_TOTAL_PRODUCT_SUM)
     private BigDecimal totalProductSum;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = WRITE_OFF_ACT_ACT_LOCATION)
     private Location location;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = WRITE_OFF_ACT_ACT_CUSTOMER)
     private Customer customer;
 }

@@ -8,25 +8,27 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static by.itechart.retailers.constant.DataBaseConstants.*;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "write_off_record")
+@Table(name = WRITE_OFF_ACT_RECORD_TABLE)
 public class WriteOffActRecord implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = WRITE_OFF_ACT_RECORD_PRODUCT)
     private Product product;
 
-    @Column(name = "amount")
+    @Column(name = WRITE_OFF_ACT_RECORD_AMOUNT)
     private Integer amount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "reason")
+    @Column(name = WRITE_OFF_ACT_RECORD_REASON)
     private Reason reason;
 }

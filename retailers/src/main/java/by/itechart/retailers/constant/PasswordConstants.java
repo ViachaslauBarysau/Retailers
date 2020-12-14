@@ -1,8 +1,8 @@
 package by.itechart.retailers.constant;
 
 public class PasswordConstants {
-    public final static String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public final static String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
-    public final static String specialCharacters = "!@#$";
-    public final static String numbers = "1234567890";
+    public final static String CAPITAL_CASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public final static String LOWER_CASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+    public final static String SPECIAL_CHARACTERS = "!@#$";
+    public final static String NUMBERS = "1234567890";
 }

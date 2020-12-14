@@ -29,6 +29,5 @@ public class UpcValidator implements ConstraintValidator<Upc, Long> {
         } else {
             return false;
         }
-
     }
 }

@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-import static by.itechart.retailers.constant.TableConstants.*;
+import static by.itechart.retailers.constant.DataBaseConstants.*;
 
 @Entity
 @Data

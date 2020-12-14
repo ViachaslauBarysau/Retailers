@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
-import static by.itechart.retailers.constant.TableConstants.*;
+import static by.itechart.retailers.constant.DataBaseConstants.*;
 
 @Entity
 @Data

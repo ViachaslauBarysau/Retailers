@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.itechart.retailers.constant.TableConstants.*;
+import static by.itechart.retailers.constant.DataBaseConstants.*;
 
 @Entity
 @Data
