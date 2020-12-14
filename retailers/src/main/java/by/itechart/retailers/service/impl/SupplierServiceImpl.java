@@ -87,6 +87,7 @@ public class SupplierServiceImpl implements SupplierService {
                 throw new BusinessException("Identifier should be unique");
             }
         }
+        persistSupplier.setIdentifier(supplier.getIdentifier());
         persistSupplier.setFullName(supplier.getFullName());
         persistSupplier.setWareHouseList(supplier.getWareHouseList());
         persistSupplier.setSupplierStatus(supplier.getSupplierStatus());
