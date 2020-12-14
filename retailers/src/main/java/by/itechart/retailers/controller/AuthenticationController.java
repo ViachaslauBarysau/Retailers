@@ -28,7 +28,7 @@ import java.util.Map;
 import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
-@RequestMapping(value = URL_ALL)
+@RequestMapping(value = URL_API)
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
