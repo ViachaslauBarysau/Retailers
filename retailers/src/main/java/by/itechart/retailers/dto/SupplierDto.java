@@ -1,8 +1,6 @@
 package by.itechart.retailers.dto;
 
-import by.itechart.retailers.entity.Customer;
 import by.itechart.retailers.entity.Status;
-import by.itechart.retailers.entity.SupplierWarehouse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
