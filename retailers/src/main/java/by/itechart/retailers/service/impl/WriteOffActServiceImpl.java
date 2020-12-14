@@ -49,7 +49,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public WriteOffActDto findById(long writeOffActId) {
-        logger.info("Find by id {}", writeOffActId);
+        logger.info("Find write-off act by id {}", writeOffActId);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -60,7 +60,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public Page<WriteOffActDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find allwrite-off acts");
         UserDto userDto = userService.getCurrentUser();
         List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
                                                                                   .getId());
@@ -73,7 +73,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     @Override
     @Transactional
     public WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException {
-        logger.info("Create");
+        logger.info("Create write-off act");
         UserDto userDto = userService.getCurrentUser();
         writeOffActDto.setCustomer(userDto.getCustomer());
         WriteOffAct writeOffAct = writeOffActConverter.dtoToEntity(writeOffActDto);
@@ -107,7 +107,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
 
     @Override
     public boolean writeOffActNumberExists(Integer writeOffActNumber) {
-        logger.info("Check for existing number {}", writeOffActNumber);
+        logger.info("Check for existing write-off act number {}", writeOffActNumber);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();

@@ -13,13 +13,11 @@ public class AddressConverter {
     public AddressDto entityToDto(Address address) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(address, AddressDto.class);
-
     }
 
     public Address dtoToEntity(AddressDto addressDto) {
         ModelMapper mapper = new ModelMapper();
         return mapper.map(addressDto, Address.class);
-
     }
 
     public List<AddressDto> entityToDto(List<Address> addresses) {

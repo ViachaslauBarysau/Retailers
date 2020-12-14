@@ -30,7 +30,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public StateDto findById(long stateId) {
-        logger.info("Find by id {}", stateId);
+        logger.info("Find state by id {}", stateId);
         State state = stateRepository.findById(stateId)
                                      .orElse(new State());
         return stateConverter.entityToDto(state);
@@ -38,7 +38,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public Page<StateDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all states");
         Page<State> statePage = stateRepository.findAll(pageable);
         List<StateDto> stateDtos = stateConverter.entityToDto(statePage.getContent());
         return new PageImpl<>(stateDtos, pageable, statePage.getTotalElements());
@@ -46,7 +46,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public StateDto create(StateDto stateDto) {
-        logger.info("Create");
+        logger.info("Create state");
         State state = stateConverter.dtoToEntity(stateDto);
         State persistState = stateRepository.save(state);
         return stateConverter.entityToDto(persistState);
@@ -54,7 +54,7 @@ public class StateServiceImpl implements StateService {
 
     @Override
     public StateDto update(StateDto stateDto) {
-        logger.info("Update");
+        logger.info("Update state");
         State state = stateConverter.dtoToEntity(stateDto);
         State persistState = stateRepository.findById(state.getId())
                                             .orElse(new State());

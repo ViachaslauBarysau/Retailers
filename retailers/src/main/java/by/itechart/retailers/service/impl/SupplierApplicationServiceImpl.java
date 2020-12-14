@@ -47,7 +47,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public SupplierApplicationDto findById(long supplierApplicationId) {
-        logger.info("Find by id {}", supplierApplicationId);
+        logger.info("Find supplier application by id {}", supplierApplicationId);
         UserDto userDto = userService.getCurrentUser();
         Long destinationLocationId = userDto.getLocation()
                                             .getId();
@@ -58,7 +58,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public Page<SupplierApplicationDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all supplier applications");
         UserDto userDto = userService.getCurrentUser();
         Page<SupplierApplication> supplierApplicationPage = supplierApplicationRepository.findAllByDestinationLocation_Id(pageable, userDto.getLocation()
                                                                                                                                            .getId());
@@ -68,7 +68,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public SupplierApplicationDto create(SupplierApplicationDto supplierApplicationDto) throws BusinessException {
-        logger.info("Create");
+        logger.info("Create supplier application");
         UserDto userDto = userService.getCurrentUser();
         supplierApplicationDto.setCreator(userDto);
         supplierApplicationDto.setDestinationLocation(userDto.getLocation());
@@ -83,8 +83,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public SupplierApplicationDto update(SupplierApplicationDto supplierApplicationDto) {
-        logger.info("Update");
-        UserDto userDto = userService.getCurrentUser();
+        logger.info("Update supplier application");
         SupplierApplication supplierApplication = supplierApplicationConverter.dtoToEntity(supplierApplicationDto);
         SupplierApplication persistSupplierApplication = supplierApplicationRepository
                 .findById(supplierApplication.getId())
@@ -96,7 +95,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public SupplierApplicationDto updateStatus(Long supplierApplicationId) throws BusinessException {
-        logger.info("Update status");
+        logger.info("Update supplier application status");
         UserDto userDto = userService.getCurrentUser();
         Long destinationLocation = userDto.getLocation()
                                           .getId();
@@ -110,7 +109,8 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
         }
         List<ApplicationRecord> applicationRecords = supplierApplication.getRecordsList();
         for (ApplicationRecord applicationRecord : applicationRecords) {
-            LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), applicationRecord.getProduct().getId());
+            LocationProduct locationProduct = locationProductRepository.findByLocation_IdAndProduct_Id(location.getId(), applicationRecord.getProduct()
+                                                                                                                                          .getId());
             if (locationProduct != null) {
                 if (locationProduct.getAmount() == 0) {
                     locationProduct.setCost(applicationRecord.getCost());
@@ -146,6 +146,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     @Override
     public boolean applicationNumberExists(Integer applicationNumber) {
+        logger.info("Check for existing supplier application number {}", applicationNumber);
         UserDto userDto = userService.getCurrentUser();
         User user = userConverter.dtoToEntity(userDto);
         return supplierApplicationRepository.findAllByApplicationNumberAndCreator(applicationNumber, user)

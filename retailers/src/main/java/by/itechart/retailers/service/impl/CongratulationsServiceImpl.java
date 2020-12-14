@@ -38,7 +38,7 @@ public class CongratulationsServiceImpl implements CongratulationsService {
 
     @Scheduled(cron = "0 59 8 ? * MON-FRI")
     public void findByBirthday() {
-        logger.info("Find by birthday");
+        logger.info("Find users by birthday");
         userDtos = userService.findByBirthday(LocalDate.now());
     }
 

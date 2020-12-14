@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto findById(long productId) {
-        logger.info("Find by id {}", productId);
+        logger.info("Find product by id {}", productId);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -66,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all products");
         UserDto userDto = userService.getCurrentUser();
         Page<Product> productPage = productRepository.findAllByCustomer_IdAndStatus(pageable, userDto.getCustomer()
                                                                                                      .getId(), DeletedStatus.ACTIVE);
@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto create(ProductDto productDto) throws BusinessException {
-        logger.info("Create");
+        logger.info("Create product");
         UserDto userDto = userService.getCurrentUser();
         productDto.setCustomer(userDto.getCustomer());
         Product product = productConverter.dtoToEntity(productDto);
@@ -92,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(ProductDto productDto) throws BusinessException {
-        logger.info("Update");
+        logger.info("Update product");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -137,7 +137,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> delete(List<Long> productIds) {
-        logger.info("Delete");
+        logger.info("Delete product");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -161,17 +161,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private boolean checkInLocationProducts(List<LocationProduct> locationProducts) {
+        logger.info("Check product in location products");
         return locationProducts.stream()
                                .anyMatch(locationProduct -> (locationProduct.getAmount() != 0));
     }
 
     private boolean checkInSupplierApplications(List<SupplierApplication> supplierApplications) {
+        logger.info("Check product in supplier applications");
         return supplierApplications.stream()
                                    .anyMatch(supplierApplication -> (supplierApplication.getApplicationStatus()
                                                                                         .equals(ApplicationStatus.OPEN)));
     }
 
     private boolean checkInInnerApplications(List<InnerApplication> innerApplications) {
+        logger.info("Check product in inner applications");
         return innerApplications.stream()
                                 .anyMatch(supplierApplication -> (supplierApplication.getApplicationStatus()
                                                                                      .equals(ApplicationStatus.OPEN)));

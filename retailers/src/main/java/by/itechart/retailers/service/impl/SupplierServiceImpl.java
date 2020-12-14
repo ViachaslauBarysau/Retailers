@@ -38,7 +38,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SupplierDto findById(long supplierId) {
-        logger.info("Find by id {}", supplierId);
+        logger.info("Find supplier by id {}", supplierId);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -49,7 +49,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Page<SupplierDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all suppliers");
         UserDto userDto = userService.getCurrentUser();
         Page<Supplier> supplierPage = supplierRepository.findAllByCustomer_Id(pageable, userDto.getCustomer()
                                                                                                .getId());
@@ -60,7 +60,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SupplierDto create(SupplierDto supplierDto) throws BusinessException {
-        logger.info("Create");
+        logger.info("Create supplier");
         UserDto userDto = userService.getCurrentUser();
         supplierDto.setCustomer(userDto.getCustomer());
         Supplier supplier = supplierConverter.dtoToEntity(supplierDto);
@@ -74,7 +74,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public SupplierDto update(SupplierDto supplierDto) throws BusinessException {
-        logger.info("Update");
+        logger.info("Update supplier");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -97,7 +97,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public List<SupplierDto> updateStatus(List<Long> supplierIdsList) {
-        logger.info("Update status");
+        logger.info("Update supplier status");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -116,7 +116,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public boolean identifierExists(String identifier) {
-        logger.info("Check for exiting identifier {}", identifier);
+        logger.info("Check for exiting supplier identifier {}", identifier);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();

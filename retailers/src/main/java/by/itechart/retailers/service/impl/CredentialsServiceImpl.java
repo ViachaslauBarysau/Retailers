@@ -26,7 +26,7 @@ public class CredentialsServiceImpl implements CredentialsService {
 
     @Override
     public void sendCredentials(UserDto userDto) {
-        logger.info("Send");
+        logger.info("Send credentials");
         StringTemplateGroup group = new StringTemplateGroup("src/main/resources", DefaultTemplateLexer.class);
         StringTemplate mail = group.getInstanceOf("Credentials");
         mail.setAttribute("name", userDto.getCustomer()

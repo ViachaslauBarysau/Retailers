@@ -34,7 +34,7 @@ public class SupplierWarehouseServiceImpl implements SupplierWarehouseService {
 
     @Override
     public List<SupplierWarehouseDto> findAll() {
-        logger.info("Find all");
+        logger.info("Find allsupplier warehouses");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -44,7 +44,7 @@ public class SupplierWarehouseServiceImpl implements SupplierWarehouseService {
 
     @Override
     public SupplierWarehouseDto findById(Long supplierWarehouseId) {
-        logger.info("Find by id {}", supplierWarehouseId);
+        logger.info("Find supplier warehouse by id {}", supplierWarehouseId);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();

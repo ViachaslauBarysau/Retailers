@@ -37,7 +37,7 @@ public class LocationProductServiceImpl implements LocationProductService {
 
     @Override
     public LocationProductDto findById(long locationProductId) {
-        logger.info("Find by id {}", locationProductId);
+        logger.info("Find location product by id {}", locationProductId);
         UserDto userDto = userService.getCurrentUser();
         Long locationId = userDto.getLocation()
                                  .getId();
@@ -48,7 +48,7 @@ public class LocationProductServiceImpl implements LocationProductService {
 
     @Override
     public Page<LocationProductDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all location products");
         UserDto userDto = userService.getCurrentUser();
         Long locationId = userDto.getLocation()
                                  .getId();
@@ -59,7 +59,7 @@ public class LocationProductServiceImpl implements LocationProductService {
 
     @Override
     public LocationProductDto create(LocationProductDto locationProductDto) {
-        logger.info("Create");
+        logger.info("Create location product");
         UserDto userDto = userService.getCurrentUser();
         locationProductDto.setLocation(userDto.getLocation());
         LocationProduct locationProduct = locationProductConverter.dtoToEntity(locationProductDto);
@@ -69,7 +69,7 @@ public class LocationProductServiceImpl implements LocationProductService {
 
     @Override
     public LocationProductDto update(LocationProductDto locationProductDto) {
-        logger.info("Update");
+        logger.info("Update location product");
         UserDto userDto = userService.getCurrentUser();
         Long locationId=userDto.getLocation().getId();
         locationProductDto.setLocation(userDto.getLocation());

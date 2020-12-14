@@ -46,7 +46,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationDto findById(long locationId) {
-        logger.info("Find by id {}", locationId);
+        logger.info("Find location by id {}", locationId);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -57,7 +57,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public Page<LocationDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all locations");
         UserDto userDto = userService.getCurrentUser();
         Page<Location> locationPage = locationRepository.findAllByCustomer_IdAndStatus(pageable, userDto.getCustomer()
                                                                                                         .getId(), DeletedStatus.ACTIVE);
@@ -87,7 +87,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationDto create(LocationDto locationDto) throws BusinessException {
-        logger.info("Create");
+        logger.info("Create location");
         UserDto userDto = userService.getCurrentUser();
         locationDto.setCustomer(userDto.getCustomer());
         Location location = locationConverter.dtoToEntity(locationDto);
@@ -101,7 +101,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationDto update(LocationDto locationDto) throws BusinessException {
-        logger.info("Update");
+        logger.info("Update location");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -128,7 +128,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<LocationDto> delete(List<Long> locationIds) {
-        logger.info("Delete");
+        logger.info("Delete location");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -147,7 +147,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public boolean identifierExists(String identifier) {
-        logger.info("Check for existing identifier {}", identifier);
+        logger.info("Check for existing location identifier {}", identifier);
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();

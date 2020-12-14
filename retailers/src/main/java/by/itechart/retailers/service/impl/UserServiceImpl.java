@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> updateStatus(List<Long> userIds) {
-        logger.info("Update status {}", userIds.toString());
+        logger.info("Update user status");
         List<User> users = userRepository.findAllById(userIds);
         List<User> undeletedUsers = new ArrayList<>(users);
         for (User user : users) {
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<UserDto> findByBirthday(LocalDate date) {
-        logger.info("Find by birthday {}", date);
+        logger.info("Find user by birthday {}", date);
         List<User> users = userRepository.findAllByBirthdayAndUserStatus(date, Status.ACTIVE);
         return userConverter.entityToDto(users);
     }
@@ -85,21 +85,21 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<UserDto> findAllByRole(Role role) {
-        logger.info("Find by role {}", role.toString());
+        logger.info("Find user by role {}", role.toString());
         List<User> users = userRepository.findAllByUserRoleAndUserStatus(role, Status.ACTIVE);
         return userConverter.entityToDto(users);
     }
 
     @Override
     public boolean emailExists(String email) {
-        logger.info("Check for existing email {}", email);
+        logger.info("Check for existing user email {}", email);
         return userRepository.findAllByEmailIgnoreCase(email)
                              .size() != 0;
     }
 
     @Override
     public boolean loginExists(String login) {
-        logger.info("Check for existing login {}", login);
+        logger.info("Check for existing user login {}", login);
         return userRepository.findAllByLoginIgnoreCase(login)
                              .size() != 0;
     }
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public List<UserDto> findAllById(List<Long> ids) {
-        logger.info("Find all by id ");
+        logger.info("Find all users by id ");
         List<User> users = userRepository.findAllById(ids);
         return userConverter.entityToDto(users);
     }
@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto getCurrentUser() {
-        logger.info("Get user");
+        logger.info("Get current user");
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto findByEmail(String email) {
-        logger.info("Find by email {}", email);
+        logger.info("Find user by email {}", email);
         User user = userRepository.findByEmail(email);
         return userConverter.entityToDto(user);
     }
@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(long userId) {
-        logger.info("Find by id {}", userId);
+        logger.info("Find user by id {}", userId);
         UserDto userDto = getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all users");
         UserDto userDto = getCurrentUser();
         Page<User> userPage = userRepository.findAllByCustomer_IdAndUserRoleIsNotContaining(pageable, userDto.getCustomer()
                                                                                                              .getId(), Role.ADMIN);
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto userDto) throws BusinessException {
-        logger.info("Create by admin");
+        logger.info("Create user by admin");
         UserDto currentUserDto = getCurrentUser();
         userDto.setCustomer(currentUserDto.getCustomer());
         User user = userConverter.dtoToEntity(userDto);
@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(CustomerDto customerDto) throws BusinessException {
-        logger.info("Create by system admin");
+        logger.info("Create user by system admin");
         Customer customer = customerConverter.dtoToEntity(customerDto);
         if (emailExists(customer.getEmail())) {
             logger.error("Not unique email {}", customer.getEmail());
@@ -231,7 +231,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto userDto) throws BusinessException {
-        logger.info("Update");
+        logger.info("Update user");
         UserDto currentUserDto = getCurrentUser();
         userDto.setCustomer(currentUserDto.getCustomer());
         Long customerId = currentUserDto.getCustomer()

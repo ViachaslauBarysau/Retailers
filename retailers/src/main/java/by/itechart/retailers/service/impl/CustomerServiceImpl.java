@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto findById(long customerId) {
-        logger.info("Find by id {}", customerId);
+        logger.info("Find customer by id {}", customerId);
         Customer customer = customerRepository.findById(customerId)
                                               .orElse(new Customer());
         return customerConverter.entityToDto(customer);
@@ -46,7 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Page<CustomerDto> findAll(Pageable pageable) {
-        logger.info("Find all");
+        logger.info("Find all customers");
         Page<Customer> customerPage = customerRepository.findAll(pageable);
         List<CustomerDto> customerDtos = customerConverter.entityToDto(customerPage.getContent());
         return new PageImpl<>(customerDtos, pageable, customerPage.getTotalElements());
@@ -55,7 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public CustomerDto create(CustomerDto customerDto) throws BusinessException {
-        logger.info("Create");
+        logger.info("Create customer");
         if (emailExists(customerDto.getEmail())) {
             logger.error("Not unique email {}", customerDto.getEmail());
             throw new BusinessException("Email should be unique");
@@ -68,7 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto update(CustomerDto customerDto) throws BusinessException {
-        logger.info("Update");
+        logger.info("Update customer");
         Customer customer = customerConverter.dtoToEntity(customerDto);
         Customer persistCustomer = customerRepository.findById(customer.getId())
                                                      .orElse(new Customer());
@@ -87,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDto> updateStatus(List<Long> customerIds) {
-        logger.info("Update status");
+        logger.info("Update customer status");
         List<Customer> customers = customerRepository.findAllById(customerIds);
         for (Customer customer : customers) {
             if (customer.getCustomerStatus()
@@ -103,7 +103,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public boolean emailExists(String email) {
-        logger.info("Check for existing email {}", email);
+        logger.info("Check for existing customer email {}", email);
         return customerRepository.findAllByEmailIgnoreCase(email)
                                  .size() != 0;
     }
