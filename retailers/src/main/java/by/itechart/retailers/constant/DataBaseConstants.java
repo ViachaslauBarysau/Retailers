@@ -107,7 +107,6 @@ public class DataBaseConstants {
 
     public static final String SUPPLIER_WAREHOUSE_TABLE = "supplier_warehouse";
     public static final String SUPPLIER_WAREHOUSE_NAME = "name";
-    public static final String SUPPLIER_WAREHOUSE_CUSTOMER = "customer_id";
     public static final String SUPPLIER_WAREHOUSE_ADDRESS = "address_id";
     public static final String SUPPLIER_WAREHOUSE_STATUS = "deleted_status";
 

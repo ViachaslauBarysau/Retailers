@@ -28,13 +28,11 @@ public class CongratulationsServiceImpl implements CongratulationsService {
     Logger logger = LoggerFactory.getLogger(CongratulationsServiceImpl.class);
     private List<UserDto> userDtos;
 
+    @Autowired
     public CongratulationsServiceImpl(UserService userService, SendingMailService sendingMailService) {
         this.userService = userService;
         this.sendingMailService = sendingMailService;
     }
-
-    @Autowired
-
 
     @Scheduled(cron = "0 59 8 ? * MON-FRI")
     public void findByBirthday() {
