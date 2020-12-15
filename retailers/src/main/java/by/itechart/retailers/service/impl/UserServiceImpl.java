@@ -212,10 +212,15 @@ public class UserServiceImpl implements UserService {
             logger.error("Not unique email {}", customer.getEmail());
             throw new BusinessException("Email should be unique");
         }
+        if (loginExists(customer.getEmail())) {
+            logger.error("Not unique login {}", customer.getEmail());
+            throw new BusinessException("Login should be unique");
+        }
         User user = new User();
         user.setFirstName(customerDto.getName());
         user.setLastName(customerDto.getName());
         user.setEmail(customerDto.getEmail());
+        user.setLogin(customerDto.getEmail());
         user.setBirthday(LocalDate.parse("2000-01-01"));
         user.setCustomer(customer);
         String password = generatePassword();
