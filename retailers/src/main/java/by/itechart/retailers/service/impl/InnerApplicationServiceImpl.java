@@ -148,8 +148,11 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
                         locationProduct.setCost(applicationRecord.getCost());
                         Integer amount = locationProduct.getAmount();
                         locationProduct.setAmount(amount + applicationRecord.getAmount());
-                        locationProductRepository.save(locationProduct);
+                    }else{
+                        Integer amount = locationProduct.getAmount();
+                        locationProduct.setAmount(amount + applicationRecord.getAmount());
                     }
+                    locationProductRepository.save(locationProduct);
                 }
             } else {
                 locationProduct = new LocationProduct();
