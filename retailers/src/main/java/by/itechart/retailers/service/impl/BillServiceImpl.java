@@ -61,13 +61,24 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Page<BillDto> findAll(Pageable pageable) {
-        logger.info("Find all bills");
+    public Page<BillDto> findAllByCustomer(Pageable pageable) {
+        logger.info("Find all bills by customer");
         UserDto userDto = userService.getCurrentUser();
         Long customerId = userDto.getCustomer()
                                  .getId();
         List<Location> locations = locationRepository.findAllByCustomer_Id(customerId);
         Page<Bill> billPage = billRepository.findAllByLocationIn(pageable, locations);
+        List<BillDto> billDtos = billConverter.entityToDto(billPage.getContent());
+        return new PageImpl<>(billDtos, pageable, billPage.getTotalElements());
+    }
+
+    @Override
+    public Page<BillDto> findAllByLocation(Pageable pageable) {
+        logger.info("Find all bills by location");
+        UserDto userDto = userService.getCurrentUser();
+        Long locationId = userDto.getLocation()
+                                 .getId();
+        Page<Bill> billPage = billRepository.findAllByLocation_Id(pageable, locationId);
         List<BillDto> billDtos = billConverter.entityToDto(billPage.getContent());
         return new PageImpl<>(billDtos, pageable, billPage.getTotalElements());
     }

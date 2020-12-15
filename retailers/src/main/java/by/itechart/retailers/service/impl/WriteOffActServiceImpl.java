@@ -59,15 +59,26 @@ public class WriteOffActServiceImpl implements WriteOffActService {
     }
 
     @Override
-    public Page<WriteOffActDto> findAll(Pageable pageable) {
-        logger.info("Find allwrite-off acts");
+    public Page<WriteOffActDto> findAllByCustomer(Pageable pageable) {
+        logger.info("Find all write-off acts by customer");
         UserDto userDto = userService.getCurrentUser();
-        List<Location> locations = locationRepository.findAllByCustomer_Id(userDto.getCustomer()
-                                                                                  .getId());
+        Long customerId = userDto.getCustomer()
+                                 .getId();
+        List<Location> locations = locationRepository.findAllByCustomer_Id(customerId);
         Page<WriteOffAct> writeOffActPage = writeOffActRepository.findAllByLocationIn(pageable, locations);
         List<WriteOffActDto> writeOffActDtos = writeOffActConverter.entityToDto(writeOffActPage.getContent());
         return new PageImpl<>(writeOffActDtos, pageable, writeOffActPage.getTotalElements());
+    }
 
+    @Override
+    public Page<WriteOffActDto> findAllByLocation(Pageable pageable) {
+        logger.info("Find all write-off acts by location");
+        UserDto userDto = userService.getCurrentUser();
+        Long locationId = userDto.getLocation()
+                                 .getId();
+        Page<WriteOffAct> writeOffActPage = writeOffActRepository.findAllByLocation_Id(pageable, locationId);
+        List<WriteOffActDto> writeOffActDtos = writeOffActConverter.entityToDto(writeOffActPage.getContent());
+        return new PageImpl<>(writeOffActDtos, pageable, writeOffActPage.getTotalElements());
     }
 
     @Override

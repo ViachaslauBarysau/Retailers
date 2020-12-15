@@ -23,9 +23,14 @@ public class WriteOffActController {
         this.writeOffActService = writeOffActService;
     }
 
-    @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = "actDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
-        return new ResponseEntity<>(writeOffActService.findAll(pageable), HttpStatus.OK);
+    @GetMapping(value = "/by_customer")
+    public ResponseEntity findAllByCustoemr(@PageableDefault(sort = "actDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+        return new ResponseEntity<>(writeOffActService.findAllByCustomer(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/by_location")
+    public ResponseEntity findAllByLocation(@PageableDefault(sort = "actDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+        return new ResponseEntity<>(writeOffActService.findAllByLocation(pageable), HttpStatus.OK);
     }
 
     @GetMapping(value = WRITE_OFF_ACT_ID_VALUE)

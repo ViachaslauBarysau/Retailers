@@ -23,11 +23,15 @@ public class BillController {
         this.billService = billService;
     }
 
-    @GetMapping
-    public ResponseEntity findAll(@PageableDefault(sort = "registrationDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
-        return new ResponseEntity<>(billService.findAll(pageable), HttpStatus.OK);
+    @GetMapping(value = "/by_customer")
+    public ResponseEntity findAllByCustomer(@PageableDefault(sort = "registrationDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+        return new ResponseEntity<>(billService.findAllByCustomer(pageable), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/by_location")
+    public ResponseEntity findAllByLocation(@PageableDefault(sort = "registrationDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+        return new ResponseEntity<>(billService.findAllByLocation(pageable), HttpStatus.OK);
+    }
     @GetMapping(value = BILL_ID_VALUE)
     public ResponseEntity findById(@PathVariable(name = BILL_ID) Long billId) {
         return new ResponseEntity<>(billService.findById(billId), HttpStatus.OK);

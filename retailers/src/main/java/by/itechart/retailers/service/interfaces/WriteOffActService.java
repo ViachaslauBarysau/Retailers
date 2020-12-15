@@ -10,7 +10,9 @@ import java.util.List;
 public interface WriteOffActService {
     WriteOffActDto findById(long writeOffActId);
 
-    Page<WriteOffActDto> findAll(Pageable pageable);
+    Page<WriteOffActDto> findAllByCustomer(Pageable pageable);
+
+    Page<WriteOffActDto> findAllByLocation(Pageable pageable);
 
     WriteOffActDto create(WriteOffActDto writeOffActDto) throws BusinessException;
 

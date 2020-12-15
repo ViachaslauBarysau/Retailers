@@ -17,6 +17,8 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     Page<Bill> findAllByLocationIn(Pageable pageable, List<Location> locations);
 
+    Page<Bill> findAllByLocation_Id(Pageable pageable, Long locationId);
+
     Optional<Bill> findByIdAndCustomer_Id(Long billId, Long customerId);
 
     @Query(value = "SELECT manager_id " +

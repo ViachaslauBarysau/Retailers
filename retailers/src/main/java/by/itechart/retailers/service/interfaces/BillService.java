@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 public interface BillService {
     BillDto findById(long billId);
 
-    Page<BillDto> findAll(Pageable pageable);
+    Page<BillDto> findAllByCustomer(Pageable pageable);
+
+    Page<BillDto> findAllByLocation(Pageable pageable);
 
     BillDto create(BillDto billDto) throws BusinessException;
 
