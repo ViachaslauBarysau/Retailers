@@ -92,7 +92,7 @@ public class WriteOffActServiceImpl implements WriteOffActService {
             logger.error("Not unique number {}", writeOffAct.getWriteOffActNumber());
             throw new BusinessException("Write-off act number should be unique");
         }
-        Location location = writeOffAct.getLocation();
+        Location location=locationRepository.findById(writeOffAct.getLocation().getId()).orElse(new Location());
         List<WriteOffActRecord> writeOffActRecords = writeOffAct.getWriteOffActRecords();
         for (WriteOffActRecord writeOffActRecord : writeOffActRecords) {
             Long productId = writeOffActRecord.getProduct()
@@ -105,8 +105,9 @@ public class WriteOffActServiceImpl implements WriteOffActService {
                                                                                      .getLabel() + " in location ");
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - writeOffActRecord.getAmount() * writeOffActRecord.getProduct()
-                                                                                                               .getVolume());
+            location.setAvailableCapacity(availableCapacity + writeOffActRecord
+                    .getAmount() * writeOffActRecord.getProduct()
+                                                    .getVolume());
             writeOffAct.setLocation(location);
             Integer amount = locationProduct.getAmount();
             locationProduct.setAmount(amount - writeOffActRecord.getAmount());

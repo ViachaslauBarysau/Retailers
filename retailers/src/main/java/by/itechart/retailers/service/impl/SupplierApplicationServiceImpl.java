@@ -7,6 +7,7 @@ import by.itechart.retailers.dto.UserDto;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.LocationProductRepository;
+import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.repository.SupplierApplicationRepository;
 import by.itechart.retailers.service.interfaces.SupplierApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
@@ -26,24 +27,21 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
 
     private final SupplierApplicationRepository supplierApplicationRepository;
     private final LocationProductRepository locationProductRepository;
+    private final LocationRepository locationRepository;
     private final SupplierApplicationConverter supplierApplicationConverter;
     private final UserConverter userConverter;
     private final UserService userService;
     Logger logger = LoggerFactory.getLogger(SupplierApplicationServiceImpl.class);
 
     @Autowired
-    public SupplierApplicationServiceImpl(SupplierApplicationRepository supplierApplicationRepository,
-                                          LocationProductRepository locationProductRepository,
-                                          SupplierApplicationConverter supplierApplicationConverter,
-                                          UserConverter userConverter,
-                                          UserService userService) {
+    public SupplierApplicationServiceImpl(SupplierApplicationRepository supplierApplicationRepository, LocationProductRepository locationProductRepository, LocationRepository locationRepository, SupplierApplicationConverter supplierApplicationConverter, UserConverter userConverter, UserService userService) {
         this.supplierApplicationRepository = supplierApplicationRepository;
         this.locationProductRepository = locationProductRepository;
+        this.locationRepository = locationRepository;
         this.supplierApplicationConverter = supplierApplicationConverter;
         this.userConverter = userConverter;
         this.userService = userService;
     }
-
 
     @Override
     public SupplierApplicationDto findById(long supplierApplicationId) {
@@ -101,7 +99,7 @@ public class SupplierApplicationServiceImpl implements SupplierApplicationServic
                                           .getId();
         SupplierApplication supplierApplication = supplierApplicationRepository.findByIdAndDestinationLocation_Id(supplierApplicationId, destinationLocation)
                                                                                .orElse(new SupplierApplication());
-        Location location = supplierApplication.getDestinationLocation();
+        Location location = locationRepository.findById(supplierApplication.getDestinationLocation().getId()).orElse(new Location());
         Integer totalUnitAmount = supplierApplication.getTotalUnitNumber();
         if (totalUnitAmount > location.getAvailableCapacity()) {
             logger.error("Not enough space in location {}", location.getId());

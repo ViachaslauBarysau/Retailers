@@ -18,7 +18,7 @@ public class CustomerDto {
     private Long id;
 
     @NotNull(message = "Customer name can't be empty.")
-    @Size(min = 1, max = 20, message = "Customer name can be from 1 to 20 symbols.")
+    @Size(min = 4, max = 40, message = "Customer name can be from 4 to 40 symbols.")
     private String name;
 
     @Email(message = "Wrong email format.")

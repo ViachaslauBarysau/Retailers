@@ -5,7 +5,6 @@ import by.itechart.retailers.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -54,9 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(URL_API + URL_BILLS + URL_ALL)
                 .hasAnyAuthority(ROLE_DIRECTOR, ROLE_SHOP_MANAGER)
                 .antMatchers(URL_API + URL_CATEGORIES + URL_ALL)
-                .hasAuthority(ROLE_DIRECTOR)
-                .antMatchers(HttpMethod.GET, URL_API + URL_CATEGORIES + URL_ALL)
-                .hasAuthority(ROLE_DISPATCHER)
+                .hasAnyAuthority(ROLE_DIRECTOR, ROLE_DISPATCHER)
                 .antMatchers(URL_API + URL_CUSTOMERS + URL_ALL)
                 .hasAuthority(ROLE_SYSTEM_ADMIN)
                 .antMatchers(URL_API + URL_INNER_APPLICATIONS + URL_ALL)
@@ -68,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(URL_API + URL_PRODUCTS + URL_ALL)
                 .hasAuthority(ROLE_DISPATCHER)
                 .antMatchers(URL_API + URL_STATES + URL_ALL)
-                .hasAnyAuthority(ROLE_SYSTEM_ADMIN, ROLE_DIRECTOR, ROLE_WAREHOUSE_MANAGER, ROLE_SHOP_MANAGER, ROLE_DISPATCHER)
+                .hasAnyAuthority(ROLE_SYSTEM_ADMIN, ROLE_DIRECTOR, ROLE_WAREHOUSE_MANAGER, ROLE_SHOP_MANAGER, ROLE_DISPATCHER, ROLE_ADMIN)
                 .antMatchers(URL_API + URL_SUPPLIER_APPLICATIONS + URL_ALL)
                 .hasAuthority(ROLE_DISPATCHER)
                 .antMatchers(URL_API + URL_SUPPLIERS + URL_ALL)
@@ -76,9 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(URL_API + URL_SUPPLIER_WAREHOUSES + URL_ALL)
                 .hasAnyAuthority(ROLE_DISPATCHER, ROLE_DIRECTOR)
                 .antMatchers(URL_API + URL_USERS + URL_ALL)
-                .hasAuthority(ROLE_ADMIN)
-                .antMatchers(HttpMethod.PUT, URL_API + URL_USERS + URL_ALL)
-                .hasAnyAuthority(ROLE_SYSTEM_ADMIN, ROLE_DIRECTOR, ROLE_WAREHOUSE_MANAGER, ROLE_SHOP_MANAGER, ROLE_DISPATCHER)
+                .hasAnyAuthority(ROLE_SYSTEM_ADMIN, ROLE_DIRECTOR, ROLE_WAREHOUSE_MANAGER, ROLE_SHOP_MANAGER, ROLE_DISPATCHER, ROLE_ADMIN)
                 .antMatchers(URL_API + URL_WRITE_OFF_ACTS + URL_ALL)
                 .hasAnyAuthority(ROLE_DIRECTOR, ROLE_WAREHOUSE_MANAGER, ROLE_SHOP_MANAGER, ROLE_DISPATCHER)
                 .anyRequest()

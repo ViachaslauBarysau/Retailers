@@ -21,7 +21,7 @@ public class SupplierApplicationDto {
 
     private Long id;
 
-    @Min(value = 0, message = "Wrong application number.")
+    @Min(value = 1, message = "Wrong application number.")
     private Integer applicationNumber;
 
     @Valid

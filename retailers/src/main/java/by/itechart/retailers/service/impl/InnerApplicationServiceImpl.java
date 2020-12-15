@@ -8,6 +8,7 @@ import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.InnerApplicationRepository;
 import by.itechart.retailers.repository.LocationProductRepository;
+import by.itechart.retailers.repository.LocationRepository;
 import by.itechart.retailers.service.interfaces.InnerApplicationService;
 import by.itechart.retailers.service.interfaces.UserService;
 import org.slf4j.Logger;
@@ -30,19 +31,17 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
     private final UserConverter userConverter;
     private final UserService userService;
     private final LocationProductRepository locationProductRepository;
+    private final LocationRepository locationRepository;
     Logger logger = LoggerFactory.getLogger(InnerApplicationServiceImpl.class);
 
     @Autowired
-    public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository,
-                                       InnerApplicationConverter innerApplicationConverter,
-                                       UserConverter userConverter,
-                                       UserService userService,
-                                       LocationProductRepository locationProductRepository) {
+    public InnerApplicationServiceImpl(InnerApplicationRepository innerApplicationRepository, InnerApplicationConverter innerApplicationConverter, UserConverter userConverter, UserService userService, LocationProductRepository locationProductRepository, LocationRepository locationRepository) {
         this.innerApplicationRepository = innerApplicationRepository;
         this.innerApplicationConverter = innerApplicationConverter;
         this.userConverter = userConverter;
         this.userService = userService;
         this.locationProductRepository = locationProductRepository;
+        this.locationRepository = locationRepository;
     }
 
 
@@ -75,7 +74,10 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
         UserDto userDto = userService.getCurrentUser();
         innerApplicationDto.setCreator(userDto);
         InnerApplication innerApplication = innerApplicationConverter.dtoToEntity(innerApplicationDto);
-        Location location = innerApplication.getSourceLocation();
+        Location location = locationRepository.findById(innerApplication.getSourceLocation()
+                                                                        .getId())
+                                              .orElse(new Location());
+
         if (applicationNumberExists(innerApplication.getApplicationNumber())) {
             logger.error("Not unique number {}", innerApplication.getApplicationNumber());
             throw new BusinessException("Application number should be unique");
@@ -92,7 +94,7 @@ public class InnerApplicationServiceImpl implements InnerApplicationService {
                                                                                                                                      .getIdentifier());
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - applicationRecord.getAmount() * applicationRecord.getProduct()
+            location.setAvailableCapacity(availableCapacity + applicationRecord.getAmount() * applicationRecord.getProduct()
                                                                                                                .getVolume());
             Integer amount = locationProduct.getAmount();
             locationProduct.setAmount(amount - applicationRecord.getAmount());

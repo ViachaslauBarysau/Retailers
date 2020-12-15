@@ -22,11 +22,11 @@ public class UserDto {
     private Long id;
 
     @NotNull(message = "First name can't be empty.")
-    @Size(min = 1, max = 20, message = "First name can be from 1 to 20 symbols.")
+    @Size(min = 2, max = 20, message = "First name can be from 2 to 20 symbols.")
     private String firstName;
 
     @NotNull(message = "Last name can't be empty.")
-    @Size(min = 1, max = 20, message = "Last name can be from 1 to 20 symbols.")
+    @Size(min = 2, max = 20, message = "Last name can be from 2 to 20 symbols.")
     private String lastName;
 
     @Valid
@@ -53,5 +53,6 @@ public class UserDto {
     @Valid
     private CustomerDto customer;
 
+    @Size(min = 3, max = 20, message = "Password must be from 3 to 20 symbols.")
     private String login;
 }

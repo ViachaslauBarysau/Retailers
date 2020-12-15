@@ -25,7 +25,7 @@ public class LocationDto {
     private Long id;
 
     @NotBlank(message = "Location identifier can't be empty.")
-    @Size(min = 1, max = 20, message = "Identifier can be from 1 to 20 symbols.")
+    @Size(min = 3, max = 30, message = "Identifier can be from 3 to 30 symbols.")
     private String identifier;
 
     @Valid
@@ -37,7 +37,6 @@ public class LocationDto {
     @Min(value = 1, message = "Total capacity must be greater than 0.")
     private Integer totalCapacity;
 
-    @Min(value = 1, message = "Available capacity must be greater than 0.")
     private Integer availableCapacity;
 
     @NotBlank(message = "Location type can't be empty.")

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +24,7 @@ public class ProductDto {
     private Long upc;
 
     @NotBlank(message = "Label can't be empty.")
+    @Size(min = 3, max = 30, message = "Label can be from 3 to 30 symbols.")
     private String label;
 
     @Valid

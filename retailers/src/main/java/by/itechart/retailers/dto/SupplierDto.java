@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @NoArgsConstructor
@@ -21,9 +19,11 @@ public class SupplierDto {
     private Long id;
 
     @NotBlank(message = "Name can't be empty.")
-    @Size(min = 1, max = 20, message = "Name can be from 1 to 20 symbols.")
+    @Size(min = 3, max = 40, message = "Name can be from 3 to 40 symbols.")
     private String fullName;
 
+    @Min(value = 1, message = "Amount must be equals or greater than 0.")
+    @Max(value = 999999999, message = "Amount must be equals or greater than 0.")
     private Integer identifier;
 
     @Valid

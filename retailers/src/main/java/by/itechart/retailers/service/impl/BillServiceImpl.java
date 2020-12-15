@@ -95,7 +95,9 @@ public class BillServiceImpl implements BillService {
         if (billNumberExists(bill.getBillNumber())) {
             throw new BusinessException("Bill number should be unique");
         }
-        Location location = bill.getLocation();
+        Location location = locationRepository.findById(bill.getLocation()
+                                                            .getId())
+                                              .orElse(new Location());
         List<BillRecord> billRecords = bill.getRecordList();
         for (BillRecord billRecord : billRecords) {
             Long productId = billRecord.getProduct()
@@ -110,8 +112,8 @@ public class BillServiceImpl implements BillService {
                                                                                      .getLabel() + " in location ");
             }
             Integer availableCapacity = location.getAvailableCapacity();
-            location.setAvailableCapacity(availableCapacity - billRecord.getProduct()
-                                                                        .getVolume() * billRecord.getProductAmount());
+            location.setAvailableCapacity(availableCapacity + billRecord
+                    .getProduct().getVolume() * billRecord.getProductAmount());
             Integer amount = locationProduct.getAmount();
             locationProduct.setAmount(amount - billRecord.getProductAmount());
             locationProductRepository.save(locationProduct);

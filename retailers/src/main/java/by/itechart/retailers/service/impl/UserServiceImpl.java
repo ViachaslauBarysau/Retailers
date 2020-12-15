@@ -200,7 +200,7 @@ public class UserServiceImpl implements UserService {
         User persistUser = userRepository.save(user);
         persistUser.setPassword(password);
         userDto = userConverter.entityToDto(persistUser);
-        credentialsService.sendCredentials(userDto);
+        new Thread(() -> credentialsService.sendCredentials(userConverter.entityToDto(user))).start();
         return userDto;
     }
 
