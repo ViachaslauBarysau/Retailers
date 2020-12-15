@@ -50,7 +50,7 @@ public class WriteOffActServiceTest {
     WriteOffActServiceImpl writeOffActService;
 
     @Test
-    public void findAllTest() {
+    public void findAllCustomerTest() {
         //given
         Long customerId = 1L;
         List<WriteOffAct> writeOffActs = new ArrayList<>();
@@ -69,7 +69,7 @@ public class WriteOffActServiceTest {
         when(writeOffActRepository.findAllByLocationIn(pageable, locations)).thenReturn(writeOffActPage);
         when(writeOffActConverter.entityToDto(writeOffActPage.getContent())).thenReturn(writeOffActDtos);
         //when
-        writeOffActService.findAll(pageable);
+        writeOffActService.findAllByCustomer(pageable);
         //then
         verify(userService).getCurrentUser();
         verify(locationRepository).findAllByCustomer_Id(customerId);

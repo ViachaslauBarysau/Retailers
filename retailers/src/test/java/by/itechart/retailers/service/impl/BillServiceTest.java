@@ -50,7 +50,7 @@ public class BillServiceTest {
     BillServiceImpl billService;
 
     @Test
-    public void findAllTest() {
+    public void findAllByCustomerTest() {
         //given
         Long customerId = 1L;
         List<Bill> bills = new ArrayList<>();
@@ -70,7 +70,7 @@ public class BillServiceTest {
         when(billRepository.findAllByLocationIn(pageable, locations)).thenReturn(billPage);
         when(billConverter.entityToDto(billPage.getContent())).thenReturn(billDtos);
         //when
-        billService.findAll(pageable);
+        billService.findAllByCustomer(pageable);
         //then
         verify(userService).getCurrentUser();
         verify(locationRepository).findAllByCustomer_Id(customerId);
