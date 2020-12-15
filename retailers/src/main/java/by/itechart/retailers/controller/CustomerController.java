@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_CUSTOMERS;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_CUSTOMERS)
@@ -31,8 +30,8 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{customerId}")
-    public ResponseEntity findById(@PathVariable(name = "customerId") Long customerId) {
+    @GetMapping(value = CUSTOMER_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = CUSTOMER_ID) Long customerId) {
         return new ResponseEntity<>(customerService.findById(customerId), HttpStatus.OK);
     }
 

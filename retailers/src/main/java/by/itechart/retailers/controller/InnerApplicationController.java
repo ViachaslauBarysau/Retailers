@@ -10,8 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_INNER_APPLICATIONS;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_INNER_APPLICATIONS)
@@ -29,8 +28,8 @@ public class InnerApplicationController {
         return new ResponseEntity<>(innerApplicationService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{innerApplicationId}")
-    public ResponseEntity findById(@PathVariable(name = "innerApplicationId") Long innerApplicationId) {
+    @GetMapping(value = INNER_APPLICATION_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = INNER_APPLICATION_ID) Long innerApplicationId) {
         return new ResponseEntity<>(innerApplicationService.findById(innerApplicationId), HttpStatus.OK);
     }
 
@@ -44,7 +43,7 @@ public class InnerApplicationController {
         return new ResponseEntity<>(innerApplicationService.update(innerApplicationDto), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/status")
+    @PutMapping(value = INNER_APPLICATION_STATUS_VALUE)
     public ResponseEntity updateStatus(@RequestBody Long innerApplicationId) {
         return new ResponseEntity<>(innerApplicationService.updateStatus(innerApplicationId), HttpStatus.OK);
     }

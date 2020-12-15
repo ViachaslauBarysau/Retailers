@@ -10,8 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_BILLS;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_BILLS)
@@ -29,8 +28,8 @@ public class BillController {
         return new ResponseEntity<>(billService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{billId}")
-    public ResponseEntity findById(@PathVariable(name = "billId") Long billId) {
+    @GetMapping(value = BILL_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = BILL_ID) Long billId) {
         return new ResponseEntity<>(billService.findById(billId), HttpStatus.OK);
     }
 

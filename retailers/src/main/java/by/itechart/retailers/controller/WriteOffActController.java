@@ -10,8 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_WRITE_OFF_ACTS;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_WRITE_OFF_ACTS)
@@ -29,8 +28,8 @@ public class WriteOffActController {
         return new ResponseEntity<>(writeOffActService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{writeOffActId}")
-    public ResponseEntity findById(@PathVariable(name = "writeOffActId") Long writeOffActId) {
+    @GetMapping(value = WRITE_OFF_ACT_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = WRITE_OFF_ACT_ID) Long writeOffActId) {
         return new ResponseEntity<>(writeOffActService.findById(writeOffActId), HttpStatus.OK);
     }
 

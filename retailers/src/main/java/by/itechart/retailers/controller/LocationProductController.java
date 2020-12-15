@@ -10,8 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_LOCATION_PRODUCTS;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_LOCATION_PRODUCTS)
@@ -29,8 +28,8 @@ public class LocationProductController {
         return new ResponseEntity<>(locationProductService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{locationProductId}")
-    public ResponseEntity findById(@PathVariable(name = "locationProductId") Long locationProductId) {
+    @GetMapping(value = LOCATION_PRODUCT_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = LOCATION_PRODUCT_ID) Long locationProductId) {
         return new ResponseEntity<>(locationProductService.findById(locationProductId), HttpStatus.OK);
     }
 

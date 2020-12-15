@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_USERS;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_USERS)
@@ -31,8 +30,8 @@ public class UserController {
         return new ResponseEntity<>(userService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{userId}")
-    public ResponseEntity findById(@PathVariable(name = "userId") Long userId) {
+    @GetMapping(value = USER_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = USER_ID) Long userId) {
         return new ResponseEntity<>(userService.findById(userId), HttpStatus.OK);
     }
 
@@ -46,10 +45,11 @@ public class UserController {
         return new ResponseEntity<>(userService.update(userDto), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/updatepassword")
+    @PutMapping(value = USER_PASSWORD_VALUE)
     public ResponseEntity updatePassword(@RequestBody UserDto userDto) {
         return new ResponseEntity<>(userService.updatePassword(userDto), HttpStatus.OK);
     }
+
     @DeleteMapping
     public ResponseEntity updateStatus(@RequestBody List<Long> userIds) {
         return new ResponseEntity<>(userService.updateStatus(userIds), HttpStatus.OK);

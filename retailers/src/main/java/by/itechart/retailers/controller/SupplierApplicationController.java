@@ -10,8 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_SUPPLIER_APPLICATIONS;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_SUPPLIER_APPLICATIONS)
@@ -29,8 +28,8 @@ public class SupplierApplicationController {
         return new ResponseEntity<>(supplierApplicationService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{supplierApplicationId}")
-    public ResponseEntity findById(@PathVariable(name = "supplierApplicationId") Long supplierApplicationId) {
+    @GetMapping(value = SUPPLIER_APPLICATION_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = SUPPLIER_APPLICATION_ID) Long supplierApplicationId) {
         return new ResponseEntity<>(supplierApplicationService.findById(supplierApplicationId), HttpStatus.OK);
     }
 
@@ -44,7 +43,7 @@ public class SupplierApplicationController {
         return new ResponseEntity<>(supplierApplicationService.update(supplierApplicationDto), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/status")
+    @PutMapping(value = SUPPLIER_APPLICATION_STATUS_VALUE)
     public ResponseEntity updateStatus(@RequestBody Long supplierApplicationId) {
         return new ResponseEntity<>(supplierApplicationService.updateStatus(supplierApplicationId), HttpStatus.OK);
     }

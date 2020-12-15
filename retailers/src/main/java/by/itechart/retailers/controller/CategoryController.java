@@ -10,8 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_CATEGORIES;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_CATEGORIES)
@@ -29,8 +28,8 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{categoryId}")
-    public ResponseEntity findById(@PathVariable(name = "categoryId") Long categoryId) {
+    @GetMapping(value = CATEGORY_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = CATEGORY_ID) Long categoryId) {
         return new ResponseEntity<>(categoryService.findById(categoryId), HttpStatus.OK);
     }
 

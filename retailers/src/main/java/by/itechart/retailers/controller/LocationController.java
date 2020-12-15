@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_LOCATIONS;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_LOCATIONS)
@@ -31,18 +30,18 @@ public class LocationController {
         return new ResponseEntity<>(locationService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/warehouses")
+    @GetMapping(value = LOCATION_WAREHOUSES_VALUE)
     public ResponseEntity findAllWarehouses(@PageableDefault(sort = "identifier", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(locationService.findAllWarehouses(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/shops")
+    @GetMapping(value = LOCATION_SHOPS_VALUE)
     public ResponseEntity findAllShops(@PageableDefault(sort = "identifier", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(locationService.findAllShops(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{locationId}")
-    public ResponseEntity findById(@PathVariable(name = "locationId") Long locationId) {
+    @GetMapping(value = LOCATION_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = LOCATION_ID) Long locationId) {
         return new ResponseEntity<>(locationService.findById(locationId), HttpStatus.OK);
     }
 

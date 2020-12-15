@@ -10,8 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static by.itechart.retailers.constant.UrlConstants.URL_API;
-import static by.itechart.retailers.constant.UrlConstants.URL_STATES;
+import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
 @RequestMapping(URL_API + URL_STATES)
@@ -29,8 +28,8 @@ public class StateController {
         return new ResponseEntity<>(stateService.findAll(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{stateId}")
-    public ResponseEntity findById(@PathVariable(name = "stateId") Long stateId) {
+    @GetMapping(value = STATE_ID_VALUE)
+    public ResponseEntity findById(@PathVariable(name = STATE_ID) Long stateId) {
         return new ResponseEntity<>(stateService.findById(stateId), HttpStatus.OK);
     }
 
