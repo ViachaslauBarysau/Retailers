@@ -23,12 +23,12 @@ public class BillController {
         this.billService = billService;
     }
 
-    @GetMapping(value = "/by_customer")
+    @GetMapping(value =BILL_FIND_ALL_BY_CUSTOMER_VALUE)
     public ResponseEntity findAllByCustomer(@PageableDefault(sort = "registrationDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(billService.findAllByCustomer(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/by_location")
+    @GetMapping(value = BILL_FIND_ALL_BY_LOCATION_VALUE)
     public ResponseEntity findAllByLocation(@PageableDefault(sort = "registrationDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(billService.findAllByLocation(pageable), HttpStatus.OK);
     }

@@ -23,12 +23,12 @@ public class WriteOffActController {
         this.writeOffActService = writeOffActService;
     }
 
-    @GetMapping(value = "/by_customer")
-    public ResponseEntity findAllByCustoemr(@PageableDefault(sort = "actDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+    @GetMapping(value = WRITE_OFF_ACT_FIND_ALL_BY_CUSTOMER_VALUE)
+    public ResponseEntity findAllByCustomer(@PageableDefault(sort = "actDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(writeOffActService.findAllByCustomer(pageable), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/by_location")
+    @GetMapping(value = WRITE_OFF_ACT_FIND_ALL_BY_LOCATION_VALUE)
     public ResponseEntity findAllByLocation(@PageableDefault(sort = "actDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(writeOffActService.findAllByLocation(pageable), HttpStatus.OK);
     }

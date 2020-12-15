@@ -1,10 +1,7 @@
 package by.itechart.retailers.service.impl;
 
 import by.itechart.retailers.converter.BillConverter;
-import by.itechart.retailers.dto.BillDto;
-import by.itechart.retailers.dto.BillRecordDto;
-import by.itechart.retailers.dto.CustomerDto;
-import by.itechart.retailers.dto.UserDto;
+import by.itechart.retailers.dto.*;
 import by.itechart.retailers.entity.*;
 import by.itechart.retailers.exceptions.BusinessException;
 import by.itechart.retailers.repository.BillRepository;
@@ -79,12 +76,44 @@ public class BillServiceTest {
     }
 
     @Test
+    public void findAllByLocationTest() {
+        //given
+        Long customerId = 1L;
+        Long locationId = 1L;
+        LocationDto locationDto = LocationDto.builder()
+                                             .id(locationId)
+                                             .build();
+        List<Bill> bills = new ArrayList<>();
+        List<BillDto> billDtos = new ArrayList<>();
+        PageRequest pageable = PageRequest.of(0, 1);
+        Page<Bill> billPage = new PageImpl<>(bills, pageable, 1);
+        List<Location> locations = new ArrayList<>();
+        CustomerDto customerDto = CustomerDto.builder()
+                                             .id(1L)
+                                             .build();
+        UserDto userDto = UserDto.builder()
+                                 .customer(customerDto)
+                                 .location(locationDto)
+                                 .build();
+
+        when(userService.getCurrentUser()).thenReturn(userDto);
+        when(billRepository.findAllByLocation_Id(pageable, locationId)).thenReturn(billPage);
+        when(billConverter.entityToDto(billPage.getContent())).thenReturn(billDtos);
+        //when
+        billService.findAllByLocation(pageable);
+        //then
+        verify(userService).getCurrentUser();
+        verify(billRepository).findAllByLocation_Id(pageable, locationId);
+        verify(billConverter).entityToDto(billPage.getContent());
+    }
+
+    @Test
     public void findByIdTest() {
         //given
         Bill bill = new Bill();
         BillDto billDto = new BillDto();
         Long billId = 1L;
-        Long customerId=1L;
+        Long customerId = 1L;
         CustomerDto customerDto = CustomerDto.builder()
                                              .id(customerId)
                                              .build();
@@ -92,12 +121,12 @@ public class BillServiceTest {
                                  .customer(customerDto)
                                  .build();
         when(userService.getCurrentUser()).thenReturn(userDto);
-        when(billRepository.findByIdAndCustomer_Id(billId,customerId)).thenReturn(Optional.of(bill));
+        when(billRepository.findByIdAndCustomer_Id(billId, customerId)).thenReturn(Optional.of(bill));
         when(billConverter.entityToDto(bill)).thenReturn(billDto);
         //when
         billService.findById(billId);
         //then
-        verify(billRepository).findByIdAndCustomer_Id(billId,customerId);
+        verify(billRepository).findByIdAndCustomer_Id(billId, customerId);
         verify(billConverter).entityToDto(bill);
     }
 

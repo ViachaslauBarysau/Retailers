@@ -50,7 +50,7 @@ public class WriteOffActServiceTest {
     WriteOffActServiceImpl writeOffActService;
 
     @Test
-    public void findAllCustomerTest() {
+    public void findAllByCustomerTest() {
         //given
         Long customerId = 1L;
         List<WriteOffAct> writeOffActs = new ArrayList<>();

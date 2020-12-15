@@ -21,6 +21,8 @@ public class UrlConstants {
 
     public static final String BILL_ID ="billId";
     public static final String BILL_ID_VALUE ="/{billId}";
+    public static final String BILL_FIND_ALL_BY_CUSTOMER_VALUE ="/by_customer";
+    public static final String BILL_FIND_ALL_BY_LOCATION_VALUE ="/by_location";
 
     public static final String CATEGORY_ID ="categoryId";
     public static final String CATEGORY_ID_VALUE ="/{categoryId}";
@@ -60,5 +62,7 @@ public class UrlConstants {
 
     public static final String WRITE_OFF_ACT_ID ="writeOffActId";
     public static final String WRITE_OFF_ACT_ID_VALUE ="/{writeOffActId}";
+    public static final String WRITE_OFF_ACT_FIND_ALL_BY_CUSTOMER_VALUE ="/by_customer";
+    public static final String WRITE_OFF_ACT_FIND_ALL_BY_LOCATION_VALUE ="/by_location";
 
 }
