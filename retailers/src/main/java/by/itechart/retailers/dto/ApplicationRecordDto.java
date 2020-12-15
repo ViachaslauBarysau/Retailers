@@ -19,7 +19,6 @@ public class ApplicationRecordDto {
 
     private Long id;
 
-    @Valid
     private ProductDto product;
 
     @NotBlank(message = "Amount field can't be empty.")

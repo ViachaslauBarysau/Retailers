@@ -26,10 +26,8 @@ public class SupplierDto {
     @Max(value = 999999999, message = "Amount must be equals or greater than 0.")
     private Integer identifier;
 
-    @Valid
     private List<SupplierWarehouseDto> wareHouseList;
 
-    @Valid
     private CustomerDto customer;
 
     private Status supplierStatus;

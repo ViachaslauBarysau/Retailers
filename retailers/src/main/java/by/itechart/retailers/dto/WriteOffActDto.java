@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,10 +29,9 @@ public class WriteOffActDto {
     @Min(value = 0, message = "Wrong write-off act number.")
     private Integer writeOffActNumber;
 
-    @Valid
     private List<WriteOffActRecordDto> writeOffActRecords;
 
-    @Past(message = "Date and time of act can't be in the future.")
+    @PastOrPresent(message = "Date and time of act can't be in the future.")
     private LocalDateTime actDateTime;
 
     @Min(value = 1, message = "Product amount must be equals or greater than 1.")
@@ -39,9 +39,7 @@ public class WriteOffActDto {
 
     private BigDecimal totalProductSum;
 
-    @Valid
     private LocationDto location;
-
 
     private CustomerDto customer;
 }

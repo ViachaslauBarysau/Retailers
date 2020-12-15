@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
@@ -34,12 +36,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity create(@RequestBody @Valid CategoryDto categoryDto) {
         return new ResponseEntity<>(categoryService.create(categoryDto), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity update(@RequestBody @Valid CategoryDto categoryDto) {
         return new ResponseEntity<>(categoryService.update(categoryDto), HttpStatus.OK);
     }
 }

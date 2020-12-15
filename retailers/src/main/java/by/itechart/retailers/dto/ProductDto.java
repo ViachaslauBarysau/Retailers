@@ -27,13 +27,11 @@ public class ProductDto {
     @Size(min = 3, max = 30, message = "Label can be from 3 to 30 symbols.")
     private String label;
 
-    @Valid
     private CategoryDto category;
 
     @Min(value = 1, message = "Product volume must be greater than 0.")
     private Integer volume;
 
-    @Valid
     private CustomerDto customer;
 
     private DeletedStatus status;

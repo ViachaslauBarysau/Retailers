@@ -27,6 +27,5 @@ public class CategoryDto {
     @DecimalMin(value = "0", message = "Tax must be equals or greater than 0.")
     private BigDecimal categoryTax;
 
-    @Valid
     private CustomerDto customer;
 }

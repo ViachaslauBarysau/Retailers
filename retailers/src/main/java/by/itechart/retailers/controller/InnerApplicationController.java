@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
@@ -34,12 +36,12 @@ public class InnerApplicationController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody InnerApplicationDto innerApplicationDto) {
+    public ResponseEntity create(@RequestBody @Valid InnerApplicationDto innerApplicationDto) {
         return new ResponseEntity<>(innerApplicationService.create(innerApplicationDto), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody InnerApplicationDto innerApplicationDto) {
+    public ResponseEntity update(@RequestBody @Valid InnerApplicationDto innerApplicationDto) {
         return new ResponseEntity<>(innerApplicationService.update(innerApplicationDto), HttpStatus.OK);
     }
 

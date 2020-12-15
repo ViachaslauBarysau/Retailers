@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,25 +25,20 @@ public class InnerApplicationDto {
     @Min(value = 0, message = "Wrong application number.")
     private Integer applicationNumber;
 
-    @Valid
     private LocationDto sourceLocation;
 
-    @Valid
     private LocationDto destinationLocation;
 
-    @Valid
     private UserDto creator;
 
-    @Valid
     private UserDto updater;
 
-    @Past(message = "Registration date of application can't be in the future.")
+    @PastOrPresent(message = "Registration date of application can't be in the future.")
     private LocalDateTime registrationDateTime;
 
-    @Past(message = "Updating date of application can't be in the future.")
+    @PastOrPresent(message = "Updating date of application can't be in the future.")
     private LocalDateTime updatingDateTime;
 
-    @NotBlank(message = "Status can't be empty.")
     private ApplicationStatus applicationStatus;
 
     private List<ApplicationRecordDto> recordsList;

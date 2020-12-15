@@ -29,30 +29,25 @@ public class UserDto {
     @Size(min = 2, max = 20, message = "Last name can be from 2 to 20 symbols.")
     private String lastName;
 
-    @Valid
     private AddressDto address;
 
     @Past(message = "Birthday can't be in the future.")
     private LocalDate birthday;
 
-    @Valid
     private List<Role> userRole = new ArrayList<>();
 
     @Email(message = "Wrong email format.")
     private String email;
 
-    @Size(min = 6, max = 20, message = "Password must be from 6 to 20 symbols.")
+    @Size(min = 6, message = "Password min length is 6 symbols.")
     private String password;
 
-    @NotBlank(message = "Status can't be empty.")
     private Status userStatus;
 
-    @Valid
     private LocationDto location;
 
-    @Valid
     private CustomerDto customer;
 
-    @Size(min = 3, max = 20, message = "Password must be from 3 to 20 symbols.")
+    @Size(min = 3, max = 20, message = "Login must be from 3 to 20 symbols.")
     private String login;
 }

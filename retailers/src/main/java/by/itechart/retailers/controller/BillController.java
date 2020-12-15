@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
@@ -38,7 +40,7 @@ public class BillController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody BillDto billDto) {
+    public ResponseEntity create(@RequestBody @Valid BillDto billDto) {
         return new ResponseEntity<>(billService.create(billDto), HttpStatus.CREATED);
     }
 }

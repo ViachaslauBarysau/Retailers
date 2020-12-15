@@ -19,7 +19,6 @@ public class BillRecordDto {
 
     private Long id;
 
-    @Valid
     private ProductDto product;
 
     @Min(value = 1, message = "Product amount must be greater than 0.")

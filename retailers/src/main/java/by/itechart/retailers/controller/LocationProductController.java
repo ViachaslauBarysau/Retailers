@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
@@ -34,12 +36,12 @@ public class LocationProductController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody LocationProductDto locationProductDto) {
+    public ResponseEntity create(@RequestBody @Valid LocationProductDto locationProductDto) {
         return new ResponseEntity<>(locationProductService.create(locationProductDto), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody LocationProductDto locationProductDto) {
+    public ResponseEntity update(@RequestBody @Valid LocationProductDto locationProductDto) {
         return new ResponseEntity<>(locationProductService.update(locationProductDto), HttpStatus.OK);
     }
 }

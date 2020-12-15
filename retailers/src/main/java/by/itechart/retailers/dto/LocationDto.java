@@ -28,10 +28,8 @@ public class LocationDto {
     @Size(min = 3, max = 30, message = "Identifier can be from 3 to 30 symbols.")
     private String identifier;
 
-    @Valid
     private CustomerDto customer;
 
-    @Valid
     private AddressDto address;
 
     @Min(value = 1, message = "Total capacity must be greater than 0.")
@@ -39,7 +37,6 @@ public class LocationDto {
 
     private Integer availableCapacity;
 
-    @NotBlank(message = "Location type can't be empty.")
     private LocationType locationType;
 
     @DecimalMin(value = "0", message = "Tax must be equals or greater than 0.")

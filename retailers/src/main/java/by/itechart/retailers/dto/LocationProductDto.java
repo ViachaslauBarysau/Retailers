@@ -18,7 +18,6 @@ public class LocationProductDto {
 
     private Long id;
 
-    @Valid
     private ProductDto product;
 
     private Integer amount;
@@ -27,6 +26,5 @@ public class LocationProductDto {
     @DecimalMin(value = "0.01", message = "Cost must be greater than 0.")
     private BigDecimal cost;
 
-    @Valid
     private LocationDto location;
 }

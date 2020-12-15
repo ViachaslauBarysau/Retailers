@@ -24,9 +24,8 @@ public class CustomerDto {
     @Email(message = "Wrong email format.")
     private String email;
 
-    @Past(message = "Registration date can't be in the future.")
+    @PastOrPresent(message = "Registration date can't be in the future.")
     private LocalDate registrationDate;
 
-    @NotBlank(message = "Status can't be empty.")
     private Status customerStatus;
 }

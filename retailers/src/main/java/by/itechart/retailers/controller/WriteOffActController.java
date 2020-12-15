@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static by.itechart.retailers.constant.UrlConstants.*;
 
 @RestController
@@ -39,7 +41,7 @@ public class WriteOffActController {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody WriteOffActDto writeOffActDto) {
+    public ResponseEntity create(@RequestBody @Valid WriteOffActDto writeOffActDto) {
         return new ResponseEntity<>(writeOffActService.create(writeOffActDto), HttpStatus.CREATED);
     }
 }
