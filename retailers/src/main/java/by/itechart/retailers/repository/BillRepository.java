@@ -31,9 +31,10 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
             "                  FROM bill " +
             "                           join customer c on bill.customer_id = c.id " +
             "                           join users u on bill.manager_id = u.id " +
-            "                  where registration_date_time between (select date_trunc('month', now())) and (select (date_trunc('month', now()) + interval '1 month - 1 second')) " +
-            "                    and customer_status = 'ACTIVE' " +
-            "                    and user_status = 'ACTIVE' " +
+            "                  where registration_date_time between (select date_trunc('month', now())) " +
+            "                  and (select (date_trunc('month', now()) + interval '1 month - 1 second')) " +
+            "                  and customer_status = 'ACTIVE' " +
+            "                  and user_status = 'ACTIVE' " +
             "                  GROUP BY bill.customer_id, manager_id " +
             "              ) AS tb1 " +
             "     ) as tb2 " +
